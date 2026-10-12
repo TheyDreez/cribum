@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  vllm-rocm:
+    image: rocm/vllm:latest
+    container_name: cribum-vllm-rocm
+    network_mode: host
+    ipc: host
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      - HUGGINGFACE_HUB_CACHE=/root/.cache/huggingface
+      - ROCM_PATH=/opt/rocm
+    command: >
+      python3 -m vllm.entrypoints.openai.api_server
+      --model Qwen/Qwen2-VL-7B-Instruct
+      --trust-remote-code
+      --port 8000
+    restart: unless-stopped
