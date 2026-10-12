@@ -1,0 +1,228 @@
+import React, { useState, useEffect } from 'react';
+import { Network, AlertOctagon, Building, User, FileText, Activity } from 'lucide-react';
+import { GraphResponse } from '../types';
+
+export const NetworkGraphView: React.FC = () => {
+  const [data, setData] = useState<GraphResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedAnomaly, setSelectedAnomaly] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/graph')
+      .then((r) => r.json())
+      .then((json: GraphResponse) => {
+        setData(json);
+        setLoading(false);
+        if (json.anomalies.length > 0) {
+          setSelectedAnomaly(json.anomalies[0].rule_id);
+        }
+      })
+      .catch((err) => {
+        console.error('Falha ao buscar dados do grafo:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center text-slate-500 font-mono text-xs">
+        Carregando topologia do grafo de 200 guias...
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex-1 flex items-center justify-center text-slate-500 text-xs">
+        Nenhum dado de rede disponível.
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex-1 flex overflow-hidden bg-graphite-950">
+      {/* Visualização de Resumo da Rede */}
+      <div className="flex-1 p-6 overflow-y-auto">
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <Network className="w-5 h-5 text-auditTeal-400" />
+              Grafo Relacional Multi-Entidade (NetworkX)
+            </h2>
+            <p className="text-xs text-slate-400">
+              Análise cruzada de 200 guias sintéticas: Pacientes, Médicos, Clínicas e Procedimentos.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4 text-xs font-mono text-slate-300 bg-graphite-900 px-4 py-2 rounded-lg border border-graphite-800">
+            <div>
+              <span className="text-slate-500 block text-[10px]">TOTAL DE GUIAS</span>
+              <span className="text-white font-bold">{data.total_claims}</span>
+            </div>
+            <div>
+              <span className="text-slate-500 block text-[10px]">NÓS MAPEADOS</span>
+              <span className="text-white font-bold">{data.nodes.length}</span>
+            </div>
+            <div>
+              <span className="text-slate-500 block text-[10px]">CONEXÕES</span>
+              <span className="text-white font-bold">{data.links.length}</span>
+            </div>
+            <div>
+              <span className="text-slate-500 block text-[10px]">ANOMALIAS</span>
+              <span className="text-auditRose-500 font-bold">{data.anomalies.length}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Grade de Entidades do Grafo */}
+        <div className="grid grid-cols-4 gap-4 mb-6">
+          <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">
+            <div className="p-2.5 rounded-lg bg-auditTeal-500/10 text-auditTeal-400">
+              <User className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] text-slate-400 block font-mono">Profissionais</span>
+              <span className="text-base font-bold text-white">24 Médicos</span>
+            </div>
+          </div>
+
+          <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">
+            <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-400">
+              <Building className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] text-slate-400 block font-mono">Clínicas/Hospitais</span>
+              <span className="text-base font-bold text-white">5 Unidades</span>
+            </div>
+          </div>
+
+          <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">
+            <div className="p-2.5 rounded-lg bg-purple-500/10 text-purple-400">
+              <Activity className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] text-slate-400 block font-mono">Procedimentos</span>
+              <span className="text-base font-bold text-white">8 Tipos</span>
+            </div>
+          </div>
+
+          <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">
+            <div className="p-2.5 rounded-lg bg-amber-500/10 text-amber-400">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] text-slate-400 block font-mono">Pacientes</span>
+              <span className="text-base font-bold text-white">100 Indivíduos</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Representação Visual da Topologia */}
+        <div className="bg-graphite-900/60 p-6 rounded-xl border border-graphite-800 min-h-[380px] flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+              Mapa de Clusters Relacionais
+            </span>
+            <span className="text-xs font-mono text-auditRose-500 flex items-center gap-1.5 bg-auditRose-500/10 px-2 py-0.5 rounded border border-auditRose-500/20">
+              <AlertOctagon className="w-3.5 h-3.5" />
+              Cluster Suspeito Identificado
+            </span>
+          </div>
+
+          {/* Diagrama Simbólico de Nós em Destaque */}
+          <div className="flex items-center justify-around py-8">
+            <div className="text-center p-4 bg-graphite-950 rounded-lg border border-auditRose-500/40 shadow-lg shadow-auditRose-500/5 max-w-[200px]">
+              <span className="text-[11px] font-mono text-auditRose-500 font-bold block mb-1">
+                PROF-DEMO-007
+              </span>
+              <p className="text-xs text-slate-300">
+                Atendimento simultâneo no mesmo dia em cidades a 180 km de distância
+              </p>
+            </div>
+
+            <div className="h-0.5 w-24 bg-auditRose-500/40 relative">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] font-mono text-auditRose-400 bg-graphite-950 px-1">
+                180 km / 24h
+              </span>
+            </div>
+
+            <div className="text-center p-4 bg-graphite-950 rounded-lg border border-graphite-700 max-w-[180px]">
+              <span className="text-[11px] font-mono text-auditTeal-400 font-bold block mb-1">
+                CLINICA-DEMO-001
+              </span>
+              <p className="text-xs text-slate-400">Hospital Santa Cruz (Sorocaba)</p>
+            </div>
+
+            <div className="h-0.5 w-16 bg-graphite-700" />
+
+            <div className="text-center p-4 bg-graphite-950 rounded-lg border border-graphite-700 max-w-[180px]">
+              <span className="text-[11px] font-mono text-blue-400 font-bold block mb-1">
+                CLINICA-DEMO-005
+              </span>
+              <p className="text-xs text-slate-400">Instituto do Litoral (Santos)</p>
+            </div>
+          </div>
+
+          <div className="text-[11px] text-slate-500 font-mono flex items-center justify-between border-t border-graphite-800/80 pt-3">
+            <span>Algoritmo: NetworkX Multigraph Anomaly Detection</span>
+            <span>Semelhança temporal & geográfica calculada por regra determinística</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Painel Lateral de Anomalias de Rede */}
+      <div className="w-96 border-l border-graphite-800 bg-graphite-900/80 p-4 overflow-y-auto">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300 font-mono mb-3 flex items-center gap-2">
+          <AlertOctagon className="w-4 h-4 text-auditRose-500" />
+          Anomalias Detectadas ({data.anomalies.length})
+        </h3>
+
+        {data.anomalies.length === 0 ? (
+          <p className="text-xs text-slate-500 italic">Nenhuma anomalia de rede detectada.</p>
+        ) : (
+          <div className="space-y-3">
+            {data.anomalies.map((anom) => (
+              <div
+                key={anom.rule_id}
+                onClick={() => setSelectedAnomaly(anom.rule_id)}
+                className={`p-3.5 rounded-lg border transition cursor-pointer ${
+                  selectedAnomaly === anom.rule_id
+                    ? 'bg-auditRose-500/10 border-auditRose-500/50'
+                    : 'bg-graphite-950 border-graphite-800 hover:border-graphite-700'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-bold text-white">{anom.title}</span>
+                  <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-auditRose-500/20 text-auditRose-400">
+                    {anom.severity}
+                  </span>
+                </div>
+
+                <p className="text-xs text-slate-300 leading-relaxed mb-3">
+                  {anom.explanation}
+                </p>
+
+                <div className="p-2 bg-graphite-900 rounded border border-graphite-800 mb-2">
+                  <span className="text-[10px] text-slate-400 block font-mono mb-1">
+                    Guias Relacionadas no Esquema ({anom.related_document_ids.length}):
+                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {anom.related_document_ids.map((id) => (
+                      <span key={id} className="text-[10px] font-mono bg-graphite-950 px-1.5 py-0.5 rounded border border-graphite-800 text-slate-300">
+                        {id}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="text-[10px] text-slate-500 italic">
+                  Limitação: {anom.limitations}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
