@@ -1,0 +1,182 @@
+[
+  {
+    "par_id": "LASA-001",
+    "droga_a": {
+      "nome": "Losartana",
+      "classe": "Anti-hipertensivo (BRA)",
+      "indicacao": "Hipertensão arterial, insuficiência cardíaca",
+      "dose_usual": "50mg a 100mg uma vez ao dia"
+    },
+    "droga_b": {
+      "nome": "Lorazepam",
+      "classe": "Benzodiazepínico (Ansiolítico)",
+      "indicacao": "Ansiedade severa, insônia aguda",
+      "dose_usual": "1mg a 2mg duas a três vezes ao dia"
+    },
+    "gravidade": "CRITICA",
+    "risco_clinico": "Risco de sedação profunda indevida, parada respiratória ou crise hipertensiva aguda por interrupção do anti-hipertensivo.",
+    "palavras_chave": ["losartan", "lorazepam", "losartana", "lorazepan"]
+  },
+  {
+    "par_id": "LASA-002",
+    "droga_a": {
+      "nome": "Citalopram",
+      "classe": "Antidepressivo (ISRS)",
+      "indicacao": "Transtorno depressivo maior",
+      "dose_usual": "20mg a 40mg ao dia"
+    },
+    "droga_b": {
+      "nome": "Escitalopram",
+      "classe": "Antidepressivo (ISRS)",
+      "indicacao": "Transtorno depressivo e ansiedade",
+      "dose_usual": "10mg a 20mg ao dia (potência 2x maior)"
+    },
+    "gravidade": "ALTA",
+    "risco_clinico": "Troca de dose com risco de sobredosagem serotoninérgica (Escitalopram tem potência dobrada em relação ao Citalopram) ou subdose terapêutica.",
+    "palavras_chave": ["citalopram", "escitalopram"]
+  },
+  {
+    "par_id": "LASA-003",
+    "droga_a": {
+      "nome": "Fluoxetina",
+      "classe": "Antidepressivo (ISRS)",
+      "indicacao": "Depressão, TOC, bulimia",
+      "dose_usual": "20mg a 60mg pela manhã"
+    },
+    "droga_b": {
+      "nome": "Flunarizina",
+      "classe": "Bloqueador de canal de cálcio / Antivertiginoso",
+      "indicacao": "Profilaxia de enxaqueca, vertigem vestibular",
+      "dose_usual": "10mg à noite"
+    },
+    "gravidade": "ALTA",
+    "risco_clinico": "Risco de depressão grave induzida pela Flunarizina em pacientes psiquiátricos e sintomas extrapiramidais (parkinsonismo medicamentoso).",
+    "palavras_chave": ["fluoxetina", "flunarizina", "flunarin", "fluxene"]
+  },
+  {
+    "par_id": "LASA-004",
+    "droga_a": {
+      "nome": "Digoxina",
+      "classe": "Glicosídeo Cardíaco",
+      "indicacao": "Insuficiência cardíaca, fibrilação atrial",
+      "dose_usual": "0.125mg a 0.25mg ao dia"
+    },
+    "droga_b": {
+      "nome": "Dipirona",
+      "classe": "Analgésico e Antipirético",
+      "indicacao": "Dor e febre",
+      "dose_usual": "500mg a 1000mg até 4x ao dia"
+    },
+    "gravidade": "CRITICA",
+    "risco_clinico": "Índice terapêutico estreitíssimo da Digoxina. Se prescrito Dipirona 500mg e interpretado como Digoxina, há intoxicação digitálica fatal (arritmias letais).",
+    "palavras_chave": ["digoxina", "dipirona", "novalgina", "digox"]
+  },
+  {
+    "par_id": "LASA-005",
+    "droga_a": {
+      "nome": "Omeprazol",
+      "classe": "Inibidor da Bomba de Prótons",
+      "indicacao": "Refluxo gastroesofágico, úlcera péptica",
+      "dose_usual": "20mg a 40mg em jejum"
+    },
+    "droga_b": {
+      "nome": "Ondansetrona",
+      "classe": "Antiemético (Antagonista 5-HT3)",
+      "indicacao": "Náuseas e vômitos refratários/quimioterapia",
+      "dose_usual": "4mg a 8mg a cada 8h"
+    },
+    "gravidade": "MEDIA",
+    "risco_clinico": "Falha no controle ácido gástrico ou persistência de náuseas severas e risco de prolongamento do intervalo QT indevido.",
+    "palavras_chave": ["omeprazol", "ondansetrona", "ondansetron", "omeprazon"]
+  },
+  {
+    "par_id": "LASA-006",
+    "droga_a": {
+      "nome": "Tramadol",
+      "classe": "Opioide Analgésico",
+      "indicacao": "Dor moderada a intensa",
+      "dose_usual": "50mg a 100mg a cada 6h a 8h"
+    },
+    "droga_b": {
+      "nome": "Trazodona",
+      "classe": "Antidepressivo Sedativo",
+      "indicacao": "Depressão, insônia crônica",
+      "dose_usual": "50mg a 150mg ao deitar"
+    },
+    "gravidade": "CRITICA",
+    "risco_clinico": "Sedação excessiva, hipotensão ortostática ou risco de síndrome serotoninérgica e convulsões se administrados erroneamente.",
+    "palavras_chave": ["tramadol", "trazodona", "tramal", "donaren"]
+  },
+  {
+    "par_id": "LASA-007",
+    "droga_a": {
+      "nome": "Diazepam",
+      "classe": "Benzodiazepínico",
+      "indicacao": "Sedativo, ansiolítico, relaxante muscular",
+      "dose_usual": "5mg a 10mg ao dia"
+    },
+    "droga_b": {
+      "nome": "Diltiazem",
+      "classe": "Bloqueador dos Canais de Cálcio",
+      "indicacao": "Angina, hipertensão arterial, arritmias",
+      "dose_usual": "30mg a 60mg até 3x ao dia"
+    },
+    "gravidade": "CRITICA",
+    "risco_clinico": "Bradicardia severa, bloqueio atrioventricular ou coma por superdosagem sedativa acidental.",
+    "palavras_chave": ["diazepam", "diltiazem", "valium", "cardizem"]
+  },
+  {
+    "par_id": "LASA-008",
+    "droga_a": {
+      "nome": "Prednisona",
+      "classe": "Glicocorticoide Oral",
+      "indicacao": "Processos inflamatórios e autoimunes",
+      "dose_usual": "5mg a 60mg ao dia"
+    },
+    "droga_b": {
+      "nome": "Prednisolona",
+      "classe": "Glicocorticoide Ativo (Solução oral)",
+      "indicacao": "Uso pediátrico ou em hepatopatas",
+      "dose_usual": "1mg/kg/dia a 2mg/kg/dia"
+    },
+    "gravidade": "MEDIA",
+    "risco_clinico": "Confusão frequente na dispensação e cálculos de volume líquido em pediatria vs. comprimidos adultos.",
+    "palavras_chave": ["prednisona", "prednisolona", "meticorten", "prelona"]
+  },
+  {
+    "par_id": "LASA-009",
+    "droga_a": {
+      "nome": "Hidroclorotiazida",
+      "classe": "Diurético Tiazídico",
+      "indicacao": "Hipertensão, edema",
+      "dose_usual": "25mg a 50mg pela manhã"
+    },
+    "droga_b": {
+      "nome": "Hidroxicloroquina",
+      "classe": "Imunomodulador / Antimalárico",
+      "indicacao": "Lúpus eritematoso, artrite reumatoide",
+      "dose_usual": "400mg ao dia"
+    },
+    "gravidade": "ALTA",
+    "risco_clinico": "Toxicidade retiniana e arritmias cardíacas com Hidroxicloroquina indevida, além de desidratação e hipocalemia com o diurético desnecessário.",
+    "palavras_chave": ["hidroclorotiazida", "hidroxicloroquina", "reumaquin", "clorocil"]
+  },
+  {
+    "par_id": "LASA-010",
+    "droga_a": {
+      "nome": "Alprazolam",
+      "classe": "Benzodiazepínico",
+      "indicacao": "Transtorno de pânico, ansiedade aguda",
+      "dose_usual": "0.5mg a 2mg ao dia"
+    },
+    "droga_b": {
+      "nome": "Alopurinol",
+      "classe": "Inibidor da Xantina Oxidase",
+      "indicacao": "Gota, hiperuricemia",
+      "dose_usual": "100mg a 300mg ao dia"
+    },
+    "gravidade": "ALTA",
+    "risco_clinico": "Risco de dependência química e sonolência grave no lugar de tratamento antiúrico; risco de Síndrome de Stevens-Johnson pelo Alopurinol desnecessário.",
+    "palavras_chave": ["alprazolam", "alopurinol", "frontin", "zyloric"]
+  }
+]
