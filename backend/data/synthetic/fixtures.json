@@ -1,0 +1,3542 @@
+{
+  "caso_01_losartana_lorazepam.jpg": {
+    "name": "CLÍNICA CARDIOLÓGICA MODELO — RECEITUÁRIO",
+    "document_id": "CASE-AMB-001",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-001",
+        "run_id": "run-CASE-AMB-001",
+        "field_type": "medication",
+        "raw_text": "Losartana 50mg",
+        "normalized_value": "Losartana 50mg",
+        "hypotheses": [
+          {
+            "text": "Losartana 50mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-001"
+            ]
+          },
+          {
+            "text": "Lorazepam 2mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-001"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-001"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-001"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-001",
+        "run_id": "run-CASE-AMB-001",
+        "field_type": "crm",
+        "raw_text": "142857-SP",
+        "normalized_value": "142857-SP",
+        "hypotheses": [
+          {
+            "text": "142857-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-001"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-001"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-001",
+        "document_id": "CASE-AMB-001",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.3048,
+          "x_max": 0.9062,
+          "y_max": 0.3524
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Losartana 50mg / Lorazepam 2mg (caligrafia ambígua)"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-001",
+        "document_id": "CASE-AMB-001",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 142857-SP"
+      }
+    ]
+  },
+  "CASE-AMB-001": {
+    "name": "CLÍNICA CARDIOLÓGICA MODELO — RECEITUÁRIO",
+    "document_id": "CASE-AMB-001",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-001",
+        "run_id": "run-CASE-AMB-001",
+        "field_type": "medication",
+        "raw_text": "Losartana 50mg",
+        "normalized_value": "Losartana 50mg",
+        "hypotheses": [
+          {
+            "text": "Losartana 50mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-001"
+            ]
+          },
+          {
+            "text": "Lorazepam 2mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-001"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-001"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-001"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-001",
+        "run_id": "run-CASE-AMB-001",
+        "field_type": "crm",
+        "raw_text": "142857-SP",
+        "normalized_value": "142857-SP",
+        "hypotheses": [
+          {
+            "text": "142857-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-001"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-001"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-001",
+        "document_id": "CASE-AMB-001",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.3048,
+          "x_max": 0.9062,
+          "y_max": 0.3524
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Losartana 50mg / Lorazepam 2mg (caligrafia ambígua)"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-001",
+        "document_id": "CASE-AMB-001",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 142857-SP"
+      }
+    ]
+  },
+  "caso_02_fluoxetina_flunarizina.jpg": {
+    "name": "INSTITUTO DE SAÚDE MENTAL DEMO",
+    "document_id": "CASE-AMB-002",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-002",
+        "run_id": "run-CASE-AMB-002",
+        "field_type": "medication",
+        "raw_text": "Fluoxetina 20mg",
+        "normalized_value": "Fluoxetina 20mg",
+        "hypotheses": [
+          {
+            "text": "Fluoxetina 20mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-002"
+            ]
+          },
+          {
+            "text": "Flunarizina 10mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-002"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-002"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-002"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-002",
+        "run_id": "run-CASE-AMB-002",
+        "field_type": "crm",
+        "raw_text": "119988-SP",
+        "normalized_value": "119988-SP",
+        "hypotheses": [
+          {
+            "text": "119988-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-002"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-002"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-002",
+        "document_id": "CASE-AMB-002",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Fluoxetina 20mg / Flunarizina 10mg (traço cursivo duvidoso)"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-002",
+        "document_id": "CASE-AMB-002",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 119988-SP"
+      }
+    ]
+  },
+  "CASE-AMB-002": {
+    "name": "INSTITUTO DE SAÚDE MENTAL DEMO",
+    "document_id": "CASE-AMB-002",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-002",
+        "run_id": "run-CASE-AMB-002",
+        "field_type": "medication",
+        "raw_text": "Fluoxetina 20mg",
+        "normalized_value": "Fluoxetina 20mg",
+        "hypotheses": [
+          {
+            "text": "Fluoxetina 20mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-002"
+            ]
+          },
+          {
+            "text": "Flunarizina 10mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-002"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-002"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-002"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-002",
+        "run_id": "run-CASE-AMB-002",
+        "field_type": "crm",
+        "raw_text": "119988-SP",
+        "normalized_value": "119988-SP",
+        "hypotheses": [
+          {
+            "text": "119988-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-002"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-002"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-002",
+        "document_id": "CASE-AMB-002",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Fluoxetina 20mg / Flunarizina 10mg (traço cursivo duvidoso)"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-002",
+        "document_id": "CASE-AMB-002",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 119988-SP"
+      }
+    ]
+  },
+  "caso_03_digoxina_dipirona.jpg": {
+    "name": "HOSPITAL REGIONAL DE ENSINO DEMO",
+    "document_id": "CASE-AMB-003",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-003",
+        "run_id": "run-CASE-AMB-003",
+        "field_type": "medication",
+        "raw_text": "Digoxina 0.25mg",
+        "normalized_value": "Digoxina 0.25mg",
+        "hypotheses": [
+          {
+            "text": "Digoxina 0.25mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-003"
+            ]
+          },
+          {
+            "text": "Dipirona 500mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-003"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-003"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-003"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-003",
+        "run_id": "run-CASE-AMB-003",
+        "field_type": "crm",
+        "raw_text": "887766-SP",
+        "normalized_value": "887766-SP",
+        "hypotheses": [
+          {
+            "text": "887766-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-003"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-003"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-003",
+        "document_id": "CASE-AMB-003",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Digoxina 0.25mg / Dipirona 500mg"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-003",
+        "document_id": "CASE-AMB-003",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 887766-SP"
+      }
+    ]
+  },
+  "CASE-AMB-003": {
+    "name": "HOSPITAL REGIONAL DE ENSINO DEMO",
+    "document_id": "CASE-AMB-003",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-003",
+        "run_id": "run-CASE-AMB-003",
+        "field_type": "medication",
+        "raw_text": "Digoxina 0.25mg",
+        "normalized_value": "Digoxina 0.25mg",
+        "hypotheses": [
+          {
+            "text": "Digoxina 0.25mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-003"
+            ]
+          },
+          {
+            "text": "Dipirona 500mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-003"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-003"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-003"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-003",
+        "run_id": "run-CASE-AMB-003",
+        "field_type": "crm",
+        "raw_text": "887766-SP",
+        "normalized_value": "887766-SP",
+        "hypotheses": [
+          {
+            "text": "887766-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-003"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-003"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-003",
+        "document_id": "CASE-AMB-003",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Digoxina 0.25mg / Dipirona 500mg"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-003",
+        "document_id": "CASE-AMB-003",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 887766-SP"
+      }
+    ]
+  },
+  "caso_04_citalopram_escitalopram.jpg": {
+    "name": "CENTRO CLÍNICO INTEGRADO DEMO",
+    "document_id": "CASE-AMB-004",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-004",
+        "run_id": "run-CASE-AMB-004",
+        "field_type": "medication",
+        "raw_text": "Citalopram 20mg",
+        "normalized_value": "Citalopram 20mg",
+        "hypotheses": [
+          {
+            "text": "Citalopram 20mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-004"
+            ]
+          },
+          {
+            "text": "Escitalopram 10mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-004"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-004"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-004"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-004",
+        "run_id": "run-CASE-AMB-004",
+        "field_type": "crm",
+        "raw_text": "554433-SP",
+        "normalized_value": "554433-SP",
+        "hypotheses": [
+          {
+            "text": "554433-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-004"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-004"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-004",
+        "document_id": "CASE-AMB-004",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Citalopram 20mg / Escitalopram 10mg"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-004",
+        "document_id": "CASE-AMB-004",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 554433-SP"
+      }
+    ]
+  },
+  "CASE-AMB-004": {
+    "name": "CENTRO CLÍNICO INTEGRADO DEMO",
+    "document_id": "CASE-AMB-004",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-004",
+        "run_id": "run-CASE-AMB-004",
+        "field_type": "medication",
+        "raw_text": "Citalopram 20mg",
+        "normalized_value": "Citalopram 20mg",
+        "hypotheses": [
+          {
+            "text": "Citalopram 20mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-004"
+            ]
+          },
+          {
+            "text": "Escitalopram 10mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-004"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-004"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-004"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-004",
+        "run_id": "run-CASE-AMB-004",
+        "field_type": "crm",
+        "raw_text": "554433-SP",
+        "normalized_value": "554433-SP",
+        "hypotheses": [
+          {
+            "text": "554433-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-004"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-004"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-004",
+        "document_id": "CASE-AMB-004",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Citalopram 20mg / Escitalopram 10mg"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-004",
+        "document_id": "CASE-AMB-004",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 554433-SP"
+      }
+    ]
+  },
+  "caso_05_tramadol_trazodona.jpg": {
+    "name": "CLÍNICA DA DOR E CUIDADOS ESPECIAIS DEMO",
+    "document_id": "CASE-AMB-005",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-005",
+        "run_id": "run-CASE-AMB-005",
+        "field_type": "medication",
+        "raw_text": "Tramadol 50mg",
+        "normalized_value": "Tramadol 50mg",
+        "hypotheses": [
+          {
+            "text": "Tramadol 50mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-005"
+            ]
+          },
+          {
+            "text": "Trazodona 50mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-005"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-005"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-005"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-005",
+        "run_id": "run-CASE-AMB-005",
+        "field_type": "crm",
+        "raw_text": "332211-SP",
+        "normalized_value": "332211-SP",
+        "hypotheses": [
+          {
+            "text": "332211-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-005"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-005"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-005",
+        "document_id": "CASE-AMB-005",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Tramadol 50mg / Trazodona 50mg"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-005",
+        "document_id": "CASE-AMB-005",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 332211-SP"
+      }
+    ]
+  },
+  "CASE-AMB-005": {
+    "name": "CLÍNICA DA DOR E CUIDADOS ESPECIAIS DEMO",
+    "document_id": "CASE-AMB-005",
+    "fields": [
+      {
+        "id": "field-med-CASE-AMB-005",
+        "run_id": "run-CASE-AMB-005",
+        "field_type": "medication",
+        "raw_text": "Tramadol 50mg",
+        "normalized_value": "Tramadol 50mg",
+        "hypotheses": [
+          {
+            "text": "Tramadol 50mg",
+            "rank": 1,
+            "score": 0.65,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-005"
+            ]
+          },
+          {
+            "text": "Trazodona 50mg",
+            "rank": 2,
+            "score": 0.25,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-005"
+            ]
+          },
+          {
+            "text": "Opção alternativa plausível",
+            "rank": 3,
+            "score": 0.1,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-AMB-005"
+            ]
+          }
+        ],
+        "uncertainty_status": "AMBIGUOUS",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.65,
+        "evidence_ids": [
+          "ev-item-CASE-AMB-005"
+        ],
+        "requires_review": true
+      },
+      {
+        "id": "field-crm-CASE-AMB-005",
+        "run_id": "run-CASE-AMB-005",
+        "field_type": "crm",
+        "raw_text": "332211-SP",
+        "normalized_value": "332211-SP",
+        "hypotheses": [
+          {
+            "text": "332211-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-AMB-005"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-AMB-005"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-AMB-005",
+        "document_id": "CASE-AMB-005",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Tramadol 50mg / Trazodona 50mg"
+      },
+      {
+        "id": "ev-crm-CASE-AMB-005",
+        "document_id": "CASE-AMB-005",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 332211-SP"
+      }
+    ]
+  },
+  "caso_06_sem_crm.jpg": {
+    "name": "CONSULTÓRIO PARTICULAR DEMO",
+    "document_id": "CASE-INC-006",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-006",
+        "run_id": "run-CASE-INC-006",
+        "field_type": "medication",
+        "raw_text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+        "normalized_value": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+        "hypotheses": [
+          {
+            "text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-006"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-006"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-006",
+        "document_id": "CASE-INC-006",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Tomar 1 comprimido de 12 em 12 horas por 7 dias."
+      }
+    ]
+  },
+  "CASE-INC-006": {
+    "name": "CONSULTÓRIO PARTICULAR DEMO",
+    "document_id": "CASE-INC-006",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-006",
+        "run_id": "run-CASE-INC-006",
+        "field_type": "medication",
+        "raw_text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+        "normalized_value": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+        "hypotheses": [
+          {
+            "text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-006"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-006"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-006",
+        "document_id": "CASE-INC-006",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Tomar 1 comprimido de 12 em 12 horas por 7 dias."
+      }
+    ]
+  },
+  "caso_07_sem_unidade.jpg": {
+    "name": "POLICLÍNICA CENTRAL DEMO",
+    "document_id": "CASE-INC-007",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-007",
+        "run_id": "run-CASE-INC-007",
+        "field_type": "medication",
+        "raw_text": "Tomar se febre acima de 38°C.",
+        "normalized_value": "Tomar se febre acima de 38°C.",
+        "hypotheses": [
+          {
+            "text": "Tomar se febre acima de 38°C.",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-007"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-007"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-INC-007",
+        "run_id": "run-CASE-INC-007",
+        "field_type": "crm",
+        "raw_text": "224466-SP",
+        "normalized_value": "224466-SP",
+        "hypotheses": [
+          {
+            "text": "224466-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-INC-007"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-INC-007"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-007",
+        "document_id": "CASE-INC-007",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Tomar se febre acima de 38°C."
+      },
+      {
+        "id": "ev-crm-CASE-INC-007",
+        "document_id": "CASE-INC-007",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 224466-SP"
+      }
+    ]
+  },
+  "CASE-INC-007": {
+    "name": "POLICLÍNICA CENTRAL DEMO",
+    "document_id": "CASE-INC-007",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-007",
+        "run_id": "run-CASE-INC-007",
+        "field_type": "medication",
+        "raw_text": "Tomar se febre acima de 38°C.",
+        "normalized_value": "Tomar se febre acima de 38°C.",
+        "hypotheses": [
+          {
+            "text": "Tomar se febre acima de 38°C.",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-007"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-007"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-INC-007",
+        "run_id": "run-CASE-INC-007",
+        "field_type": "crm",
+        "raw_text": "224466-SP",
+        "normalized_value": "224466-SP",
+        "hypotheses": [
+          {
+            "text": "224466-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-INC-007"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-INC-007"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-007",
+        "document_id": "CASE-INC-007",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Tomar se febre acima de 38°C."
+      },
+      {
+        "id": "ev-crm-CASE-INC-007",
+        "document_id": "CASE-INC-007",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 224466-SP"
+      }
+    ]
+  },
+  "caso_08_crm_incompleto.jpg": {
+    "name": "HOSPITAL GERAL DE RETAGUARDA DEMO",
+    "document_id": "CASE-INC-008",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-008",
+        "run_id": "run-CASE-INC-008",
+        "field_type": "medication",
+        "raw_text": "Tomar 1 cápsula de 6 em 6 horas.",
+        "normalized_value": "Tomar 1 cápsula de 6 em 6 horas.",
+        "hypotheses": [
+          {
+            "text": "Tomar 1 cápsula de 6 em 6 horas.",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-008"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-008"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-008",
+        "document_id": "CASE-INC-008",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Tomar 1 cápsula de 6 em 6 horas."
+      }
+    ]
+  },
+  "CASE-INC-008": {
+    "name": "HOSPITAL GERAL DE RETAGUARDA DEMO",
+    "document_id": "CASE-INC-008",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-008",
+        "run_id": "run-CASE-INC-008",
+        "field_type": "medication",
+        "raw_text": "Tomar 1 cápsula de 6 em 6 horas.",
+        "normalized_value": "Tomar 1 cápsula de 6 em 6 horas.",
+        "hypotheses": [
+          {
+            "text": "Tomar 1 cápsula de 6 em 6 horas.",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-008"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-008"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-008",
+        "document_id": "CASE-INC-008",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Tomar 1 cápsula de 6 em 6 horas."
+      }
+    ]
+  },
+  "caso_09_cid_incompativel.jpg": {
+    "name": "CLÍNICA CIRÚRGICA DEMO",
+    "document_id": "CASE-INC-009",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-009",
+        "run_id": "run-CASE-INC-009",
+        "field_type": "medication",
+        "raw_text": "Artroplastia Total de Quadril Direito",
+        "normalized_value": "Artroplastia Total de Quadril Direito",
+        "hypotheses": [
+          {
+            "text": "Artroplastia Total de Quadril Direito",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-009"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-009"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-INC-009",
+        "run_id": "run-CASE-INC-009",
+        "field_type": "crm",
+        "raw_text": "771122-SP",
+        "normalized_value": "771122-SP",
+        "hypotheses": [
+          {
+            "text": "771122-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-INC-009"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-INC-009"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-009",
+        "document_id": "CASE-INC-009",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Artroplastia Total de Quadril Direito"
+      },
+      {
+        "id": "ev-crm-CASE-INC-009",
+        "document_id": "CASE-INC-009",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 771122-SP"
+      }
+    ]
+  },
+  "CASE-INC-009": {
+    "name": "CLÍNICA CIRÚRGICA DEMO",
+    "document_id": "CASE-INC-009",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-009",
+        "run_id": "run-CASE-INC-009",
+        "field_type": "medication",
+        "raw_text": "Artroplastia Total de Quadril Direito",
+        "normalized_value": "Artroplastia Total de Quadril Direito",
+        "hypotheses": [
+          {
+            "text": "Artroplastia Total de Quadril Direito",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-009"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-009"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-INC-009",
+        "run_id": "run-CASE-INC-009",
+        "field_type": "crm",
+        "raw_text": "771122-SP",
+        "normalized_value": "771122-SP",
+        "hypotheses": [
+          {
+            "text": "771122-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-INC-009"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-INC-009"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-009",
+        "document_id": "CASE-INC-009",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Artroplastia Total de Quadril Direito"
+      },
+      {
+        "id": "ev-crm-CASE-INC-009",
+        "document_id": "CASE-INC-009",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 771122-SP"
+      }
+    ]
+  },
+  "caso_10_posologia_contraditoria.jpg": {
+    "name": "AMBULATÓRIO DE ESPECIALIDADES DEMO",
+    "document_id": "CASE-INC-010",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-010",
+        "run_id": "run-CASE-INC-010",
+        "field_type": "medication",
+        "raw_text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+        "normalized_value": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+        "hypotheses": [
+          {
+            "text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-010"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-010"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-INC-010",
+        "run_id": "run-CASE-INC-010",
+        "field_type": "crm",
+        "raw_text": "993311-SP",
+        "normalized_value": "993311-SP",
+        "hypotheses": [
+          {
+            "text": "993311-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-INC-010"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-INC-010"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-010",
+        "document_id": "CASE-INC-010",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'"
+      },
+      {
+        "id": "ev-crm-CASE-INC-010",
+        "document_id": "CASE-INC-010",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 993311-SP"
+      }
+    ]
+  },
+  "CASE-INC-010": {
+    "name": "AMBULATÓRIO DE ESPECIALIDADES DEMO",
+    "document_id": "CASE-INC-010",
+    "fields": [
+      {
+        "id": "field-med-CASE-INC-010",
+        "run_id": "run-CASE-INC-010",
+        "field_type": "medication",
+        "raw_text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+        "normalized_value": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+        "hypotheses": [
+          {
+            "text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-INC-010"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-INC-010"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-INC-010",
+        "run_id": "run-CASE-INC-010",
+        "field_type": "crm",
+        "raw_text": "993311-SP",
+        "normalized_value": "993311-SP",
+        "hypotheses": [
+          {
+            "text": "993311-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-INC-010"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-INC-010"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-INC-010",
+        "document_id": "CASE-INC-010",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'"
+      },
+      {
+        "id": "ev-crm-CASE-INC-010",
+        "document_id": "CASE-INC-010",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 993311-SP"
+      }
+    ]
+  },
+  "caso_11_duplicidade_declarada.jpg": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-011",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-011",
+        "run_id": "run-CASE-DUP-011",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-001",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-001",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-001",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-011"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-011"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-011",
+        "run_id": "run-CASE-DUP-011",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-011"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-011"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-011",
+        "document_id": "CASE-DUP-011",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-001"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-011",
+        "document_id": "CASE-DUP-011",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "CASE-DUP-011": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-011",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-011",
+        "run_id": "run-CASE-DUP-011",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-001",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-001",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-001",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-011"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-011"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-011",
+        "run_id": "run-CASE-DUP-011",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-011"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-011"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-011",
+        "document_id": "CASE-DUP-011",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-001"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-011",
+        "document_id": "CASE-DUP-011",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "caso_12_duplicidade_declarada.jpg": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-012",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-012",
+        "run_id": "run-CASE-DUP-012",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-002",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-002",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-002",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-012"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-012"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-012",
+        "run_id": "run-CASE-DUP-012",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-012"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-012"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-012",
+        "document_id": "CASE-DUP-012",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-002"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-012",
+        "document_id": "CASE-DUP-012",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "CASE-DUP-012": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-012",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-012",
+        "run_id": "run-CASE-DUP-012",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-002",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-002",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-002",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-012"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-012"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-012",
+        "run_id": "run-CASE-DUP-012",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-012"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-012"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-012",
+        "document_id": "CASE-DUP-012",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-002"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-012",
+        "document_id": "CASE-DUP-012",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "caso_13_duplicidade_declarada.jpg": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-013",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-013",
+        "run_id": "run-CASE-DUP-013",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-003",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-003",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-003",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-013"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-013"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-013",
+        "run_id": "run-CASE-DUP-013",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-013"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-013"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-013",
+        "document_id": "CASE-DUP-013",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-003"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-013",
+        "document_id": "CASE-DUP-013",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "CASE-DUP-013": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-013",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-013",
+        "run_id": "run-CASE-DUP-013",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-003",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-003",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-003",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-013"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-013"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-013",
+        "run_id": "run-CASE-DUP-013",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-013"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-013"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-013",
+        "document_id": "CASE-DUP-013",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-003"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-013",
+        "document_id": "CASE-DUP-013",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "caso_14_duplicidade_declarada.jpg": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-014",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-014",
+        "run_id": "run-CASE-DUP-014",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-004",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-004",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-004",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-014"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-014"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-014",
+        "run_id": "run-CASE-DUP-014",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-014"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-014"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-014",
+        "document_id": "CASE-DUP-014",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-004"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-014",
+        "document_id": "CASE-DUP-014",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "CASE-DUP-014": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-014",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-014",
+        "run_id": "run-CASE-DUP-014",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-004",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-004",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-004",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-014"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-014"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-014",
+        "run_id": "run-CASE-DUP-014",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-014"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-014"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-014",
+        "document_id": "CASE-DUP-014",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-004"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-014",
+        "document_id": "CASE-DUP-014",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "caso_15_duplicidade_declarada.jpg": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-015",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-015",
+        "run_id": "run-CASE-DUP-015",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-005",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-005",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-005",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-015"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-015"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-015",
+        "run_id": "run-CASE-DUP-015",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-015"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-015"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-015",
+        "document_id": "CASE-DUP-015",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-005"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-015",
+        "document_id": "CASE-DUP-015",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "CASE-DUP-015": {
+    "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+    "document_id": "CASE-DUP-015",
+    "fields": [
+      {
+        "id": "field-med-CASE-DUP-015",
+        "run_id": "run-CASE-DUP-015",
+        "field_type": "medication",
+        "raw_text": "Lote de auditoria: LOTE-REPETICAO-005",
+        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-005",
+        "hypotheses": [
+          {
+            "text": "Lote de auditoria: LOTE-REPETICAO-005",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-DUP-015"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-DUP-015"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-DUP-015",
+        "run_id": "run-CASE-DUP-015",
+        "field_type": "crm",
+        "raw_text": "665544-SP",
+        "normalized_value": "665544-SP",
+        "hypotheses": [
+          {
+            "text": "665544-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-DUP-015"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-DUP-015"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-DUP-015",
+        "document_id": "CASE-DUP-015",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2286,
+          "x_max": 0.9062,
+          "y_max": 0.2762
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Lote de auditoria: LOTE-REPETICAO-005"
+      },
+      {
+        "id": "ev-crm-CASE-DUP-015",
+        "document_id": "CASE-DUP-015",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 665544-SP"
+      }
+    ]
+  },
+  "caso_16_controle_limpo.jpg": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-016",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-016",
+        "run_id": "run-CASE-CTR-016",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-016"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-016"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-016",
+        "run_id": "run-CASE-CTR-016",
+        "field_type": "crm",
+        "raw_text": "1234516-SP",
+        "normalized_value": "1234516-SP",
+        "hypotheses": [
+          {
+            "text": "1234516-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-016"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-016"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-016",
+        "document_id": "CASE-CTR-016",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-016",
+        "document_id": "CASE-CTR-016",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234516-SP"
+      }
+    ]
+  },
+  "CASE-CTR-016": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-016",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-016",
+        "run_id": "run-CASE-CTR-016",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-016"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-016"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-016",
+        "run_id": "run-CASE-CTR-016",
+        "field_type": "crm",
+        "raw_text": "1234516-SP",
+        "normalized_value": "1234516-SP",
+        "hypotheses": [
+          {
+            "text": "1234516-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-016"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-016"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-016",
+        "document_id": "CASE-CTR-016",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-016",
+        "document_id": "CASE-CTR-016",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234516-SP"
+      }
+    ]
+  },
+  "caso_17_controle_limpo.jpg": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-017",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-017",
+        "run_id": "run-CASE-CTR-017",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-017"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-017"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-017",
+        "run_id": "run-CASE-CTR-017",
+        "field_type": "crm",
+        "raw_text": "1234517-SP",
+        "normalized_value": "1234517-SP",
+        "hypotheses": [
+          {
+            "text": "1234517-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-017"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-017"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-017",
+        "document_id": "CASE-CTR-017",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-017",
+        "document_id": "CASE-CTR-017",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234517-SP"
+      }
+    ]
+  },
+  "CASE-CTR-017": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-017",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-017",
+        "run_id": "run-CASE-CTR-017",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-017"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-017"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-017",
+        "run_id": "run-CASE-CTR-017",
+        "field_type": "crm",
+        "raw_text": "1234517-SP",
+        "normalized_value": "1234517-SP",
+        "hypotheses": [
+          {
+            "text": "1234517-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-017"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-017"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-017",
+        "document_id": "CASE-CTR-017",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-017",
+        "document_id": "CASE-CTR-017",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234517-SP"
+      }
+    ]
+  },
+  "caso_18_controle_limpo.jpg": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-018",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-018",
+        "run_id": "run-CASE-CTR-018",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-018"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-018"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-018",
+        "run_id": "run-CASE-CTR-018",
+        "field_type": "crm",
+        "raw_text": "1234518-SP",
+        "normalized_value": "1234518-SP",
+        "hypotheses": [
+          {
+            "text": "1234518-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-018"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-018"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-018",
+        "document_id": "CASE-CTR-018",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-018",
+        "document_id": "CASE-CTR-018",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234518-SP"
+      }
+    ]
+  },
+  "CASE-CTR-018": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-018",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-018",
+        "run_id": "run-CASE-CTR-018",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-018"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-018"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-018",
+        "run_id": "run-CASE-CTR-018",
+        "field_type": "crm",
+        "raw_text": "1234518-SP",
+        "normalized_value": "1234518-SP",
+        "hypotheses": [
+          {
+            "text": "1234518-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-018"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-018"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-018",
+        "document_id": "CASE-CTR-018",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-018",
+        "document_id": "CASE-CTR-018",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234518-SP"
+      }
+    ]
+  },
+  "caso_19_controle_limpo.jpg": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-019",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-019",
+        "run_id": "run-CASE-CTR-019",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-019"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-019"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-019",
+        "run_id": "run-CASE-CTR-019",
+        "field_type": "crm",
+        "raw_text": "1234519-SP",
+        "normalized_value": "1234519-SP",
+        "hypotheses": [
+          {
+            "text": "1234519-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-019"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-019"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-019",
+        "document_id": "CASE-CTR-019",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-019",
+        "document_id": "CASE-CTR-019",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234519-SP"
+      }
+    ]
+  },
+  "CASE-CTR-019": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-019",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-019",
+        "run_id": "run-CASE-CTR-019",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-019"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-019"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-019",
+        "run_id": "run-CASE-CTR-019",
+        "field_type": "crm",
+        "raw_text": "1234519-SP",
+        "normalized_value": "1234519-SP",
+        "hypotheses": [
+          {
+            "text": "1234519-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-019"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-019"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-019",
+        "document_id": "CASE-CTR-019",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-019",
+        "document_id": "CASE-CTR-019",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234519-SP"
+      }
+    ]
+  },
+  "caso_20_controle_limpo.jpg": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-020",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-020",
+        "run_id": "run-CASE-CTR-020",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-020"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-020"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-020",
+        "run_id": "run-CASE-CTR-020",
+        "field_type": "crm",
+        "raw_text": "1234520-SP",
+        "normalized_value": "1234520-SP",
+        "hypotheses": [
+          {
+            "text": "1234520-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-020"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-020"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-020",
+        "document_id": "CASE-CTR-020",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-020",
+        "document_id": "CASE-CTR-020",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234520-SP"
+      }
+    ]
+  },
+  "CASE-CTR-020": {
+    "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+    "document_id": "CASE-CTR-020",
+    "fields": [
+      {
+        "id": "field-med-CASE-CTR-020",
+        "run_id": "run-CASE-CTR-020",
+        "field_type": "medication",
+        "raw_text": "Dipirona Monoidratada 500mg/ml gotas",
+        "normalized_value": "Dipirona Monoidratada 500mg/ml gotas",
+        "hypotheses": [
+          {
+            "text": "Dipirona Monoidratada 500mg/ml gotas",
+            "rank": 1,
+            "score": 0.98,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-item-CASE-CTR-020"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.98,
+        "evidence_ids": [
+          "ev-item-CASE-CTR-020"
+        ],
+        "requires_review": false
+      },
+      {
+        "id": "field-crm-CASE-CTR-020",
+        "run_id": "run-CASE-CTR-020",
+        "field_type": "crm",
+        "raw_text": "1234520-SP",
+        "normalized_value": "1234520-SP",
+        "hypotheses": [
+          {
+            "text": "1234520-SP",
+            "rank": 1,
+            "score": 0.99,
+            "score_kind": "HEURISTIC_MODEL",
+            "supporting_evidence_ids": [
+              "ev-crm-CASE-CTR-020"
+            ]
+          }
+        ],
+        "uncertainty_status": "CERTAIN",
+        "confidence_kind": "HEURISTIC_MODEL",
+        "score": 0.99,
+        "evidence_ids": [
+          "ev-crm-CASE-CTR-020"
+        ],
+        "requires_review": false
+      }
+    ],
+    "evidences": [
+      {
+        "id": "ev-item-CASE-CTR-020",
+        "document_id": "CASE-CTR-020",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.0938,
+          "y_min": 0.2667,
+          "x_max": 0.9062,
+          "y_max": 0.3143
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "Dipirona Monoidratada 500mg/ml gotas"
+      },
+      {
+        "id": "ev-crm-CASE-CTR-020",
+        "document_id": "CASE-CTR-020",
+        "page": 1,
+        "bbox": {
+          "x_min": 0.08,
+          "y_min": 0.16,
+          "x_max": 0.45,
+          "y_max": 0.2
+        },
+        "coordinate_system": "NORMALIZED_0_1",
+        "localization_status": "MANUAL_FIXTURE",
+        "source": "FIXTURE",
+        "excerpt": "CRM 1234520-SP"
+      }
+    ]
+  }
+}

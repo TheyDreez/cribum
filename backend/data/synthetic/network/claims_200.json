@@ -1,0 +1,2605 @@
+[
+  {
+    "id": "CLAIM-NET-001",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-001",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária",
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 25000,
+    "anomalia_injetada": "DISTANCIA_IMPOSSIVEL"
+  },
+  {
+    "id": "CLAIM-NET-002",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-002",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária",
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 25000,
+    "anomalia_injetada": "DISTANCIA_IMPOSSIVEL"
+  },
+  {
+    "id": "CLAIM-NET-003",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-003",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária",
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 25000,
+    "anomalia_injetada": "DISTANCIA_IMPOSSIVEL"
+  },
+  {
+    "id": "CLAIM-NET-004",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-004",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 90000,
+    "anomalia_injetada": "DISTANCIA_IMPOSSIVEL"
+  },
+  {
+    "id": "CLAIM-NET-005",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-005",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 90000,
+    "anomalia_injetada": "DISTANCIA_IMPOSSIVEL"
+  },
+  {
+    "id": "CLAIM-NET-006",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-006",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 90000,
+    "anomalia_injetada": "DISTANCIA_IMPOSSIVEL"
+  },
+  {
+    "id": "CLAIM-NET-007",
+    "crm_profissional": "PROF-DEMO-001",
+    "paciente_id": "PACIENTE-DEMO-095",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 44256,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-008",
+    "crm_profissional": "PROF-DEMO-024",
+    "paciente_id": "PACIENTE-DEMO-014",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 92397,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-009",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-004",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 45495,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-010",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-004",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 108850,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-011",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-029",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 15851,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-012",
+    "crm_profissional": "PROF-DEMO-023",
+    "paciente_id": "PACIENTE-DEMO-055",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 35379,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-013",
+    "crm_profissional": "PROF-DEMO-011",
+    "paciente_id": "PACIENTE-DEMO-014",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 27676,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-014",
+    "crm_profissional": "PROF-DEMO-012",
+    "paciente_id": "PACIENTE-DEMO-078",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 110647,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-015",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-016",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 87357,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-016",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-080",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 90674,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-017",
+    "crm_profissional": "PROF-DEMO-023",
+    "paciente_id": "PACIENTE-DEMO-009",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-01",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 116327,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-018",
+    "crm_profissional": "PROF-DEMO-003",
+    "paciente_id": "PACIENTE-DEMO-030",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 64823,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-019",
+    "crm_profissional": "PROF-DEMO-015",
+    "paciente_id": "PACIENTE-DEMO-082",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 36319,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-020",
+    "crm_profissional": "PROF-DEMO-012",
+    "paciente_id": "PACIENTE-DEMO-027",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 106988,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-021",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-082",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 36417,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-022",
+    "crm_profissional": "PROF-DEMO-013",
+    "paciente_id": "PACIENTE-DEMO-035",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 104733,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-023",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-030",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 56347,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-024",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-009",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 42869,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-025",
+    "crm_profissional": "PROF-DEMO-013",
+    "paciente_id": "PACIENTE-DEMO-083",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 49718,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-026",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-096",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 112912,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-027",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-075",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 43746,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-028",
+    "crm_profissional": "PROF-DEMO-017",
+    "paciente_id": "PACIENTE-DEMO-064",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 29371,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-029",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-021",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 93172,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-030",
+    "crm_profissional": "PROF-DEMO-013",
+    "paciente_id": "PACIENTE-DEMO-049",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 84352,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-031",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-002",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 104353,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-032",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-099",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 29621,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-033",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-021",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 109646,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-034",
+    "crm_profissional": "PROF-DEMO-017",
+    "paciente_id": "PACIENTE-DEMO-098",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 96959,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-035",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-065",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 35032,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-036",
+    "crm_profissional": "PROF-DEMO-006",
+    "paciente_id": "PACIENTE-DEMO-070",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 93504,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-037",
+    "crm_profissional": "PROF-DEMO-016",
+    "paciente_id": "PACIENTE-DEMO-003",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 55306,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-038",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-031",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 26226,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-039",
+    "crm_profissional": "PROF-DEMO-003",
+    "paciente_id": "PACIENTE-DEMO-098",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 31828,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-040",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-022",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 42760,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-041",
+    "crm_profissional": "PROF-DEMO-024",
+    "paciente_id": "PACIENTE-DEMO-089",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 67296,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-042",
+    "crm_profissional": "PROF-DEMO-015",
+    "paciente_id": "PACIENTE-DEMO-067",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 47493,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-043",
+    "crm_profissional": "PROF-DEMO-003",
+    "paciente_id": "PACIENTE-DEMO-044",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-01",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 92128,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-044",
+    "crm_profissional": "PROF-DEMO-001",
+    "paciente_id": "PACIENTE-DEMO-010",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 45007,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-045",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-043",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 51500,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-046",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-070",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 46850,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-047",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-025",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 101374,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-048",
+    "crm_profissional": "PROF-DEMO-012",
+    "paciente_id": "PACIENTE-DEMO-055",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 110561,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-049",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-084",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 22944,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-050",
+    "crm_profissional": "PROF-DEMO-024",
+    "paciente_id": "PACIENTE-DEMO-044",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 47591,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-051",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-069",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 70296,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-052",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-060",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 73082,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-053",
+    "crm_profissional": "PROF-DEMO-004",
+    "paciente_id": "PACIENTE-DEMO-007",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 27224,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-054",
+    "crm_profissional": "PROF-DEMO-006",
+    "paciente_id": "PACIENTE-DEMO-053",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 43016,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-055",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-022",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 66173,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-056",
+    "crm_profissional": "PROF-DEMO-015",
+    "paciente_id": "PACIENTE-DEMO-037",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 35289,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-057",
+    "crm_profissional": "PROF-DEMO-010",
+    "paciente_id": "PACIENTE-DEMO-028",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-01",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 113038,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-058",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-007",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 80909,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-059",
+    "crm_profissional": "PROF-DEMO-006",
+    "paciente_id": "PACIENTE-DEMO-008",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 39356,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-060",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-009",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 67923,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-061",
+    "crm_profissional": "PROF-DEMO-019",
+    "paciente_id": "PACIENTE-DEMO-032",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 96183,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-062",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-085",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 49179,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-063",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-092",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 49814,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-064",
+    "crm_profissional": "PROF-DEMO-005",
+    "paciente_id": "PACIENTE-DEMO-086",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 74929,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-065",
+    "crm_profissional": "PROF-DEMO-003",
+    "paciente_id": "PACIENTE-DEMO-002",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 24602,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-066",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-065",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 60745,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-067",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-048",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 72433,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-068",
+    "crm_profissional": "PROF-DEMO-023",
+    "paciente_id": "PACIENTE-DEMO-039",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 102538,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-069",
+    "crm_profissional": "PROF-DEMO-010",
+    "paciente_id": "PACIENTE-DEMO-085",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 49664,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-070",
+    "crm_profissional": "PROF-DEMO-004",
+    "paciente_id": "PACIENTE-DEMO-096",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 50697,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-071",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-027",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 41685,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-072",
+    "crm_profissional": "PROF-DEMO-017",
+    "paciente_id": "PACIENTE-DEMO-063",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 27097,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-073",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-006",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-01",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 116072,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-074",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-034",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 87309,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-075",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-002",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 105573,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-076",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-005",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 91350,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-077",
+    "crm_profissional": "PROF-DEMO-005",
+    "paciente_id": "PACIENTE-DEMO-056",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 55404,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-078",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-046",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 102416,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-079",
+    "crm_profissional": "PROF-DEMO-012",
+    "paciente_id": "PACIENTE-DEMO-072",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 96351,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-080",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-021",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 69040,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-081",
+    "crm_profissional": "PROF-DEMO-006",
+    "paciente_id": "PACIENTE-DEMO-095",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 102806,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-082",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-021",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 65140,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-083",
+    "crm_profissional": "PROF-DEMO-016",
+    "paciente_id": "PACIENTE-DEMO-029",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 60830,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-084",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-029",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-01",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 67227,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-085",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-009",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 61025,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-086",
+    "crm_profissional": "PROF-DEMO-013",
+    "paciente_id": "PACIENTE-DEMO-087",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 18617,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-087",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-023",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 20014,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-088",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-056",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 72199,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-089",
+    "crm_profissional": "PROF-DEMO-017",
+    "paciente_id": "PACIENTE-DEMO-015",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 48386,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-090",
+    "crm_profissional": "PROF-DEMO-023",
+    "paciente_id": "PACIENTE-DEMO-056",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-01",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 62739,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-091",
+    "crm_profissional": "PROF-DEMO-003",
+    "paciente_id": "PACIENTE-DEMO-086",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 101951,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-092",
+    "crm_profissional": "PROF-DEMO-024",
+    "paciente_id": "PACIENTE-DEMO-039",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 102410,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-093",
+    "crm_profissional": "PROF-DEMO-011",
+    "paciente_id": "PACIENTE-DEMO-052",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 87667,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-094",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-054",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 103777,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-095",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-073",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 86819,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-096",
+    "crm_profissional": "PROF-DEMO-010",
+    "paciente_id": "PACIENTE-DEMO-037",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 117990,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-097",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-084",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 72905,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-098",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-028",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 119036,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-099",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-011",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 27240,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-100",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-040",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 34313,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-101",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-032",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 74692,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-102",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-074",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 79799,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-103",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-019",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 113430,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-104",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-029",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 21582,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-105",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-016",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 75901,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-106",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-077",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 95301,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-107",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-071",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 112472,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-108",
+    "crm_profissional": "PROF-DEMO-015",
+    "paciente_id": "PACIENTE-DEMO-034",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 98579,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-109",
+    "crm_profissional": "PROF-DEMO-017",
+    "paciente_id": "PACIENTE-DEMO-063",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 50992,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-110",
+    "crm_profissional": "PROF-DEMO-003",
+    "paciente_id": "PACIENTE-DEMO-092",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 50614,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-111",
+    "crm_profissional": "PROF-DEMO-011",
+    "paciente_id": "PACIENTE-DEMO-070",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 34769,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-112",
+    "crm_profissional": "PROF-DEMO-013",
+    "paciente_id": "PACIENTE-DEMO-089",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 23418,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-113",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-043",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 69496,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-114",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-054",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 115348,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-115",
+    "crm_profissional": "PROF-DEMO-013",
+    "paciente_id": "PACIENTE-DEMO-062",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-01",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 54139,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-116",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-069",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 78993,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-117",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-056",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 65968,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-118",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-087",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 109919,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-119",
+    "crm_profissional": "PROF-DEMO-015",
+    "paciente_id": "PACIENTE-DEMO-017",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 66645,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-120",
+    "crm_profissional": "PROF-DEMO-019",
+    "paciente_id": "PACIENTE-DEMO-085",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-01",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 99246,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-121",
+    "crm_profissional": "PROF-DEMO-005",
+    "paciente_id": "PACIENTE-DEMO-060",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 49099,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-122",
+    "crm_profissional": "PROF-DEMO-011",
+    "paciente_id": "PACIENTE-DEMO-028",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 59236,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-123",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-097",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 48065,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-124",
+    "crm_profissional": "PROF-DEMO-016",
+    "paciente_id": "PACIENTE-DEMO-003",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 60870,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-125",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-009",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 113858,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-126",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-026",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 96439,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-127",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-017",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 88920,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-128",
+    "crm_profissional": "PROF-DEMO-015",
+    "paciente_id": "PACIENTE-DEMO-090",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 36992,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-129",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-096",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 116946,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-130",
+    "crm_profissional": "PROF-DEMO-010",
+    "paciente_id": "PACIENTE-DEMO-014",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 55888,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-131",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-049",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 24961,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-132",
+    "crm_profissional": "PROF-DEMO-023",
+    "paciente_id": "PACIENTE-DEMO-081",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 106382,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-133",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-077",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 119363,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-134",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-045",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 101706,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-135",
+    "crm_profissional": "PROF-DEMO-003",
+    "paciente_id": "PACIENTE-DEMO-065",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 16658,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-136",
+    "crm_profissional": "PROF-DEMO-016",
+    "paciente_id": "PACIENTE-DEMO-014",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 98307,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-137",
+    "crm_profissional": "PROF-DEMO-023",
+    "paciente_id": "PACIENTE-DEMO-020",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 111180,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-138",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-035",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 75931,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-139",
+    "crm_profissional": "PROF-DEMO-024",
+    "paciente_id": "PACIENTE-DEMO-076",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 47177,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-140",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-058",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 89691,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-141",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-049",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 79789,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-142",
+    "crm_profissional": "PROF-DEMO-006",
+    "paciente_id": "PACIENTE-DEMO-063",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 119573,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-143",
+    "crm_profissional": "PROF-DEMO-011",
+    "paciente_id": "PACIENTE-DEMO-036",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 87848,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-144",
+    "crm_profissional": "PROF-DEMO-017",
+    "paciente_id": "PACIENTE-DEMO-025",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 109381,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-145",
+    "crm_profissional": "PROF-DEMO-016",
+    "paciente_id": "PACIENTE-DEMO-072",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 105519,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-146",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-092",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 118931,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-147",
+    "crm_profissional": "PROF-DEMO-003",
+    "paciente_id": "PACIENTE-DEMO-038",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 105673,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-148",
+    "crm_profissional": "PROF-DEMO-010",
+    "paciente_id": "PACIENTE-DEMO-085",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 77031,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-149",
+    "crm_profissional": "PROF-DEMO-017",
+    "paciente_id": "PACIENTE-DEMO-045",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 61112,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-150",
+    "crm_profissional": "PROF-DEMO-009",
+    "paciente_id": "PACIENTE-DEMO-040",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 30814,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-151",
+    "crm_profissional": "PROF-DEMO-011",
+    "paciente_id": "PACIENTE-DEMO-016",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 40105,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-152",
+    "crm_profissional": "PROF-DEMO-024",
+    "paciente_id": "PACIENTE-DEMO-062",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 28176,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-153",
+    "crm_profissional": "PROF-DEMO-010",
+    "paciente_id": "PACIENTE-DEMO-030",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 54618,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-154",
+    "crm_profissional": "PROF-DEMO-023",
+    "paciente_id": "PACIENTE-DEMO-069",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 20965,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-155",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-038",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 98606,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-156",
+    "crm_profissional": "PROF-DEMO-004",
+    "paciente_id": "PACIENTE-DEMO-002",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 76524,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-157",
+    "crm_profissional": "PROF-DEMO-015",
+    "paciente_id": "PACIENTE-DEMO-044",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 48092,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-158",
+    "crm_profissional": "PROF-DEMO-004",
+    "paciente_id": "PACIENTE-DEMO-009",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 24710,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-159",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-088",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-01",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 34555,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-160",
+    "crm_profissional": "PROF-DEMO-010",
+    "paciente_id": "PACIENTE-DEMO-011",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 88147,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-161",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-077",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 116671,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-162",
+    "crm_profissional": "PROF-DEMO-013",
+    "paciente_id": "PACIENTE-DEMO-058",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 92139,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-163",
+    "crm_profissional": "PROF-DEMO-010",
+    "paciente_id": "PACIENTE-DEMO-073",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 94905,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-164",
+    "crm_profissional": "PROF-DEMO-007",
+    "paciente_id": "PACIENTE-DEMO-081",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 101563,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-165",
+    "crm_profissional": "PROF-DEMO-006",
+    "paciente_id": "PACIENTE-DEMO-031",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 35517,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-166",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-058",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 53175,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-167",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-037",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 107141,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-168",
+    "crm_profissional": "PROF-DEMO-003",
+    "paciente_id": "PACIENTE-DEMO-088",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 118262,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-169",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-026",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-07",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 86376,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-170",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-020",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 24359,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-171",
+    "crm_profissional": "PROF-DEMO-006",
+    "paciente_id": "PACIENTE-DEMO-040",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 72560,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-172",
+    "crm_profissional": "PROF-DEMO-015",
+    "paciente_id": "PACIENTE-DEMO-089",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 50683,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-173",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-064",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 93385,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-174",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-095",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 18390,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-175",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-087",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 115238,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-176",
+    "crm_profissional": "PROF-DEMO-019",
+    "paciente_id": "PACIENTE-DEMO-006",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 76669,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-177",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-057",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 91720,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-178",
+    "crm_profissional": "PROF-DEMO-021",
+    "paciente_id": "PACIENTE-DEMO-063",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 60607,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-179",
+    "crm_profissional": "PROF-DEMO-011",
+    "paciente_id": "PACIENTE-DEMO-042",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-11",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 36079,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-180",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-089",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 101846,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-181",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-005",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Eletrocardiograma de Repouso"
+    ],
+    "valor_centavos": 56224,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-182",
+    "crm_profissional": "PROF-DEMO-011",
+    "paciente_id": "PACIENTE-DEMO-015",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 82449,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-183",
+    "crm_profissional": "PROF-DEMO-022",
+    "paciente_id": "PACIENTE-DEMO-070",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 22104,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-184",
+    "crm_profissional": "PROF-DEMO-017",
+    "paciente_id": "PACIENTE-DEMO-047",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-10",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 96973,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-185",
+    "crm_profissional": "PROF-DEMO-002",
+    "paciente_id": "PACIENTE-DEMO-027",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 52752,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-186",
+    "crm_profissional": "PROF-DEMO-023",
+    "paciente_id": "PACIENTE-DEMO-063",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 97578,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-187",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-091",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 87199,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-188",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-053",
+    "clinica_id": "CLINICA-DEMO-001",
+    "cidade": "Sorocaba",
+    "data": "2026-10-02",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 29871,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-189",
+    "crm_profissional": "PROF-DEMO-004",
+    "paciente_id": "PACIENTE-DEMO-083",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 80323,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-190",
+    "crm_profissional": "PROF-DEMO-017",
+    "paciente_id": "PACIENTE-DEMO-091",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-05",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 78242,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-191",
+    "crm_profissional": "PROF-DEMO-008",
+    "paciente_id": "PACIENTE-DEMO-059",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-09",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 65277,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-192",
+    "crm_profissional": "PROF-DEMO-020",
+    "paciente_id": "PACIENTE-DEMO-066",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Hemograma Completo"
+    ],
+    "valor_centavos": 24150,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-193",
+    "crm_profissional": "PROF-DEMO-014",
+    "paciente_id": "PACIENTE-DEMO-044",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-13",
+    "procedimentos": [
+      "Ressonância Magnética"
+    ],
+    "valor_centavos": 15336,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-194",
+    "crm_profissional": "PROF-DEMO-024",
+    "paciente_id": "PACIENTE-DEMO-039",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-14",
+    "procedimentos": [
+      "Ecocardiograma Transtorácico"
+    ],
+    "valor_centavos": 34476,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-195",
+    "crm_profissional": "PROF-DEMO-018",
+    "paciente_id": "PACIENTE-DEMO-062",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 87340,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-196",
+    "crm_profissional": "PROF-DEMO-013",
+    "paciente_id": "PACIENTE-DEMO-059",
+    "clinica_id": "CLINICA-DEMO-005",
+    "cidade": "Santos",
+    "data": "2026-10-06",
+    "procedimentos": [
+      "Ultrassonografia Abdominal"
+    ],
+    "valor_centavos": 106422,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-197",
+    "crm_profissional": "PROF-DEMO-019",
+    "paciente_id": "PACIENTE-DEMO-050",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-04",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 20720,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-198",
+    "crm_profissional": "PROF-DEMO-024",
+    "paciente_id": "PACIENTE-DEMO-061",
+    "clinica_id": "CLINICA-DEMO-003",
+    "cidade": "São Paulo",
+    "data": "2026-10-12",
+    "procedimentos": [
+      "Sessão de Fisioterapia Motora"
+    ],
+    "valor_centavos": 65604,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-199",
+    "crm_profissional": "PROF-DEMO-016",
+    "paciente_id": "PACIENTE-DEMO-005",
+    "clinica_id": "CLINICA-DEMO-002",
+    "cidade": "Campinas",
+    "data": "2026-10-03",
+    "procedimentos": [
+      "Endoscopia Digestiva Alta"
+    ],
+    "valor_centavos": 28154,
+    "anomalia_injetada": null
+  },
+  {
+    "id": "CLAIM-NET-200",
+    "crm_profissional": "PROF-DEMO-004",
+    "paciente_id": "PACIENTE-DEMO-068",
+    "clinica_id": "CLINICA-DEMO-004",
+    "cidade": "São José dos Campos",
+    "data": "2026-10-08",
+    "procedimentos": [
+      "Consulta Médica em Atenção Primária"
+    ],
+    "valor_centavos": 109692,
+    "anomalia_injetada": null
+  }
+]

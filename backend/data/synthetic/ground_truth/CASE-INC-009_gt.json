@@ -1,0 +1,24 @@
+{
+  "id": "CASE-INC-009",
+  "filename": "caso_09_cid_incompativel.jpg",
+  "title": "CLÍNICA CIRÚRGICA DEMO",
+  "crm": "771122-SP",
+  "paciente": "PACIENTE-DEMO-009",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-009 | Data: 2026-10-10 | CRM: 771122-SP",
+    "Diagnóstico Declarado: CID-10 J00 (Nasofaringite aguda - Resfriado comum)",
+    "---",
+    "PROCEDIMENTO SOLICITADO:",
+    "[BOX] Artroplastia Total de Quadril Direito",
+    "Justificativa: Procedimento de alta complexidade em regime hospitalar."
+  ],
+  "ambiguous": false,
+  "expected_findings": [],
+  "category": "DOCUMENT_INCONSISTENCY",
+  "box": [
+    280,
+    75,
+    330,
+    725
+  ]
+}

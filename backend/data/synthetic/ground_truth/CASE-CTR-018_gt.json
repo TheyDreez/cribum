@@ -1,0 +1,26 @@
+{
+  "id": "CASE-CTR-018",
+  "filename": "caso_18_controle_limpo.jpg",
+  "title": "CLÍNICA GERAL DA FAMÍLIA DEMO",
+  "crm": "1234518-SP",
+  "paciente": "PACIENTE-DEMO-018",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-018 | Data: 2026-10-12 | CRM: 1234518-SP",
+    "Diagnóstico: CID-10 J06.9 (Infecção aguda das vias aéreas superiores)",
+    "---",
+    "PRESCRIÇÃO NORMAL:",
+    "[BOX] Dipirona Monoidratada 500mg/ml gotas",
+    "Tomar 30 gotas a cada 6 horas se dor ou febre.",
+    "---",
+    "Uso por até 3 dias. Repouso e hidratação oral recomendados."
+  ],
+  "ambiguous": false,
+  "expected_findings": [],
+  "category": "CONTROL_CLEAN",
+  "box": [
+    280,
+    75,
+    330,
+    725
+  ]
+}

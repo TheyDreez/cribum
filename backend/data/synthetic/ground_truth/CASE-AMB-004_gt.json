@@ -1,0 +1,29 @@
+{
+  "id": "CASE-AMB-004",
+  "filename": "caso_04_citalopram_escitalopram.jpg",
+  "title": "CENTRO CLÍNICO INTEGRADO DEMO",
+  "crm": "554433-SP",
+  "paciente": "PACIENTE-DEMO-004",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-004 | Data: 2026-10-09 | CRM: 554433-SP",
+    "Diagnóstico: CID-10 F41.1 (Ansiedade Generalizada)",
+    "---",
+    "PRESCRIÇÃO:",
+    "[BOX] Citalopram 20mg / Escitalopram 10mg",
+    "Uso contínuo: 1 cp via oral ao dia."
+  ],
+  "ambiguous": true,
+  "expected_findings": [
+    "MED-001-AMBIGUOUS-READING",
+    "MED-002-LASA-LASA-002"
+  ],
+  "expected_top1": "Citalopram 20mg",
+  "expected_top2": "Escitalopram 10mg",
+  "category": "AMBIGUITY_LASA",
+  "box": [
+    280,
+    75,
+    330,
+    725
+  ]
+}

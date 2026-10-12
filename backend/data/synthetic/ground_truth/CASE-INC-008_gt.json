@@ -1,0 +1,25 @@
+{
+  "id": "CASE-INC-008",
+  "filename": "caso_08_crm_incompleto.jpg",
+  "title": "HOSPITAL GERAL DE RETAGUARDA DEMO",
+  "crm": null,
+  "paciente": "PACIENTE-DEMO-008",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-008 | Data: 2026-10-11 | Carimbo ilegível rasurado",
+    "---",
+    "PRESCRIÇÃO:",
+    "[BOX] Cefalexina 500mg",
+    "Tomar 1 cápsula de 6 em 6 horas."
+  ],
+  "ambiguous": false,
+  "expected_findings": [
+    "DOC-002-MISSING-CRM"
+  ],
+  "category": "DOCUMENT_INCONSISTENCY",
+  "box": [
+    240,
+    75,
+    290,
+    725
+  ]
+}

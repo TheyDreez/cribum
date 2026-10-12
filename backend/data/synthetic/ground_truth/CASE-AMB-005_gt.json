@@ -1,0 +1,29 @@
+{
+  "id": "CASE-AMB-005",
+  "filename": "caso_05_tramadol_trazodona.jpg",
+  "title": "CLÍNICA DA DOR E CUIDADOS ESPECIAIS DEMO",
+  "crm": "332211-SP",
+  "paciente": "PACIENTE-DEMO-005",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-005 | Data: 2026-10-08 | CRM: 332211-SP",
+    "Diagnóstico: CID-10 M54.5 (Dor Lombar Baixa)",
+    "---",
+    "PRESCRIÇÃO:",
+    "[BOX] Tramadol 50mg / Trazodona 50mg",
+    "Tomar 1 comprimido à noite se dor intensa."
+  ],
+  "ambiguous": true,
+  "expected_findings": [
+    "MED-001-AMBIGUOUS-READING",
+    "MED-002-LASA-LASA-006"
+  ],
+  "expected_top1": "Tramadol 50mg",
+  "expected_top2": "Trazodona 50mg",
+  "category": "AMBIGUITY_LASA",
+  "box": [
+    280,
+    75,
+    330,
+    725
+  ]
+}

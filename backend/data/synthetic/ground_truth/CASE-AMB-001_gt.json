@@ -1,0 +1,31 @@
+{
+  "id": "CASE-AMB-001",
+  "filename": "caso_01_losartana_lorazepam.jpg",
+  "title": "CLÍNICA CARDIOLÓGICA MODELO — RECEITUÁRIO",
+  "crm": "142857-SP",
+  "paciente": "PACIENTE-DEMO-001",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-001 | Data: 2026-10-12 | CRM: 142857-SP",
+    "Diagnóstico Sugerido: CID-10 I10 (Hipertensão Essencial)",
+    "---",
+    "PRESCRIÇÃO MÉDICA:",
+    "[BOX] Losartana 50mg / Lorazepam 2mg (caligrafia ambígua)",
+    "Uso Oral: Tomar 1 comprimido pela manhã em jejum",
+    "---",
+    "Observação: Paciente relata cefaleia matinal frequente."
+  ],
+  "ambiguous": true,
+  "expected_findings": [
+    "MED-001-AMBIGUOUS-READING",
+    "MED-002-LASA-LASA-001"
+  ],
+  "expected_top1": "Losartana 50mg",
+  "expected_top2": "Lorazepam 2mg",
+  "category": "AMBIGUITY_LASA",
+  "box": [
+    320,
+    75,
+    370,
+    725
+  ]
+}

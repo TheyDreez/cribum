@@ -1,0 +1,166 @@
+{
+  "seed": 42,
+  "total_document_cases": 20,
+  "total_network_claims": 200,
+  "cases": [
+    {
+      "id": "CASE-AMB-001",
+      "filename": "caso_01_losartana_lorazepam.jpg",
+      "category": "AMBIGUITY_LASA",
+      "ambiguous": true,
+      "expected_findings": [
+        "MED-001-AMBIGUOUS-READING",
+        "MED-002-LASA-LASA-001"
+      ]
+    },
+    {
+      "id": "CASE-AMB-002",
+      "filename": "caso_02_fluoxetina_flunarizina.jpg",
+      "category": "AMBIGUITY_LASA",
+      "ambiguous": true,
+      "expected_findings": [
+        "MED-001-AMBIGUOUS-READING",
+        "MED-002-LASA-LASA-003"
+      ]
+    },
+    {
+      "id": "CASE-AMB-003",
+      "filename": "caso_03_digoxina_dipirona.jpg",
+      "category": "AMBIGUITY_LASA",
+      "ambiguous": true,
+      "expected_findings": [
+        "MED-001-AMBIGUOUS-READING",
+        "MED-002-LASA-LASA-004"
+      ]
+    },
+    {
+      "id": "CASE-AMB-004",
+      "filename": "caso_04_citalopram_escitalopram.jpg",
+      "category": "AMBIGUITY_LASA",
+      "ambiguous": true,
+      "expected_findings": [
+        "MED-001-AMBIGUOUS-READING",
+        "MED-002-LASA-LASA-002"
+      ]
+    },
+    {
+      "id": "CASE-AMB-005",
+      "filename": "caso_05_tramadol_trazodona.jpg",
+      "category": "AMBIGUITY_LASA",
+      "ambiguous": true,
+      "expected_findings": [
+        "MED-001-AMBIGUOUS-READING",
+        "MED-002-LASA-LASA-006"
+      ]
+    },
+    {
+      "id": "CASE-INC-006",
+      "filename": "caso_06_sem_crm.jpg",
+      "category": "DOCUMENT_INCONSISTENCY",
+      "ambiguous": false,
+      "expected_findings": [
+        "DOC-002-MISSING-CRM"
+      ]
+    },
+    {
+      "id": "CASE-INC-007",
+      "filename": "caso_07_sem_unidade.jpg",
+      "category": "DOCUMENT_INCONSISTENCY",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-INC-008",
+      "filename": "caso_08_crm_incompleto.jpg",
+      "category": "DOCUMENT_INCONSISTENCY",
+      "ambiguous": false,
+      "expected_findings": [
+        "DOC-002-MISSING-CRM"
+      ]
+    },
+    {
+      "id": "CASE-INC-009",
+      "filename": "caso_09_cid_incompativel.jpg",
+      "category": "DOCUMENT_INCONSISTENCY",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-INC-010",
+      "filename": "caso_10_posologia_contraditoria.jpg",
+      "category": "DOCUMENT_INCONSISTENCY",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-DUP-011",
+      "filename": "caso_11_duplicidade_declarada.jpg",
+      "category": "DUPLICATE_CLAIM",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-DUP-012",
+      "filename": "caso_12_duplicidade_declarada.jpg",
+      "category": "DUPLICATE_CLAIM",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-DUP-013",
+      "filename": "caso_13_duplicidade_declarada.jpg",
+      "category": "DUPLICATE_CLAIM",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-DUP-014",
+      "filename": "caso_14_duplicidade_declarada.jpg",
+      "category": "DUPLICATE_CLAIM",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-DUP-015",
+      "filename": "caso_15_duplicidade_declarada.jpg",
+      "category": "DUPLICATE_CLAIM",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-CTR-016",
+      "filename": "caso_16_controle_limpo.jpg",
+      "category": "CONTROL_CLEAN",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-CTR-017",
+      "filename": "caso_17_controle_limpo.jpg",
+      "category": "CONTROL_CLEAN",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-CTR-018",
+      "filename": "caso_18_controle_limpo.jpg",
+      "category": "CONTROL_CLEAN",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-CTR-019",
+      "filename": "caso_19_controle_limpo.jpg",
+      "category": "CONTROL_CLEAN",
+      "ambiguous": false,
+      "expected_findings": []
+    },
+    {
+      "id": "CASE-CTR-020",
+      "filename": "caso_20_controle_limpo.jpg",
+      "category": "CONTROL_CLEAN",
+      "ambiguous": false,
+      "expected_findings": []
+    }
+  ]
+}

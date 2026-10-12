@@ -1,0 +1,25 @@
+{
+  "id": "CASE-INC-006",
+  "filename": "caso_06_sem_crm.jpg",
+  "title": "CONSULTÓRIO PARTICULAR DEMO",
+  "crm": null,
+  "paciente": "PACIENTE-DEMO-006",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-006 | Data: 2026-10-12 | MÉDICO NÃO IDENTIFICADO",
+    "---",
+    "PRESCRIÇÃO:",
+    "[BOX] Amoxicilina + Clavulanato 875mg",
+    "Tomar 1 comprimido de 12 em 12 horas por 7 dias."
+  ],
+  "ambiguous": false,
+  "expected_findings": [
+    "DOC-002-MISSING-CRM"
+  ],
+  "category": "DOCUMENT_INCONSISTENCY",
+  "box": [
+    240,
+    75,
+    290,
+    725
+  ]
+}

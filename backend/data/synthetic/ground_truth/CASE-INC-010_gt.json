@@ -1,0 +1,23 @@
+{
+  "id": "CASE-INC-010",
+  "filename": "caso_10_posologia_contraditoria.jpg",
+  "title": "AMBULATÓRIO DE ESPECIALIDADES DEMO",
+  "crm": "993311-SP",
+  "paciente": "PACIENTE-DEMO-010",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-010 | Data: 2026-10-09 | CRM: 993311-SP",
+    "---",
+    "PRESCRIÇÃO:",
+    "[BOX] Insulina NPH 100 UI",
+    "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'"
+  ],
+  "ambiguous": false,
+  "expected_findings": [],
+  "category": "DOCUMENT_INCONSISTENCY",
+  "box": [
+    240,
+    75,
+    290,
+    725
+  ]
+}

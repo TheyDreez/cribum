@@ -1,0 +1,29 @@
+{
+  "id": "CASE-AMB-003",
+  "filename": "caso_03_digoxina_dipirona.jpg",
+  "title": "HOSPITAL REGIONAL DE ENSINO DEMO",
+  "crm": "887766-SP",
+  "paciente": "PACIENTE-DEMO-003",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-003 | Data: 2026-10-11 | CRM: 887766-SP",
+    "Diagnóstico: CID-10 I50 (Insuficiência Cardíaca)",
+    "---",
+    "PRESCRIÇÃO:",
+    "[BOX] Digoxina 0.25mg / Dipirona 500mg",
+    "Tomar conforme orientação clínica estrita."
+  ],
+  "ambiguous": true,
+  "expected_findings": [
+    "MED-001-AMBIGUOUS-READING",
+    "MED-002-LASA-LASA-004"
+  ],
+  "expected_top1": "Digoxina 0.25mg",
+  "expected_top2": "Dipirona 500mg",
+  "category": "AMBIGUITY_LASA",
+  "box": [
+    280,
+    75,
+    330,
+    725
+  ]
+}

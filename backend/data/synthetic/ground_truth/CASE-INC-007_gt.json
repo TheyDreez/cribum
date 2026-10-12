@@ -1,0 +1,23 @@
+{
+  "id": "CASE-INC-007",
+  "filename": "caso_07_sem_unidade.jpg",
+  "title": "POLICLÍNICA CENTRAL DEMO",
+  "crm": "224466-SP",
+  "paciente": "PACIENTE-DEMO-007",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-007 | Data: 2026-10-12 | CRM: 224466-SP",
+    "---",
+    "PRESCRIÇÃO:",
+    "[BOX] Paracetamol 500 (sem unidade mg ou ml)",
+    "Tomar se febre acima de 38°C."
+  ],
+  "ambiguous": false,
+  "expected_findings": [],
+  "category": "DOCUMENT_INCONSISTENCY",
+  "box": [
+    240,
+    75,
+    290,
+    725
+  ]
+}

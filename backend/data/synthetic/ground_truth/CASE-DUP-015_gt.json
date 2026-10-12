@@ -1,0 +1,23 @@
+{
+  "id": "CASE-DUP-015",
+  "filename": "caso_15_duplicidade_declarada.jpg",
+  "title": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
+  "crm": "665544-SP",
+  "paciente": "PACIENTE-DEMO-015",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-015 | Data: 2026-10-12 | CRM: 665544-SP",
+    "---",
+    "PROCEDIMENTO / PRESCRIÇÃO:",
+    "[BOX] Ressonância Magnética de Crânio com Contraste",
+    "Lote de auditoria: LOTE-REPETICAO-005"
+  ],
+  "ambiguous": false,
+  "expected_findings": [],
+  "category": "DUPLICATE_CLAIM",
+  "box": [
+    240,
+    75,
+    290,
+    725
+  ]
+}

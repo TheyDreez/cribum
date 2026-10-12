@@ -1,0 +1,29 @@
+{
+  "id": "CASE-AMB-002",
+  "filename": "caso_02_fluoxetina_flunarizina.jpg",
+  "title": "INSTITUTO DE SAÚDE MENTAL DEMO",
+  "crm": "119988-SP",
+  "paciente": "PACIENTE-DEMO-002",
+  "lines": [
+    "Paciente: PACIENTE-DEMO-002 | Data: 2026-10-10 | CRM: 119988-SP",
+    "Diagnóstico: CID-10 F32.1 (Episódio Depressivo Moderado)",
+    "---",
+    "PRESCRIÇÃO:",
+    "[BOX] Fluoxetina 20mg / Flunarizina 10mg (traço cursivo duvidoso)",
+    "Posologia: 1 cápsula ao dia pela manhã."
+  ],
+  "ambiguous": true,
+  "expected_findings": [
+    "MED-001-AMBIGUOUS-READING",
+    "MED-002-LASA-LASA-003"
+  ],
+  "expected_top1": "Fluoxetina 20mg",
+  "expected_top2": "Flunarizina 10mg",
+  "category": "AMBIGUITY_LASA",
+  "box": [
+    280,
+    75,
+    330,
+    725
+  ]
+}
