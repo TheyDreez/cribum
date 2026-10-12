@@ -50,6 +50,12 @@ frontend/build/
 *.safetensors
 *.onnx
 
+# Databases & Storage
+*.db
+*.sqlite3
+backend/data/storage/
+!backend/data/storage/.gitkeep
+
 # IDE & OS files
 .vscode/
 .idea/
