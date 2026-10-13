@@ -5,7 +5,7 @@ import { GraphResponse, NetworkAnomaly } from '../types';
 export const NetworkGraphView: React.FC = () => {
   const [data, setData] = useState<GraphResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedAnomalyRule, setSelectedAnomalyRule] = useState<string | null>(null);
+  const [selectedAnomalyId, setSelectedAnomalyId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/graph')
@@ -14,7 +14,7 @@ export const NetworkGraphView: React.FC = () => {
         setData(json);
         setLoading(false);
         if (json.anomalies && json.anomalies.length > 0) {
-          setSelectedAnomalyRule(json.anomalies[0].rule_id);
+          setSelectedAnomalyId(json.anomalies[0].id || json.anomalies[0].rule_id);
         }
       })
       .catch((err) => {
@@ -47,7 +47,7 @@ export const NetworkGraphView: React.FC = () => {
 
   // Anomalia ativa selecionada
   const activeAnomaly: NetworkAnomaly | undefined =
-    data.anomalies.find((a) => a.rule_id === selectedAnomalyRule) || data.anomalies[0];
+    data.anomalies.find((a) => (a.id || a.rule_id) === selectedAnomalyId) || data.anomalies[0];
 
   // Entidades correlacionadas dinamicamente às guias da anomalia selecionada
   const relatedDocIds = new Set(activeAnomaly?.related_document_ids || []);
@@ -228,16 +228,19 @@ export const NetworkGraphView: React.FC = () => {
           <p className="text-xs text-slate-500 italic">Nenhuma anomalia de rede detectada.</p>
         ) : (
           <div className="space-y-3">
-            {data.anomalies.map((anom) => (
-              <div
-                key={anom.rule_id}
-                onClick={() => setSelectedAnomalyRule(anom.rule_id)}
-                className={`p-3.5 rounded-lg border transition cursor-pointer ${
-                  selectedAnomalyRule === anom.rule_id
-                    ? 'bg-auditRose-500/10 border-auditRose-500/50'
-                    : 'bg-graphite-950 border-graphite-800 hover:border-graphite-700'
-                }`}
-              >
+            {data.anomalies.map((anom) => {
+              const anomKey = anom.id || anom.rule_id;
+              const isSelected = (activeAnomaly?.id === anom.id) || selectedAnomalyId === anomKey;
+              return (
+                <div
+                  key={anomKey}
+                  onClick={() => setSelectedAnomalyId(anomKey)}
+                  className={`p-3.5 rounded-lg border transition cursor-pointer ${
+                    isSelected
+                      ? 'bg-auditRose-500/10 border-auditRose-500/50'
+                      : 'bg-graphite-950 border-graphite-800 hover:border-graphite-700'
+                  }`}
+                >
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-xs font-bold text-white">{anom.title}</span>
                   <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-auditRose-500/20 text-auditRose-400">
@@ -269,7 +272,8 @@ export const NetworkGraphView: React.FC = () => {
                   Limitação: {anom.limitations}
                 </p>
               </div>
-            ))}
+            );
+          })}
           </div>
         )}
       </div>

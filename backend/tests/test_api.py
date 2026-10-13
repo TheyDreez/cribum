@@ -260,3 +260,38 @@ def test_rules_engine_severity_mapping_and_indeterminate_handling():
     assert med_field["score"] is None
 
 
+def test_evidence_run_isolation_and_anomaly_unique_ids():
+    # 1. Verifica isolamento de evidências por run e que re-execução não duplica achados/evidências
+    img_path = "backend/data/synthetic/cases/caso_01_losartana_lorazepam.jpg"
+    with open(img_path, "rb") as f:
+        files = {"file": ("caso_01_losartana_lorazepam.jpg", f.read(), "image/jpeg")}
+    doc_id = client.post("/api/documents", files=files).json()["id"]
+
+    run1_res = client.post(f"/api/documents/{doc_id}/runs?mode_override=DEMO")
+    assert run1_res.status_code == 200
+    doc_detail1 = client.get(f"/api/documents/{doc_id}").json()
+    ev_count_1 = len(doc_detail1["evidences"])
+    fn_count_1 = len(doc_detail1["findings"])
+    assert ev_count_1 > 0
+    assert fn_count_1 > 0
+
+    # Executa segundo run no mesmo documento
+    run2_res = client.post(f"/api/documents/{doc_id}/runs?mode_override=DEMO")
+    assert run2_res.status_code == 200
+    doc_detail2 = client.get(f"/api/documents/{doc_id}").json()
+
+    # O detalhe do documento deve refletir o latest_run, NÃO acumular evidências e achados de run1 + run2
+    assert len(doc_detail2["evidences"]) == ev_count_1
+    assert len(doc_detail2["findings"]) == fn_count_1
+
+    # 2. Verifica identificador único nas anomalias de grafo
+    graph_res = client.get("/api/graph").json()
+    anomalies = graph_res["anomalies"]
+    assert len(anomalies) > 0
+    anom_ids = [a.get("id") for a in anomalies]
+    assert all(aid is not None and aid.startswith("ANOM-") for aid in anom_ids)
+    # Todos os IDs de anomalia devem ser distintos
+    assert len(anom_ids) == len(set(anom_ids))
+
+
+

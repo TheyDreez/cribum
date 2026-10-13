@@ -159,7 +159,17 @@ def list_documents(db: Session = Depends(get_db)):
     docs = db.query(DocumentModel).order_by(DocumentModel.created_at.desc()).all()
     results = []
     for d in docs:
-        findings_count = db.query(FindingModel).filter(FindingModel.document_id == d.id).count()
+        latest_run = (
+            db.query(ProcessingRunModel)
+            .filter(ProcessingRunModel.document_id == d.id)
+            .order_by(ProcessingRunModel.started_at.desc())
+            .first()
+        )
+        findings_count = (
+            db.query(FindingModel).filter(FindingModel.run_id == latest_run.id).count()
+            if latest_run
+            else 0
+        )
         decisions = (
             db.query(ReviewDecisionModel)
             .filter(ReviewDecisionModel.document_id == d.id)
@@ -167,12 +177,6 @@ def list_documents(db: Session = Depends(get_db)):
             .all()
         )
         review_status = compute_document_review_status(decisions)
-        latest_run = (
-            db.query(ProcessingRunModel)
-            .filter(ProcessingRunModel.document_id == d.id)
-            .order_by(ProcessingRunModel.started_at.desc())
-            .first()
-        )
 
         results.append(
             DocumentContract(
@@ -259,12 +263,17 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
 
     runs = db.query(ProcessingRunModel).filter(ProcessingRunModel.document_id == doc.id).all()
     fields = []
+    evidences = []
+    findings = []
     latest_run = runs[-1] if runs else None
     if latest_run:
         fields = db.query(ExtractedFieldModel).filter(ExtractedFieldModel.run_id == latest_run.id).all()
+        evidences = db.query(EvidenceModel).filter(EvidenceModel.run_id == latest_run.id).all()
+        findings = db.query(FindingModel).filter(FindingModel.run_id == latest_run.id).all()
+    else:
+        evidences = db.query(EvidenceModel).filter(EvidenceModel.document_id == doc.id).all()
+        findings = db.query(FindingModel).filter(FindingModel.document_id == doc.id).all()
 
-    evidences = db.query(EvidenceModel).filter(EvidenceModel.document_id == doc.id).all()
-    findings = db.query(FindingModel).filter(FindingModel.document_id == doc.id).all()
     decisions = db.query(ReviewDecisionModel).filter(ReviewDecisionModel.document_id == doc.id).order_by(ReviewDecisionModel.created_at.desc()).all()
     review_status = compute_document_review_status(decisions)
 
@@ -422,11 +431,14 @@ def run_document_processing(
             detail=f"Erro interno de processamento: {str(exc)}",
         )
 
-    # 1. Salva Evidências
-    for ev_data in result.evidences:
+    # 1. Salva Evidências isoladas por run_id e document_id
+    for idx, ev_data in enumerate(result.evidences, 1):
+        raw_id = ev_data.get("id") or f"ev-{run.id[:8]}-{idx}"
+        scoped_id = f"{raw_id}-{run.id[:8]}" if not raw_id.endswith(run.id[:8]) else raw_id
         ev = EvidenceModel(
-            id=ev_data.get("id"),
+            id=scoped_id,
             document_id=doc.id,
+            run_id=run.id,
             page=ev_data.get("page", 1),
             bbox=ev_data.get("bbox"),
             coordinate_system=ev_data.get("coordinate_system", "NORMALIZED_0_1"),

@@ -51,6 +51,7 @@ class ExtractedFieldContract(BaseModel):
 class EvidenceContract(BaseModel):
     id: str
     document_id: str
+    run_id: Optional[str] = None
     page: int = 1
     bbox: Optional[BoundingBoxNormalized] = None
     coordinate_system: str = "NORMALIZED_0_1"

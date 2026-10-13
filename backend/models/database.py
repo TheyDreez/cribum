@@ -66,13 +66,15 @@ class ProcessingRunModel(Base):
     document = relationship("DocumentModel", back_populates="runs")
     fields = relationship("ExtractedFieldModel", back_populates="run", cascade="all, delete-orphan")
     findings = relationship("FindingModel", back_populates="run", cascade="all, delete-orphan")
+    evidences = relationship("EvidenceModel", back_populates="run", cascade="all, delete-orphan")
 
 
 class EvidenceModel(Base):
     __tablename__ = "evidences"
 
-    id = Column(String(36), primary_key=True, default=generate_uuid)
+    id = Column(String(64), primary_key=True, default=generate_uuid)
     document_id = Column(String(36), ForeignKey("documents.id"), nullable=False, index=True)
+    run_id = Column(String(36), ForeignKey("processing_runs.id"), nullable=True, index=True)
     page = Column(Integer, default=1, nullable=False)
     bbox = Column(JSON, nullable=True)  # {"x_min": float, "y_min": float, "x_max": float, "y_max": float} 0..1
     coordinate_system = Column(String(30), default="NORMALIZED_0_1", nullable=False)
@@ -81,6 +83,7 @@ class EvidenceModel(Base):
     excerpt = Column(Text, nullable=True)
 
     document = relationship("DocumentModel", back_populates="evidences")
+    run = relationship("ProcessingRunModel", back_populates="evidences")
 
 
 class ExtractedFieldModel(Base):

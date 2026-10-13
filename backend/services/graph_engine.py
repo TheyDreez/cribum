@@ -71,7 +71,9 @@ class GraphEngine:
 
                 if len(cidades) > 1 and len(day_claims) >= 3:
                     doc_ids = [str(c.get("document_id") or c.get("id")) for c in day_claims]
+                    anom_id = f"ANOM-NET-001-{prof}-{data}"
                     anomalies.append({
+                        "id": anom_id,
                         "category": "GRAPH_ANOMALY",
                         "severity": "HIGH",
                         "rule_id": "NET-001-CONCURRENT-DISTANT-CLINICS",

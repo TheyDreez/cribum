@@ -120,6 +120,7 @@ export interface GraphLink {
 }
 
 export interface NetworkAnomaly {
+  id: string;
   category: string;
   severity: string;
   rule_id: string;
