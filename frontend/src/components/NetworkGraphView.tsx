@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Network, AlertOctagon, Building, User, FileText, Activity } from 'lucide-react';
-import { GraphResponse } from '../types';
+import { GraphResponse, NetworkAnomaly } from '../types';
 
 export const NetworkGraphView: React.FC = () => {
   const [data, setData] = useState<GraphResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedAnomaly, setSelectedAnomaly] = useState<string | null>(null);
+  const [selectedAnomalyRule, setSelectedAnomalyRule] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/graph')
@@ -13,8 +13,8 @@ export const NetworkGraphView: React.FC = () => {
       .then((json: GraphResponse) => {
         setData(json);
         setLoading(false);
-        if (json.anomalies.length > 0) {
-          setSelectedAnomaly(json.anomalies[0].rule_id);
+        if (json.anomalies && json.anomalies.length > 0) {
+          setSelectedAnomalyRule(json.anomalies[0].rule_id);
         }
       })
       .catch((err) => {
@@ -26,7 +26,7 @@ export const NetworkGraphView: React.FC = () => {
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center text-slate-500 font-mono text-xs">
-        Carregando topologia do grafo de 200 guias...
+        Carregando topologia do grafo multi-entidade...
       </div>
     );
   }
@@ -39,6 +39,29 @@ export const NetworkGraphView: React.FC = () => {
     );
   }
 
+  // Contagens dinâmicas derivadas diretamente dos nós retornados pela API
+  const profCount = data.nodes.filter((n) => n.type === 'profissional').length;
+  const clinicCount = data.nodes.filter((n) => n.type === 'clinica').length;
+  const procCount = data.nodes.filter((n) => n.type === 'procedimento').length;
+  const patientCount = data.nodes.filter((n) => n.type === 'paciente').length;
+
+  // Anomalia ativa selecionada
+  const activeAnomaly: NetworkAnomaly | undefined =
+    data.anomalies.find((a) => a.rule_id === selectedAnomalyRule) || data.anomalies[0];
+
+  // Entidades correlacionadas dinamicamente às guias da anomalia selecionada
+  const relatedDocIds = new Set(activeAnomaly?.related_document_ids || []);
+  const anomalyLinks = data.links.filter((l) => l.document_id && relatedDocIds.has(l.document_id));
+  const relatedNodeIds = new Set<string>();
+  anomalyLinks.forEach((l) => {
+    relatedNodeIds.add(l.source);
+    relatedNodeIds.add(l.target);
+  });
+
+  const anomalyNodes = data.nodes.filter((n) => relatedNodeIds.has(n.id) || relatedDocIds.has(n.id));
+  const profsInvolved = anomalyNodes.filter((n) => n.type === 'profissional');
+  const clinicsInvolved = anomalyNodes.filter((n) => n.type === 'clinica');
+
   return (
     <div className="flex-1 flex overflow-hidden bg-graphite-950">
       {/* Visualização de Resumo da Rede */}
@@ -50,7 +73,7 @@ export const NetworkGraphView: React.FC = () => {
               Grafo Relacional Multi-Entidade (NetworkX)
             </h2>
             <p className="text-xs text-slate-400">
-              Análise cruzada de 200 guias sintéticas: Pacientes, Médicos, Clínicas e Procedimentos.
+              Análise cruzada de conexões entre Pacientes, Médicos, Clínicas e Procedimentos.
             </p>
           </div>
 
@@ -74,7 +97,7 @@ export const NetworkGraphView: React.FC = () => {
           </div>
         </div>
 
-        {/* Grade de Entidades do Grafo */}
+        {/* Grade de Entidades Dinâmicas */}
         <div className="grid grid-cols-4 gap-4 mb-6">
           <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">
             <div className="p-2.5 rounded-lg bg-auditTeal-500/10 text-auditTeal-400">
@@ -82,7 +105,7 @@ export const NetworkGraphView: React.FC = () => {
             </div>
             <div>
               <span className="text-[11px] text-slate-400 block font-mono">Profissionais</span>
-              <span className="text-base font-bold text-white">24 Médicos</span>
+              <span className="text-base font-bold text-white">{profCount} Médicos</span>
             </div>
           </div>
 
@@ -92,7 +115,7 @@ export const NetworkGraphView: React.FC = () => {
             </div>
             <div>
               <span className="text-[11px] text-slate-400 block font-mono">Clínicas/Hospitais</span>
-              <span className="text-base font-bold text-white">5 Unidades</span>
+              <span className="text-base font-bold text-white">{clinicCount} Unidades</span>
             </div>
           </div>
 
@@ -102,7 +125,7 @@ export const NetworkGraphView: React.FC = () => {
             </div>
             <div>
               <span className="text-[11px] text-slate-400 block font-mono">Procedimentos</span>
-              <span className="text-base font-bold text-white">8 Tipos</span>
+              <span className="text-base font-bold text-white">{procCount} Tipos</span>
             </div>
           </div>
 
@@ -112,60 +135,84 @@ export const NetworkGraphView: React.FC = () => {
             </div>
             <div>
               <span className="text-[11px] text-slate-400 block font-mono">Pacientes</span>
-              <span className="text-base font-bold text-white">100 Indivíduos</span>
+              <span className="text-base font-bold text-white">{patientCount} Indivíduos</span>
             </div>
           </div>
         </div>
 
-        {/* Representação Visual da Topologia */}
+        {/* Representação Dinâmica do Subgrafo da Anomalia Selecionada */}
         <div className="bg-graphite-900/60 p-6 rounded-xl border border-graphite-800 min-h-[380px] flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-              Mapa de Clusters Relacionais
+              Topologia do Cluster Selecionado ({activeAnomaly?.rule_id || 'Nenhuma anomalia'})
             </span>
-            <span className="text-xs font-mono text-auditRose-500 flex items-center gap-1.5 bg-auditRose-500/10 px-2 py-0.5 rounded border border-auditRose-500/20">
-              <AlertOctagon className="w-3.5 h-3.5" />
-              Cluster Suspeito Identificado
-            </span>
+            {activeAnomaly && (
+              <span className="text-xs font-mono text-auditRose-500 flex items-center gap-1.5 bg-auditRose-500/10 px-2.5 py-1 rounded border border-auditRose-500/20">
+                <AlertOctagon className="w-3.5 h-3.5" />
+                {activeAnomaly.severity} — {activeAnomaly.title}
+              </span>
+            )}
           </div>
 
-          {/* Diagrama Simbólico de Nós em Destaque */}
-          <div className="flex items-center justify-around py-8">
-            <div className="text-center p-4 bg-graphite-950 rounded-lg border border-auditRose-500/40 shadow-lg shadow-auditRose-500/5 max-w-[200px]">
-              <span className="text-[11px] font-mono text-auditRose-500 font-bold block mb-1">
-                PROF-DEMO-007
-              </span>
-              <p className="text-xs text-slate-300">
-                Atendimento simultâneo no mesmo dia em cidades a 180 km de distância
-              </p>
-            </div>
+          {activeAnomaly ? (
+            <div className="py-6">
+              <div className="flex items-center justify-around flex-wrap gap-4 py-4">
+                {/* Nós de Profissionais Envolvidos */}
+                {profsInvolved.map((prof) => (
+                  <div
+                    key={prof.id}
+                    className="text-center p-4 bg-graphite-950 rounded-lg border border-auditRose-500/40 shadow-lg shadow-auditRose-500/5 min-w-[180px]"
+                  >
+                    <span className="text-[11px] font-mono text-auditRose-400 font-bold block mb-1">
+                      {prof.label}
+                    </span>
+                    <span className="text-[10px] text-slate-400 block font-mono">
+                      Grau de Conexão: {prof.degree}
+                    </span>
+                    <span className="text-[10px] text-slate-500 mt-1 block">
+                      {activeAnomaly.related_document_ids.length} guias na data analisada
+                    </span>
+                  </div>
+                ))}
 
-            <div className="h-0.5 w-24 bg-auditRose-500/40 relative">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] font-mono text-auditRose-400 bg-graphite-950 px-1">
-                180 km / 24h
-              </span>
-            </div>
+                {/* Nós de Clínicas Envolvidas */}
+                {clinicsInvolved.map((clinic) => (
+                  <div
+                    key={clinic.id}
+                    className="text-center p-4 bg-graphite-950 rounded-lg border border-graphite-700 min-w-[180px]"
+                  >
+                    <span className="text-[11px] font-mono text-auditTeal-400 font-bold block mb-1">
+                      {clinic.label}
+                    </span>
+                    <span className="text-xs text-slate-300 block">
+                      {clinic.cidade ? `Município: ${clinic.cidade}` : 'Local não informado'}
+                    </span>
+                    <span className="text-[10px] text-slate-500 mt-1 block font-mono">
+                      {clinic.id}
+                    </span>
+                  </div>
+                ))}
+              </div>
 
-            <div className="text-center p-4 bg-graphite-950 rounded-lg border border-graphite-700 max-w-[180px]">
-              <span className="text-[11px] font-mono text-auditTeal-400 font-bold block mb-1">
-                CLINICA-DEMO-001
-              </span>
-              <p className="text-xs text-slate-400">Hospital Santa Cruz (Sorocaba)</p>
+              {/* Relações Extraídas */}
+              <div className="mt-4 p-3 bg-graphite-950/80 rounded-lg border border-graphite-800 text-xs">
+                <span className="text-slate-400 font-mono text-[11px] block mb-1">
+                  Parecer Descritivo do Investigador:
+                </span>
+                <p className="text-slate-300 leading-relaxed font-sans">
+                  {activeAnomaly.explanation}
+                </p>
+              </div>
             </div>
-
-            <div className="h-0.5 w-16 bg-graphite-700" />
-
-            <div className="text-center p-4 bg-graphite-950 rounded-lg border border-graphite-700 max-w-[180px]">
-              <span className="text-[11px] font-mono text-blue-400 font-bold block mb-1">
-                CLINICA-DEMO-005
-              </span>
-              <p className="text-xs text-slate-400">Instituto do Litoral (Santos)</p>
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-slate-500 text-xs">
+              Nenhuma anomalia ativa selecionada.
             </div>
-          </div>
+          )}
 
           <div className="text-[11px] text-slate-500 font-mono flex items-center justify-between border-t border-graphite-800/80 pt-3">
-            <span>Algoritmo: NetworkX Multigraph Anomaly Detection</span>
-            <span>Semelhança temporal & geográfica calculada por regra determinística</span>
+            <span>Motor: NetworkX MultiGraph Anomaly Detection</span>
+            <span>Entidades e evidências mapeadas diretamente das guias sintéticas</span>
           </div>
         </div>
       </div>
@@ -184,9 +231,9 @@ export const NetworkGraphView: React.FC = () => {
             {data.anomalies.map((anom) => (
               <div
                 key={anom.rule_id}
-                onClick={() => setSelectedAnomaly(anom.rule_id)}
+                onClick={() => setSelectedAnomalyRule(anom.rule_id)}
                 className={`p-3.5 rounded-lg border transition cursor-pointer ${
-                  selectedAnomaly === anom.rule_id
+                  selectedAnomalyRule === anom.rule_id
                     ? 'bg-auditRose-500/10 border-auditRose-500/50'
                     : 'bg-graphite-950 border-graphite-800 hover:border-graphite-700'
                 }`}
@@ -208,7 +255,10 @@ export const NetworkGraphView: React.FC = () => {
                   </span>
                   <div className="flex flex-wrap gap-1">
                     {anom.related_document_ids.map((id) => (
-                      <span key={id} className="text-[10px] font-mono bg-graphite-950 px-1.5 py-0.5 rounded border border-graphite-800 text-slate-300">
+                      <span
+                        key={id}
+                        className="text-[10px] font-mono bg-graphite-950 px-1.5 py-0.5 rounded border border-graphite-800 text-slate-300"
+                      >
                         {id}
                       </span>
                     ))}

@@ -29,7 +29,8 @@
 ## 3. Bloco de Avaliação Obrigatório da Trilha de Saúde
 
 Campos textuais que devem constar na descrição da submissão:
-1. **One Business Result:** Redução de até 80% no tempo de triagem de guias com caligrafia ambígua e 100% de interceptação de conflitos LASA críticos antes da dispensação.
+1. **One Business Result:** Identificação de 100% dos conflitos LASA críticos injetados em ambiente experimental controlado e detecção de esquemas de rede em 200 guias sintéticas, fornecendo triagem orientada por incerteza ao auditor humano.
+
 2. **One Known Limitation:** A pontuação percentual das hipóteses é heurística e não calibrada; requer supervisão humana para medicamentos com janelas terapêuticas estreitas.
 3. **One Failure Case (O Caso de Dúvida):** Caligrafia cursiva sobreposta onde *Losartana 50mg* e *Lorazepam 2mg* possuem traçado idêntico.
 4. **The Safeguard / Human Review Process:** O sistema bloqueia a aprovação autônoma, gera badge de incerteza em âmbar e exige a assinatura e fundamentação de um auditor humano na interface.

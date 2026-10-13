@@ -75,11 +75,11 @@ class GraphEngine:
                         "category": "GRAPH_ANOMALY",
                         "severity": "HIGH",
                         "rule_id": "NET-001-CONCURRENT-DISTANT-CLINICS",
-                        "title": f"Atendimento Simultâneo em Cidades Distintas (CRM {prof})",
+                        "title": f"Atendimentos no Mesmo Dia em Municípios Distintos (CRM {prof})",
                         "explanation": (
-                            f"O profissional CRM {prof} possui {len(day_claims)} guias registradas no mesmo dia ({data}) "
-                            f"distribuídas entre {len(cidades)} municípios distintos ({', '.join(cidades)}). "
-                            "Indício documental de impossibilidade de deslocamento físico no mesmo turno."
+                            f"O profissional CRM {prof} possui {len(day_claims)} guias registradas na mesma data ({data}) "
+                            f"distribuídas entre {len(cidades)} municípios distintos ({', '.join(sorted(cidades))}). "
+                            "Indício documental que requer conferência humana quanto à viabilidade de deslocamento ou divergência na data de faturamento."
                         ),
                         "related_document_ids": doc_ids,
                         "limitations": "Pode decorrer de erro de digitação de data pelo faturamento ou telemedicina legítima.",

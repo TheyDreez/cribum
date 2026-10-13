@@ -147,6 +147,47 @@ def test_human_review_decision_persisted():
     doc_after = client.get(f"/api/documents/{doc_id}").json()
     assert len(doc_after["decisions"]) >= 1
     assert doc_after["decisions"][0]["confirmed_value"] == "Losartana 50mg"
+    # CONFIRMED_HYPOTHESIS não rejeita o documento: coloca em IN_REVIEW
+    assert doc_after["document"]["review_status"] == "IN_REVIEW"
+
+    # Agora submete aprovação final da guia
+    approve_res = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "APPROVED_CLAIM",
+            "actor_id": "auditor-chefe",
+            "reason": "Todas as pendências sanadas pelo auditor.",
+        },
+    )
+    assert approve_res.status_code == 201
+    doc_approved = client.get(f"/api/documents/{doc_id}").json()
+    assert doc_approved["document"]["review_status"] == "APPROVED"
+
+
+def test_unknown_image_rejected_in_demo_mode_without_fallback():
+    # Cria uma imagem arbitrária que NÃO pertence ao catálogo de 20 casos sintéticos
+    img_bytes = create_test_image_bytes(250, 250, "JPEG")
+    # Mesmo se o atacante passar o nome de um caso conhecido, o hash SHA-256 não coincidirá
+    files = {"file": ("caso_01_losartana_lorazepam.jpg", img_bytes, "image/jpeg")}
+    doc_res = client.post("/api/documents", files=files)
+    assert doc_res.status_code == 201
+    doc_id = doc_res.json()["id"]
+
+    # Tentativa de rodar em modo DEMO deve falhar com NO_FIXTURE_AVAILABLE
+    # Provando que o sistema NÃO confia em nomes de arquivos e NÃO usa fallback genérico
+    run_res = client.post(f"/api/documents/{doc_id}/runs?mode_override=DEMO")
+    assert run_res.status_code == 400
+    err = run_res.json()["detail"]
+    assert err["error"] == "NO_FIXTURE_AVAILABLE"
+
+
+def test_upload_file_too_large_returns_413():
+    # Gera buffer ligeiramente acima de 10MB (10MB + 128KB)
+    large_bytes = b"0" * (10 * 1024 * 1024 + 128 * 1024)
+    files = {"file": ("arquivo_gigante.jpg", large_bytes, "image/jpeg")}
+    response = client.post("/api/documents", files=files)
+    assert response.status_code == 413
+    assert "limite máximo permitido" in response.json()["detail"]
 
 
 def test_graph_endpoint():
@@ -157,4 +198,5 @@ def test_graph_endpoint():
     assert "links" in data
     assert "anomalies" in data
     assert data["total_claims"] == 200
-    assert len(data["anomalies"]) >= 1  # Detectou o esquema de distância impossível injetado
+    assert len(data["anomalies"]) >= 1
+

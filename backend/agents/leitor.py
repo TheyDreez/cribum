@@ -21,8 +21,9 @@ REGRAS DE OURO INEGOCIÁVEIS:
 1. NUNCA invente medicamentos ou adivinhe com certeza absoluta se a caligrafia for ambígua.
 2. Para cada medicamento/procedimento prescrito:
    - Forneça SEMPRE até 3 hipóteses de leitura (ordenadas da mais provável para a menos provável).
-   - Atribua um score de confiança probabilística para cada hipótese (entre 0.0 e 1.0, somando no máximo 1.0).
+   - Ordene as hipóteses por plausibilidade visual (1ª mais provável, 2ª, 3ª). Não invente precisão estatística ou scores decimais arbitrários se o texto for ilegível.
    - Se houver dúvida visual razoável (caligrafia corrida, ilegível ou rasurada), marque 'nivel_incerteza': 'alto' ou 'medio' e explique a dúvida em 'justificativa_leitura'.
+
 3. ANCORAGEM VISUAL (BOUNDING BOXES):
    - Cada item DEVE conter sua coordenada exata normalizada na imagem: [ymin, xmin, ymax, xmax] em escala de 0 a 1000.
    - Exemplo: [450, 120, 520, 850] representa a faixa horizontal onde o remédio foi escrito.

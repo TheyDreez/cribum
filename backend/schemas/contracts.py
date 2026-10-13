@@ -18,11 +18,12 @@ class BoundingBoxNormalized(BaseModel):
 
     @model_validator(mode="after")
     def validate_coordinates(self) -> "BoundingBoxNormalized":
-        if self.x_max < self.x_min:
-            raise ValueError(f"x_max ({self.x_max}) must be >= x_min ({self.x_min})")
-        if self.y_max < self.y_min:
-            raise ValueError(f"y_max ({self.y_max}) must be >= y_min ({self.y_min})")
+        if self.x_max <= self.x_min:
+            raise ValueError(f"x_max ({self.x_max}) must be strictly greater than x_min ({self.x_min})")
+        if self.y_max <= self.y_min:
+            raise ValueError(f"y_max ({self.y_max}) must be strictly greater than y_min ({self.y_min})")
         return self
+
 
 
 class HypothesisContract(BaseModel):
@@ -53,7 +54,14 @@ class EvidenceContract(BaseModel):
     page: int = 1
     bbox: Optional[BoundingBoxNormalized] = None
     coordinate_system: str = "NORMALIZED_0_1"
-    localization_status: Literal["VALIDATED", "UNLOCALIZED", "MANUAL_FIXTURE"] = "UNLOCALIZED"
+    localization_status: Literal[
+        "PROPOSED_BY_MODEL",
+        "HUMAN_VERIFIED",
+        "MANUAL_FIXTURE",
+        "UNLOCALIZED",
+        "INVALID_GEOMETRY",
+        "VALIDATED"
+    ] = "UNLOCALIZED"
     source: str = "VLM_OUTPUT"
     excerpt: Optional[str] = None
 
@@ -117,7 +125,16 @@ class DocumentContract(BaseModel):
     synthetic: bool
     created_at: str
     findings_count: int = 0
-    review_status: str = "PENDING"  # PENDING, REVIEWED, APPROVED, REJECTED
+    review_status: Literal[
+        "PENDING",
+        "IN_REVIEW",
+        "APPROVED",
+        "REJECTED",
+        "ESCALATED",
+        "CLARIFICATION_REQUESTED"
+    ] = "PENDING"
+    last_execution_mode: Optional[str] = None
+
 
 
 class ProcessingRunContract(BaseModel):

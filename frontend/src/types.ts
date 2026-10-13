@@ -31,7 +31,13 @@ export interface Evidence {
   page: number;
   bbox?: BoundingBox | null;
   coordinate_system: string;
-  localization_status: 'VALIDATED' | 'UNLOCALIZED' | 'MANUAL_FIXTURE';
+  localization_status:
+    | 'PROPOSED_BY_MODEL'
+    | 'HUMAN_VERIFIED'
+    | 'MANUAL_FIXTURE'
+    | 'UNLOCALIZED'
+    | 'INVALID_GEOMETRY'
+    | 'VALIDATED';
   source: string;
   excerpt?: string | null;
 }
@@ -68,8 +74,17 @@ export interface DocumentItem {
   synthetic: boolean;
   created_at: string;
   findings_count: number;
-  review_status: string;
+  review_status:
+    | 'PENDING'
+    | 'IN_REVIEW'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'ESCALATED'
+    | 'CLARIFICATION_REQUESTED'
+    | string;
+  last_execution_mode?: string | null;
 }
+
 
 export interface DocumentDetail {
   document: DocumentItem;

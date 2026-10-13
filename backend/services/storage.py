@@ -121,3 +121,23 @@ def get_image_path(storage_key: str) -> str:
     if not os.path.exists(full_path):
         raise FileNotFoundError(f"Arquivo não encontrado: {storage_key}")
     return full_path
+
+
+async def read_upload_file_chunked(file, max_bytes: int = MAX_FILE_BYTES) -> bytes:
+    """
+    Lê o upload em blocos limitados (64 KB) e aborta imediatamente se o tamanho
+    acumulado exceder max_bytes, evitando buffering descontrolado de arquivos gigantescos na memória.
+    """
+    buffer = bytearray()
+    chunk_size = 64 * 1024  # 64 KB
+    while True:
+        chunk = await file.read(chunk_size)
+        if not chunk:
+            break
+        buffer.extend(chunk)
+        if len(buffer) > max_bytes:
+            raise FileTooLargeError(
+                f"Arquivo excede o limite máximo permitido de {max_bytes // (1024 * 1024)}MB."
+            )
+    return bytes(buffer)
+

@@ -40,8 +40,10 @@ from backend.services.storage import (
     FileTooLargeError,
     InvalidImageError,
     get_image_path,
+    read_upload_file_chunked,
     validate_and_save_image,
 )
+
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./cribum.db")
 SessionLocal = init_db(DATABASE_URL)
@@ -120,21 +122,57 @@ def get_config():
     )
 
 
+def compute_document_review_status(decisions: List[ReviewDecisionModel]) -> str:
+    """
+    Determina o status de revisão da guia a partir do histórico de decisões do auditor humano:
+    - Se nenhuma decisão foi registrada: 'PENDING'
+    - Se a decisão mais recente de nível de guia for 'APPROVED_CLAIM': 'APPROVED'
+    - Se a decisão mais recente de nível de guia for 'REJECTED_CLAIM': 'REJECTED'
+    - Se houver escalonamento pericial: 'ESCALATED'
+    - Se houver pedido de esclarecimento: 'CLARIFICATION_REQUESTED'
+    - Se houver apenas confirmações de hipótese de campos: 'IN_REVIEW'
+    """
+    if not decisions:
+        return "PENDING"
+
+    # Itera sobre decisões da mais recente para a mais antiga
+    for dec in decisions:
+        act = dec.action
+        if act in ("APPROVED_CLAIM", "APPROVE"):
+            return "APPROVED"
+        if act in ("REJECTED_CLAIM", "REJECT"):
+            return "REJECTED"
+        if act in ("ESCALATED_FORENSIC", "ESCALATE"):
+            return "ESCALATED"
+        if act in ("REQUESTED_CLARIFICATION", "CLARIFICATION"):
+            return "CLARIFICATION_REQUESTED"
+
+    # Se houver apenas confirmação de campo/hipótese
+    if any(d.action in ("CONFIRMED_HYPOTHESIS", "CONFIRM") for d in decisions):
+        return "IN_REVIEW"
+
+    return "PENDING"
+
+
 @app.get("/api/documents", response_model=List[DocumentContract])
 def list_documents(db: Session = Depends(get_db)):
     docs = db.query(DocumentModel).order_by(DocumentModel.created_at.desc()).all()
     results = []
     for d in docs:
         findings_count = db.query(FindingModel).filter(FindingModel.document_id == d.id).count()
-        last_decision = (
+        decisions = (
             db.query(ReviewDecisionModel)
             .filter(ReviewDecisionModel.document_id == d.id)
             .order_by(ReviewDecisionModel.created_at.desc())
+            .all()
+        )
+        review_status = compute_document_review_status(decisions)
+        latest_run = (
+            db.query(ProcessingRunModel)
+            .filter(ProcessingRunModel.document_id == d.id)
+            .order_by(ProcessingRunModel.started_at.desc())
             .first()
         )
-        review_status = "PENDING"
-        if last_decision:
-            review_status = "APPROVED" if "APPROV" in last_decision.action else "REJECTED"
 
         results.append(
             DocumentContract(
@@ -148,6 +186,7 @@ def list_documents(db: Session = Depends(get_db)):
                 created_at=d.created_at.isoformat(),
                 findings_count=findings_count,
                 review_status=review_status,
+                last_execution_mode=latest_run.mode if latest_run else None,
             )
         )
     return results
@@ -160,13 +199,15 @@ async def upload_document(
     db: Session = Depends(get_db),
 ):
     try:
-        content = await file.read()
+        content = await read_upload_file_chunked(file)
         storage_key, content_hash, width, height, media_type = validate_and_save_image(
             file_bytes=content,
             original_filename=file.filename or "upload.jpg",
             content_type=file.content_type,
         )
-    except (InvalidImageError, FileTooLargeError) as exc:
+    except FileTooLargeError as exc:
+        raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail=str(exc))
+    except InvalidImageError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
     except Exception as exc:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Erro no armazenamento: {str(exc)}")
@@ -206,6 +247,7 @@ async def upload_document(
         created_at=doc.created_at.isoformat(),
         findings_count=0,
         review_status="PENDING",
+        last_execution_mode=None,
     )
 
 
@@ -217,13 +259,14 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
 
     runs = db.query(ProcessingRunModel).filter(ProcessingRunModel.document_id == doc.id).all()
     fields = []
-    if runs:
-        latest_run = runs[-1]
+    latest_run = runs[-1] if runs else None
+    if latest_run:
         fields = db.query(ExtractedFieldModel).filter(ExtractedFieldModel.run_id == latest_run.id).all()
 
     evidences = db.query(EvidenceModel).filter(EvidenceModel.document_id == doc.id).all()
     findings = db.query(FindingModel).filter(FindingModel.document_id == doc.id).all()
     decisions = db.query(ReviewDecisionModel).filter(ReviewDecisionModel.document_id == doc.id).order_by(ReviewDecisionModel.created_at.desc()).all()
+    review_status = compute_document_review_status(decisions)
 
     return {
         "document": {
@@ -235,7 +278,11 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
             "height": doc.height,
             "synthetic": doc.synthetic,
             "created_at": doc.created_at.isoformat(),
+            "review_status": review_status,
+            "findings_count": len(findings),
+            "last_execution_mode": latest_run.mode if latest_run else None,
         },
+
         "fields": [
             {
                 "id": f.id,
@@ -316,7 +363,13 @@ def run_document_processing(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento não encontrado.")
 
     active_mode = (mode_override or EXECUTION_MODE).upper()
+    if active_mode not in ("REAL", "DEMO"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Modo de execução inválido: {active_mode}. Apenas REAL e DEMO são suportados.",
+        )
     provider = real_provider if active_mode == "REAL" else demo_provider
+
 
     image_path = get_image_path(doc.storage_key)
 
@@ -545,7 +598,15 @@ def get_graph():
 @app.post("/api/admin/seed-demo")
 def seed_demo_cases(db: Session = Depends(get_db)):
     """Precarrega os 20 casos sintéticos diretamente no banco de dados para teste imediato de interface."""
+    env = os.getenv("ENVIRONMENT", "development").lower()
+    if env == "production":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Operação administrativa de seed bloqueada em ambiente de produção.",
+        )
+
     cases_dir = "backend/data/synthetic/cases"
+
     if not os.path.exists(cases_dir):
         raise HTTPException(status_code=400, detail="Casos sintéticos ainda não gerados.")
 

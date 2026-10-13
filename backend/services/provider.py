@@ -62,6 +62,72 @@ class BaseInferenceProvider(abc.ABC):
         pass
 
 
+def validate_bounding_box(raw_box: Any) -> Tuple[Optional[Dict[str, float]], str]:
+    """
+    Valida rigorosamente a geometria da bounding box:
+    - Requer exatamente 4 números.
+    - Se todos forem 0, indica ausência de localização ('UNLOCALIZED').
+    - Converte escala 0-1000 (do VLM) para escala normalizada [0.0, 1.0].
+    - Valida que todos os valores estão em [0.0, 1.0].
+    - Valida que x_max > x_min e y_max > y_min com área mínima de 0.0001.
+    - Retorna status 'PROPOSED_BY_MODEL' (não 'VALIDATED', pois a localização
+      visual ainda requer conferência humana ou ground truth).
+    """
+    if not raw_box or not isinstance(raw_box, (list, tuple)) or len(raw_box) != 4:
+        return None, "UNLOCALIZED"
+
+    try:
+        coords = [float(c) for c in raw_box]
+    except (ValueError, TypeError):
+        return None, "INVALID_GEOMETRY"
+
+    if all(c == 0.0 for c in coords):
+        return None, "UNLOCALIZED"
+
+    y_min_raw, x_min_raw, y_max_raw, x_max_raw = coords
+
+    if any(c > 1.0 for c in coords):
+        x_min = round(x_min_raw / 1000.0, 4)
+        y_min = round(y_min_raw / 1000.0, 4)
+        x_max = round(x_max_raw / 1000.0, 4)
+        y_max = round(y_max_raw / 1000.0, 4)
+    else:
+        x_min, y_min, x_max, y_max = round(x_min_raw, 4), round(y_min_raw, 4), round(x_max_raw, 4), round(y_max_raw, 4)
+
+    for val in (x_min, y_min, x_max, y_max):
+        if val < 0.0 or val > 1.0:
+            return None, "INVALID_GEOMETRY"
+
+    if x_max <= x_min or y_max <= y_min:
+        return None, "INVALID_GEOMETRY"
+
+    area = (x_max - x_min) * (y_max - y_min)
+    if area < 0.0001:
+        return None, "INVALID_GEOMETRY"
+
+    return {
+        "x_min": x_min,
+        "y_min": y_min,
+        "x_max": x_max,
+        "y_max": y_max,
+    }, "PROPOSED_BY_MODEL"
+
+
+def inspect_runtime_hardware() -> str:
+    """Verifica dinamicamente a presença de GPU / ROCm sem assumir hardware fixo."""
+    try:
+        import torch
+        if torch.cuda.is_available():
+            dev_name = torch.cuda.get_device_name(0)
+            hip_ver = getattr(torch.version, "hip", None)
+            if hip_ver:
+                return f"AMD ROCm GPU: {dev_name} (HIP {hip_ver})"
+            return f"GPU: {dev_name} (CUDA/Direct)"
+        return "CPU Local (ROCm não detectado no host atual)"
+    except ImportError:
+        return "Python Runtime (PyTorch não instalado no ambiente)"
+
+
 class RealROCmProvider(BaseInferenceProvider):
     """
     Provedor REAL: executa inferência através de endpoint vLLM em GPU AMD com ROCm.
@@ -142,7 +208,8 @@ class RealROCmProvider(BaseInferenceProvider):
 
         telemetry = {
             "mode": "REAL",
-            "backend": "AMD ROCm GPU (vLLM)",
+            "backend": f"vLLM Endpoint ({self.api_base})",
+            "detected_hardware": inspect_runtime_hardware(),
             "endpoint": endpoint,
             "tokens": res_data.get("usage", {}),
             "latency_ms": elapsed_ms,
@@ -159,6 +226,7 @@ class RealROCmProvider(BaseInferenceProvider):
         )
 
     def _convert_to_contracts(self, parsed: Dict[str, Any], document_id: str) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+
         fields = []
         evidences = []
 
@@ -167,19 +235,11 @@ class RealROCmProvider(BaseInferenceProvider):
 
         # Campos do cabeçalho
         if cabecalho.get("crm"):
+            raw_crm = str(cabecalho.get("crm")).strip()
+            uf = str(cabecalho.get("uf_crm", "SP")).strip()
             ev_id = f"ev-crm-{document_id[:8]}"
             crm_box = boxes.get("crm")
-            norm_box = None
-            loc_status = "UNLOCALIZED"
-            if crm_box and len(crm_box) == 4:
-                # Converte de 0-1000 para 0-1 (x_min, y_min, x_max, y_max)
-                norm_box = {
-                    "x_min": crm_box[1] / 1000.0,
-                    "y_min": crm_box[0] / 1000.0,
-                    "x_max": crm_box[3] / 1000.0,
-                    "y_max": crm_box[2] / 1000.0,
-                }
-                loc_status = "VALIDATED"
+            norm_box, loc_status = validate_bounding_box(crm_box)
 
             evidences.append({
                 "id": ev_id,
@@ -189,42 +249,36 @@ class RealROCmProvider(BaseInferenceProvider):
                 "coordinate_system": "NORMALIZED_0_1",
                 "localization_status": loc_status,
                 "source": "VLM_OUTPUT",
-                "excerpt": f"CRM {cabecalho.get('crm')}/{cabecalho.get('uf_crm', '')}",
+                "excerpt": f"CRM {raw_crm}/{uf}",
             })
+
+            is_valid_digits = raw_crm.replace(".", "").replace("-", "").isdigit()
+            uncertainty = "CERTAIN" if is_valid_digits and len(raw_crm) >= 4 else "AMBIGUOUS"
 
             fields.append({
                 "field_type": "crm",
-                "raw_text": str(cabecalho.get("crm")),
-                "normalized_value": f"{cabecalho.get('crm')}-{cabecalho.get('uf_crm', 'SP')}",
+                "raw_text": raw_crm,
+                "normalized_value": f"{raw_crm}-{uf}",
                 "hypotheses": [
                     {
-                        "text": f"{cabecalho.get('crm')}-{cabecalho.get('uf_crm', 'SP')}",
+                        "text": f"{raw_crm}-{uf}",
                         "rank": 1,
-                        "score": 0.95,
+                        "score": None,  # Sem probabilidade inventada
                         "score_kind": "HEURISTIC_MODEL",
-                        "supporting_evidence_ids": [ev_id],
+                        "supporting_evidence_ids": [ev_id] if norm_box else [],
                     }
                 ],
-                "uncertainty_status": "CERTAIN",
+                "uncertainty_status": uncertainty,
                 "confidence_kind": "HEURISTIC_MODEL",
-                "score": 0.95,
-                "evidence_ids": [ev_id],
-                "requires_review": False,
+                "score": None,  # Nulo na ausência de calibração estatística
+                "evidence_ids": [ev_id] if norm_box else [],
+                "requires_review": (uncertainty != "CERTAIN"),
             })
 
         # Itens da receita
         for idx, item in enumerate(parsed.get("itens", []), 1):
-            raw_box = item.get("box", [0, 0, 0, 0])
-            norm_box = None
-            loc_status = "UNLOCALIZED"
-            if len(raw_box) == 4 and any(c > 0 for c in raw_box):
-                norm_box = {
-                    "x_min": raw_box[1] / 1000.0,
-                    "y_min": raw_box[0] / 1000.0,
-                    "x_max": raw_box[3] / 1000.0,
-                    "y_max": raw_box[2] / 1000.0,
-                }
-                loc_status = "VALIDATED"
+            raw_box = item.get("box")
+            norm_box, loc_status = validate_bounding_box(raw_box)
 
             ev_id = f"ev-item-{idx}-{document_id[:8]}"
             evidences.append({
@@ -245,7 +299,7 @@ class RealROCmProvider(BaseInferenceProvider):
                     "rank": rank,
                     "score": hyp.get("confianca"),
                     "score_kind": "HEURISTIC_MODEL",
-                    "supporting_evidence_ids": [ev_id],
+                    "supporting_evidence_ids": [ev_id] if norm_box else [],
                 })
 
             uncertainty = "CERTAIN"
@@ -263,7 +317,7 @@ class RealROCmProvider(BaseInferenceProvider):
                 "uncertainty_status": uncertainty,
                 "confidence_kind": "HEURISTIC_MODEL",
                 "score": hyp_list[0]["score"] if hyp_list else None,
-                "evidence_ids": [ev_id],
+                "evidence_ids": [ev_id] if norm_box else [],
                 "requires_review": (uncertainty != "CERTAIN"),
             })
 
@@ -274,8 +328,8 @@ class DemoFixtureProvider(BaseInferenceProvider):
     """
     Provedor DEMO: utiliza exclusivamente fixtures determinísticas gabaritadas.
     Exibe banner explícito na UI indicando modo de demonstração.
-    Se a imagem não tiver fixture registrada, recusa o processamento informando
-    que não há fixture disponível (sem fabricar alucinação).
+    VINCULA FIXTURES EXCLUSIVAMENTE AO HASH DE CONTEÚDO (SHA-256) OU AO ID
+    DO CASO PRÉ-SEMEADO. NUNCA UTILIZA NOME DE ARQUIVO NEM FALLBACK GENÉRICO.
     """
 
     def __init__(self, fixtures_path: str = "backend/data/synthetic/fixtures.json"):
@@ -298,29 +352,19 @@ class DemoFixtureProvider(BaseInferenceProvider):
         content_hash: str,
         original_filename: Optional[str] = None,
     ) -> ProviderResult:
-        # Busca por hash, nome original do arquivo, id do documento ou storage_key
-        filename = os.path.basename(image_path)
-        fixture = (
-            self._fixtures.get(content_hash)
-            or (self._fixtures.get(original_filename) if original_filename else None)
-            or self._fixtures.get(document_id)
-            or self._fixtures.get(filename)
-        )
-
-        if not fixture:
-            # Se não encontrou por hash exato, verifica se existe fixture genérica cadastrada para testes
-            fixture = self._fixtures.get("default_synthetic_case")
+        # Busca exclusivamente por content_hash (SHA-256) ou document_id conhecido
+        fixture = self._fixtures.get(content_hash) or self._fixtures.get(document_id)
 
         if not fixture:
             raise NoFixtureAvailableError(
-                f"Nenhuma fixture registrada no modo DEMO para este documento (Hash: {content_hash[:12]}...). "
-                "Para testar uma imagem nova arbitrária, conecte o cluster AMD e selecione o modo REAL."
+                f"Nenhuma fixture registrada no modo DEMO para o hash SHA-256 {content_hash}. "
+                "No modo DEMO, apenas imagens sintéticas do catálogo gabaritado são aceitas. "
+                "Para processar novas imagens arbitrárias, selecione o modo REAL com endpoint vLLM/ROCm ativo."
             )
 
         fields = fixture.get("fields", [])
         evidences = fixture.get("evidences", [])
 
-        # Garante que os IDs de evidência e documento reflitam o documento atual
         adapted_evidences = []
         for ev in evidences:
             ev_copy = dict(ev)
@@ -343,3 +387,4 @@ class DemoFixtureProvider(BaseInferenceProvider):
             model_id="deterministic-fixture-v1",
             telemetry=telemetry,
         )
+

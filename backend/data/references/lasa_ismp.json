@@ -15,7 +15,8 @@
     },
     "gravidade": "CRITICA",
     "risco_clinico": "Risco de sedação profunda indevida, parada respiratória ou crise hipertensiva aguda por interrupção do anti-hipertensivo.",
-    "palavras_chave": ["losartan", "lorazepam", "losartana", "lorazepan"]
+    "palavras_chave": ["losartan", "lorazepam", "losartana", "lorazepan"],
+    "fonte_referencia": "ISMP Brasil Boletim v.4 n.1 (Medicamentos com Nomes Semelhantes); FDA/ISMP List of Look-Alike Drug Names."
   },
   {
     "par_id": "LASA-002",
@@ -33,7 +34,8 @@
     },
     "gravidade": "ALTA",
     "risco_clinico": "Troca de dose com risco de sobredosagem serotoninérgica (Escitalopram tem potência dobrada em relação ao Citalopram) ou subdose terapêutica.",
-    "palavras_chave": ["citalopram", "escitalopram"]
+    "palavras_chave": ["citalopram", "escitalopram"],
+    "fonte_referencia": "ISMP List of Confused Drug Names (Institute for Safe Medication Practices, 2019)."
   },
   {
     "par_id": "LASA-003",
@@ -51,7 +53,8 @@
     },
     "gravidade": "ALTA",
     "risco_clinico": "Risco de depressão grave induzida pela Flunarizina em pacientes psiquiátricos e sintomas extrapiramidais (parkinsonismo medicamentoso).",
-    "palavras_chave": ["fluoxetina", "flunarizina", "flunarin", "fluxene"]
+    "palavras_chave": ["fluoxetina", "flunarizina", "flunarin", "fluxene"],
+    "fonte_referencia": "ISMP Brasil - Alertas de Farmacovigilância e Erros de Dispensação com Nomes Semelhantes."
   },
   {
     "par_id": "LASA-004",
@@ -69,7 +72,8 @@
     },
     "gravidade": "CRITICA",
     "risco_clinico": "Índice terapêutico estreitíssimo da Digoxina. Se prescrito Dipirona 500mg e interpretado como Digoxina, há intoxicação digitálica fatal (arritmias letais).",
-    "palavras_chave": ["digoxina", "dipirona", "novalgina", "digox"]
+    "palavras_chave": ["digoxina", "dipirona", "novalgina", "digox"],
+    "fonte_referencia": "ISMP Brasil - Protocolo de Medicamentos Potencialmente Perigosos / Alta Vigilância em Ambulatórios."
   },
   {
     "par_id": "LASA-005",
@@ -87,7 +91,8 @@
     },
     "gravidade": "MEDIA",
     "risco_clinico": "Falha no controle ácido gástrico ou persistência de náuseas severas e risco de prolongamento do intervalo QT indevido.",
-    "palavras_chave": ["omeprazol", "ondansetrona", "ondansetron", "omeprazon"]
+    "palavras_chave": ["omeprazol", "ondansetrona", "ondansetron", "omeprazon"],
+    "fonte_referencia": "FDA / ISMP Look-Alike Sound-Alike Drug Name List."
   },
   {
     "par_id": "LASA-006",
@@ -105,7 +110,8 @@
     },
     "gravidade": "CRITICA",
     "risco_clinico": "Sedação excessiva, hipotensão ortostática ou risco de síndrome serotoninérgica e convulsões se administrados erroneamente.",
-    "palavras_chave": ["tramadol", "trazodona", "tramal", "donaren"]
+    "palavras_chave": ["tramadol", "trazodona", "tramal", "donaren"],
+    "fonte_referencia": "ISMP Medication Safety Alert! Acute Care - Confused Drug Name Pairs (Tramadol vs Trazodone)."
   },
   {
     "par_id": "LASA-007",
@@ -123,7 +129,8 @@
     },
     "gravidade": "CRITICA",
     "risco_clinico": "Bradicardia severa, bloqueio atrioventricular ou coma por superdosagem sedativa acidental.",
-    "palavras_chave": ["diazepam", "diltiazem", "valium", "cardizem"]
+    "palavras_chave": ["diazepam", "diltiazem", "valium", "cardizem"],
+    "fonte_referencia": "ANVISA / ISMP Brasil - Boletim de Segurança do Paciente sobre Troca Acidental Diazepam/Diltiazem."
   },
   {
     "par_id": "LASA-008",
@@ -141,7 +148,8 @@
     },
     "gravidade": "MEDIA",
     "risco_clinico": "Confusão frequente na dispensação e cálculos de volume líquido em pediatria vs. comprimidos adultos.",
-    "palavras_chave": ["prednisona", "prednisolona", "meticorten", "prelona"]
+    "palavras_chave": ["prednisona", "prednisolona", "meticorten", "prelona"],
+    "fonte_referencia": "ISMP Community/Ambulatory Care Edition - Look-Alike Steroid Name Warnings."
   },
   {
     "par_id": "LASA-009",
@@ -159,7 +167,8 @@
     },
     "gravidade": "ALTA",
     "risco_clinico": "Toxicidade retiniana e arritmias cardíacas com Hidroxicloroquina indevida, além de desidratação e hipocalemia com o diurético desnecessário.",
-    "palavras_chave": ["hidroclorotiazida", "hidroxicloroquina", "reumaquin", "clorocil"]
+    "palavras_chave": ["hidroclorotiazida", "hidroxicloroquina", "reumaquin", "clorocil"],
+    "fonte_referencia": "ISMP Special Report on Look-Alike Sound-Alike Generic Names with Hydro- Prefix."
   },
   {
     "par_id": "LASA-010",
@@ -177,6 +186,7 @@
     },
     "gravidade": "ALTA",
     "risco_clinico": "Risco de dependência química e sonolência grave no lugar de tratamento antiúrico; risco de Síndrome de Stevens-Johnson pelo Alopurinol desnecessário.",
-    "palavras_chave": ["alprazolam", "alopurinol", "frontin", "zyloric"]
+    "palavras_chave": ["alprazolam", "alopurinol", "frontin", "zyloric"],
+    "fonte_referencia": "FDA CDER / ISMP List of Confused Names in Ambulatory and Retail Settings."
   }
 ]

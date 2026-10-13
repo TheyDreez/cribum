@@ -75,7 +75,8 @@ Unlike traditional OCR solutions or opaque black-box APIs:
 In strict compliance with the **Health and Wellbeing Track Safety Guidelines**:
 - **Non-Autonomous:** CRIBUM is explicitly an auditor-support tool. It never provides direct clinical diagnosis or automated prescription decisions.
 - **Fail-Safe Insecurity Escalation:** When visual confidence falls below safety thresholds or a LASA collision is flagged, the item is tagged with `incerteza: alta` and escalated directly into the human auditor review queue.
-- **Data Privacy & Sovereignty:** Zero cloud API leakage. All weights run locally on AMD infrastructure, fully compliant with LGPD and GDPR medical record regulations.
+- **Auto-hospedagem e Soberania de Dados:** Arquitetura desenhada para execução local/auto-hospedada em hardware AMD via vLLM/ROCm, sem envio de imagens ou registros de saúde para APIs proprietárias externas. Avaliação conduzida experimentalmente sobre dataset sintético.
+
 
 ---
 

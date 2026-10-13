@@ -1,3 +1,5 @@
+import hashlib
+import io
 import json
 import os
 import random
@@ -392,10 +394,10 @@ def build_synthetic_20_cases():
                 "field_type": "crm",
                 "raw_text": caso["crm"],
                 "normalized_value": caso["crm"],
-                "hypotheses": [{"text": caso["crm"], "rank": 1, "score": 0.99, "score_kind": "HEURISTIC_MODEL", "supporting_evidence_ids": [ev_crm_id]}],
+                "hypotheses": [{"text": caso["crm"], "rank": 1, "score": None, "score_kind": "HEURISTIC_MODEL", "supporting_evidence_ids": [ev_crm_id]}],
                 "uncertainty_status": "CERTAIN",
                 "confidence_kind": "HEURISTIC_MODEL",
-                "score": 0.99,
+                "score": None,
                 "evidence_ids": [ev_crm_id],
                 "requires_review": False,
             })
@@ -410,8 +412,22 @@ def build_synthetic_20_cases():
                 "excerpt": f"CRM {caso['crm']}",
             })
 
-        fixtures_dict[caso["filename"]] = fixture_data
+        # Calcula hashes criptográficos (bruto e sanitizado) para indexação estrita de conteúdo
+        with open(img_path, "rb") as f_img:
+            raw_bytes = f_img.read()
+        raw_hash = hashlib.sha256(raw_bytes).hexdigest()
+
+        img_temp = Image.open(io.BytesIO(raw_bytes))
+        out_buf = io.BytesIO()
+        img_temp.save(out_buf, format="JPEG", quality=92, optimize=True)
+        sanitized_hash = hashlib.sha256(out_buf.getvalue()).hexdigest()
+
+        # Vincula exclusivamente ao hash criptográfico e ao ID do caso
+        # NUNCA indexa por nome de arquivo do usuário
+        fixtures_dict[raw_hash] = fixture_data
+        fixtures_dict[sanitized_hash] = fixture_data
         fixtures_dict[caso["id"]] = fixture_data
+
 
         # Salva o gabarito oficial em ground_truth
         with open(os.path.join(GROUND_TRUTH_DIR, f"{caso['id']}_gt.json"), "w", encoding="utf-8") as f:

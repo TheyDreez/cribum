@@ -27,40 +27,42 @@ class RulesEngine:
         document: DocumentModel,
         run_id: str,
         fields: List[ExtractedFieldModel],
-        db_session: Any
+        db_session: Optional[Any] = None
     ) -> List[FindingModel]:
         findings: List[FindingModel] = []
 
         # 1. Regra DOC-001: Verificação de duplicidade exata de documento por Hash SHA-256
-        existing_dup = (
-            db_session.query(DocumentModel)
-            .filter(
-                DocumentModel.content_hash == document.content_hash,
-                DocumentModel.id != document.id
-            )
-            .first()
-        )
-        if existing_dup:
-            findings.append(
-                FindingModel(
-                    document_id=document.id,
-                    run_id=run_id,
-                    category="DUPLICATE_CLAIM",
-                    severity="HIGH",
-                    rule_id="DOC-001-EXACT-HASH-DUPLICATE",
-                    rule_version="1.0.0",
-                    title="Documento Idêntico Já Registrado",
-                    explanation=(
-                        f"O arquivo enviado possui hash SHA-256 ({document.content_hash[:12]}...) "
-                        f"idêntico ao documento previamente registrado ID: {existing_dup.id} "
-                        f"({existing_dup.filename_original})."
-                    ),
-                    evidence_ids=[],
-                    related_document_ids=[existing_dup.id],
-                    limitations="Validação puramente criptográfica. Não avalia se houve reenvio administrativo justificado.",
-                    requires_review=True,
+        if db_session is not None:
+            existing_dup = (
+                db_session.query(DocumentModel)
+                .filter(
+                    DocumentModel.content_hash == document.content_hash,
+                    DocumentModel.id != document.id
                 )
+                .first()
             )
+            if existing_dup:
+                findings.append(
+                    FindingModel(
+                        document_id=document.id,
+                        run_id=run_id,
+                        category="DUPLICATE_CLAIM",
+                        severity="HIGH",
+                        rule_id="DOC-001-EXACT-HASH-DUPLICATE",
+                        rule_version="1.0.0",
+                        title="Documento Idêntico Já Registrado",
+                        explanation=(
+                            f"O arquivo enviado possui hash SHA-256 ({document.content_hash[:12]}...) "
+                            f"idêntico ao documento previamente registrado ID: {existing_dup.id} "
+                            f"({existing_dup.filename_original})."
+                        ),
+                        evidence_ids=[],
+                        related_document_ids=[existing_dup.id],
+                        limitations="Validação puramente criptográfica. Não avalia se houve reenvio administrativo justificado.",
+                        requires_review=True,
+                    )
+                )
+
 
         # 2. Regra DOC-002: Verificação de campos obrigatórios (CRM do prescritor)
         crm_field = next((f for f in fields if f.field_type == "crm"), None)
@@ -139,8 +141,12 @@ class RulesEngine:
         return findings
 
     def _check_lasa_collision(self, hypotheses: List[Dict[str, Any]]) -> Optional[tuple]:
-        """Verifica se alguma das hipóteses colide com pares catalogados na base ISMP."""
-        if not hypotheses:
+        """
+        Verifica se as hipóteses concorrentes colidem com pares LASA catalogados pelo ISMP.
+        Uma colisão real ocorre quando a leitura é ambígua (>= 2 hipóteses) e apresenta
+        hipóteses alternativas que coincidem simultaneamente com a Droga A e a Droga B do par.
+        """
+        if not hypotheses or len(hypotheses) < 2:
             return None
 
         hyp_texts = [h.get("text", "").lower() for h in hypotheses]
@@ -148,17 +154,24 @@ class RulesEngine:
         for par in self.lasa_database:
             nome_a = par["droga_a"]["nome"].lower()
             nome_b = par["droga_b"]["nome"].lower()
+
+            has_match_a = any(nome_a in t for t in hyp_texts)
+            has_match_b = any(nome_b in t for t in hyp_texts)
+
+            # Também verifica palavras-chave / marcas registradas do par
             palavras = [p.lower() for p in par.get("palavras_chave", [])]
+            for t in hyp_texts:
+                for p in palavras:
+                    if p in t:
+                        if nome_a[:4] in p:
+                            has_match_a = True
+                        if nome_b[:4] in p:
+                            has_match_b = True
 
-            match_a = any(nome_a in t or any(p in t for p in palavras[:2]) for t in hyp_texts)
-            match_b = any(nome_b in t or any(p in t for p in palavras[2:]) for t in hyp_texts)
-
-            # Se ambas as drogas aparecem entre as hipóteses do MESMO item (ex: Hipótese 1: Losartana, Hipótese 2: Lorazepam)
-            if match_a and match_b:
-                return (par, par["droga_a"]["nome"], par["droga_b"]["nome"])
-
-            # Se ao menos uma das drogas críticas foi detectada como hipótese principal
-            if match_a:
+            # Colisão LASA confirmada quando o leitor hesita entre droga A e droga B
+            if has_match_a and has_match_b:
                 return (par, par["droga_a"]["nome"], par["droga_b"]["nome"])
 
         return None
+
+
