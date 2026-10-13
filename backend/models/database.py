@@ -12,6 +12,7 @@ from sqlalchemy import (
     String,
     Text,
     create_engine,
+    text,
 )
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 from sqlalchemy.types import JSON
@@ -130,6 +131,8 @@ class ReviewDecisionModel(Base):
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
     document_id = Column(String(36), ForeignKey("documents.id"), nullable=False, index=True)
+    run_id = Column(String(36), ForeignKey("processing_runs.id"), nullable=True, index=True)
+    field_id = Column(String(36), ForeignKey("extracted_fields.id"), nullable=True, index=True)
     finding_id = Column(String(36), ForeignKey("findings.id"), nullable=True)
     actor_id = Column(String(100), default="auditor-default", nullable=False)
     action = Column(String(50), nullable=False)  # CONFIRMED_HYPOTHESIS, REJECTED_CLAIM, APPROVED_CLAIM, ESCALATED_FORENSIC, REQUESTED_CLARIFICATION
@@ -139,6 +142,8 @@ class ReviewDecisionModel(Base):
     created_at = Column(DateTime, default=utc_now, nullable=False)
 
     document = relationship("DocumentModel", back_populates="decisions")
+    run = relationship("ProcessingRunModel")
+    field = relationship("ExtractedFieldModel")
 
 
 class AuditEventModel(Base):
@@ -153,6 +158,31 @@ class AuditEventModel(Base):
     metadata_sanitized = Column(JSON, default=dict, nullable=False)
 
 
+def ensure_schema_migrations(engine):
+    """
+    Executa migrações idempotentes e seguras para bancos SQLite existentes.
+    Garante que colunas adicionadas após a criação inicial da tabela existam
+    sem perder dados já gravados.
+    """
+    with engine.connect() as conn:
+        # 1. Tabela evidences -> adicionar run_id se ausente
+        res = conn.execute(text("PRAGMA table_info(evidences)"))
+        evidence_cols = [row[1] for row in res.fetchall()]
+        if evidence_cols and "run_id" not in evidence_cols:
+            conn.execute(text("ALTER TABLE evidences ADD COLUMN run_id VARCHAR(36)"))
+            conn.commit()
+
+        # 2. Tabela review_decisions -> adicionar run_id e field_id se ausentes
+        res = conn.execute(text("PRAGMA table_info(review_decisions)"))
+        decision_cols = [row[1] for row in res.fetchall()]
+        if decision_cols:
+            if "run_id" not in decision_cols:
+                conn.execute(text("ALTER TABLE review_decisions ADD COLUMN run_id VARCHAR(36)"))
+            if "field_id" not in decision_cols:
+                conn.execute(text("ALTER TABLE review_decisions ADD COLUMN field_id VARCHAR(36)"))
+            conn.commit()
+
+
 # Database Initialization Helper
 def get_engine(database_url: str = "sqlite:///./cribum.db"):
     connect_args = {"check_same_thread": False} if database_url.startswith("sqlite") else {}
@@ -162,4 +192,6 @@ def get_engine(database_url: str = "sqlite:///./cribum.db"):
 def init_db(database_url: str = "sqlite:///./cribum.db"):
     engine = get_engine(database_url)
     Base.metadata.create_all(bind=engine)
+    if database_url.startswith("sqlite"):
+        ensure_schema_migrations(engine)
     return sessionmaker(autocommit=False, autoflush=False, bind=engine)

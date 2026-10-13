@@ -98,6 +98,8 @@ class ReviewDecisionCreate(BaseModel):
         "REQUESTED_CLARIFICATION"
     ]
     finding_id: Optional[str] = None
+    field_id: Optional[str] = None
+    run_id: Optional[str] = None
     actor_id: str = "auditor-default"
     previous_value: Optional[str] = None
     confirmed_value: Optional[str] = None
@@ -107,6 +109,8 @@ class ReviewDecisionCreate(BaseModel):
 class ReviewDecisionContract(BaseModel):
     id: str
     document_id: str
+    run_id: Optional[str] = None
+    field_id: Optional[str] = None
     finding_id: Optional[str] = None
     actor_id: str
     action: str
@@ -135,6 +139,8 @@ class DocumentContract(BaseModel):
         "CLARIFICATION_REQUESTED"
     ] = "PENDING"
     last_execution_mode: Optional[str] = None
+    last_execution_status: Optional[str] = None
+    last_execution_error: Optional[str] = None
 
 
 

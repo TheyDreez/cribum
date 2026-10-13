@@ -128,6 +128,7 @@ export const App: React.FC = () => {
   const handleSubmitDecision = async (decisionData: {
     action: string;
     confirmed_value?: string;
+    field_id?: string;
     reason: string;
     finding_id?: string;
   }) => {

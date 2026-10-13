@@ -191,6 +191,8 @@ def list_documents(db: Session = Depends(get_db)):
                 findings_count=findings_count,
                 review_status=review_status,
                 last_execution_mode=latest_run.mode if latest_run else None,
+                last_execution_status=latest_run.status if latest_run else None,
+                last_execution_error=latest_run.error_message if latest_run else None,
             )
         )
     return results
@@ -266,11 +268,11 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
     evidences = []
     findings = []
     latest_run = runs[-1] if runs else None
-    if latest_run:
+    if latest_run and latest_run.status != "FAILED":
         fields = db.query(ExtractedFieldModel).filter(ExtractedFieldModel.run_id == latest_run.id).all()
         evidences = db.query(EvidenceModel).filter(EvidenceModel.run_id == latest_run.id).all()
         findings = db.query(FindingModel).filter(FindingModel.run_id == latest_run.id).all()
-    else:
+    elif not latest_run:
         evidences = db.query(EvidenceModel).filter(EvidenceModel.document_id == doc.id).all()
         findings = db.query(FindingModel).filter(FindingModel.document_id == doc.id).all()
 
@@ -290,6 +292,8 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
             "review_status": review_status,
             "findings_count": len(findings),
             "last_execution_mode": latest_run.mode if latest_run else None,
+            "last_execution_status": latest_run.status if latest_run else None,
+            "last_execution_error": latest_run.error_message if latest_run else None,
         },
 
         "fields": [
@@ -336,6 +340,9 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
         "decisions": [
             {
                 "id": dec.id,
+                "run_id": dec.run_id,
+                "field_id": dec.field_id,
+                "finding_id": dec.finding_id,
                 "action": dec.action,
                 "actor_id": dec.actor_id,
                 "previous_value": dec.previous_value,
@@ -557,7 +564,9 @@ def submit_human_review(
                 detail=f"O apontamento (finding_id '{decision_in.finding_id}') não pertence ao documento '{doc.id}'.",
             )
 
-    # 2. Validação da confirmação de hipótese: exige valor confirmado e valida pertinência ao documento
+    # 2. Validação da confirmação de hipótese: exige valor confirmado, field_id e valida pertinência ao campo específico
+    field_record = None
+    target_run_id = decision_in.run_id
     if decision_in.action == "CONFIRMED_HYPOTHESIS":
         if not decision_in.confirmed_value or not decision_in.confirmed_value.strip():
             raise HTTPException(
@@ -565,45 +574,84 @@ def submit_human_review(
                 detail="A ação CONFIRMED_HYPOTHESIS exige o campo 'confirmed_value' preenchido.",
             )
 
-        latest_run = (
-            db.query(ProcessingRunModel)
-            .filter(ProcessingRunModel.document_id == doc.id)
-            .order_by(ProcessingRunModel.started_at.desc())
+        if not decision_in.field_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="A ação CONFIRMED_HYPOTHESIS exige o identificador do campo específico ('field_id').",
+            )
+
+        field_record = (
+            db.query(ExtractedFieldModel)
+            .filter(ExtractedFieldModel.id == decision_in.field_id)
             .first()
         )
-        if latest_run:
-            fields = db.query(ExtractedFieldModel).filter(ExtractedFieldModel.run_id == latest_run.id).all()
-            valid_hypotheses = set()
-            for f in fields:
-                if f.normalized_value:
-                    valid_hypotheses.add(f.normalized_value.strip().lower())
-                if f.raw_text:
-                    valid_hypotheses.add(f.raw_text.strip().lower())
-                for h in (f.hypotheses or []):
-                    if isinstance(h, dict) and h.get("text"):
-                        valid_hypotheses.add(h["text"].strip().lower())
+        if not field_record:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Campo extraído (field_id '{decision_in.field_id}') não encontrado.",
+            )
 
-            target_val = decision_in.confirmed_value.strip().lower()
-            is_matched = any(
-                target_val == v or target_val in v or v in target_val
-                for v in valid_hypotheses
-            ) if valid_hypotheses else True
+        field_run = (
+            db.query(ProcessingRunModel)
+            .filter(ProcessingRunModel.id == field_record.run_id)
+            .first()
+        )
+        if not field_run or field_run.document_id != doc.id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"O campo '{field_record.id}' não pertence a nenhuma execução do documento '{doc.id}'.",
+            )
 
-            if not is_matched:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=(
-                        f"O valor confirmado '{decision_in.confirmed_value}' não corresponde a nenhuma das hipóteses "
-                        f"extraídas para este documento."
-                    ),
-                )
+        if decision_in.run_id and decision_in.run_id != field_record.run_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"O campo '{field_record.id}' pertence à execução '{field_record.run_id}', não à execução informada '{decision_in.run_id}'.",
+            )
+
+        target_run_id = field_record.run_id
+
+        # Valida contra o conjunto de hipóteses daquele campo específico
+        valid_field_hypotheses = set()
+        if field_record.normalized_value:
+            valid_field_hypotheses.add(field_record.normalized_value.strip().lower())
+        if field_record.raw_text:
+            valid_field_hypotheses.add(field_record.raw_text.strip().lower())
+        for h in (field_record.hypotheses or []):
+            if isinstance(h, dict) and h.get("text"):
+                valid_field_hypotheses.add(h["text"].strip().lower())
+
+        target_val = decision_in.confirmed_value.strip().lower()
+        is_matched = any(
+            target_val == v or target_val in v or v in target_val
+            for v in valid_field_hypotheses
+        ) if valid_field_hypotheses else False
+
+        if not is_matched:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=(
+                    f"O valor confirmado '{decision_in.confirmed_value}' não corresponde a nenhuma das hipóteses "
+                    f"extraídas para o campo específico '{field_record.field_type}' (id: '{field_record.id}')."
+                ),
+            )
+    else:
+        if not target_run_id:
+            latest_run = (
+                db.query(ProcessingRunModel)
+                .filter(ProcessingRunModel.document_id == doc.id)
+                .order_by(ProcessingRunModel.started_at.desc())
+                .first()
+            )
+            target_run_id = latest_run.id if latest_run else None
 
     decision = ReviewDecisionModel(
         document_id=doc.id,
+        run_id=target_run_id,
+        field_id=field_record.id if field_record else decision_in.field_id,
         finding_id=decision_in.finding_id,
         actor_id=decision_in.actor_id,
         action=decision_in.action,
-        previous_value=decision_in.previous_value,
+        previous_value=decision_in.previous_value or (field_record.raw_text if field_record else None),
         confirmed_value=decision_in.confirmed_value,
         reason=decision_in.reason,
     )
@@ -617,6 +665,8 @@ def submit_human_review(
         entity_id=decision.id,
         metadata_sanitized={
             "document_id": doc.id,
+            "run_id": target_run_id,
+            "field_id": field_record.id if field_record else decision_in.field_id,
             "action": decision_in.action,
             "confirmed_value": decision_in.confirmed_value,
             "reason": decision_in.reason,
@@ -629,6 +679,8 @@ def submit_human_review(
     return ReviewDecisionContract(
         id=decision.id,
         document_id=decision.document_id,
+        run_id=decision.run_id,
+        field_id=decision.field_id,
         finding_id=decision.finding_id,
         actor_id=decision.actor_id,
         action=decision.action,

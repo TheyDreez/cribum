@@ -128,10 +128,15 @@ def test_human_review_decision_persisted():
     doc_id = client.post("/api/documents", files=files).json()["id"]
     client.post(f"/api/documents/{doc_id}/runs?mode_override=DEMO")
 
-    # Auditor humano confere e envia decisão
+    # Obtém o field_id extraído para vincular a confirmação
+    doc_data = client.get(f"/api/documents/{doc_id}").json()
+    field_id = doc_data["fields"][0]["id"]
+
+    # Auditor humano confere e envia decisão vinculada ao campo específico
     review_payload = {
         "action": "CONFIRMED_HYPOTHESIS",
         "actor_id": "auditor-andre-01",
+        "field_id": field_id,
         "previous_value": "Losartana 50mg / Lorazepam 2mg (ambíguo)",
         "confirmed_value": "Losartana 50mg",
         "reason": "Conferido visualmente pelo auditor: o diagnóstico de hipertensão (I10) e a posologia matinal em jejum confirmam Losartana."
@@ -301,12 +306,29 @@ def test_human_review_hypothesis_and_finding_validation():
     doc_id = client.post("/api/documents", files=files).json()["id"]
     client.post(f"/api/documents/{doc_id}/runs?mode_override=DEMO")
 
-    # 1. Submissão com finding_id inexistente/de outro documento deve retornar 400
+    doc_data = client.get(f"/api/documents/{doc_id}").json()
+    med_field_id = next(f["id"] for f in doc_data["fields"] if f["field_type"] == "medication")
+
+    # 1. Submissão sem field_id para CONFIRMED_HYPOTHESIS deve retornar 400
+    res_no_field = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "CONFIRMED_HYPOTHESIS",
+            "actor_id": "auditor-01",
+            "confirmed_value": "Losartana 50mg",
+            "reason": "Sem informar field_id.",
+        },
+    )
+    assert res_no_field.status_code == 400
+    assert "field_id" in res_no_field.json()["detail"]
+
+    # 2. Submissão com finding_id inexistente/de outro documento deve retornar 400
     res_fake_finding = client.post(
         f"/api/documents/{doc_id}/reviews",
         json={
             "action": "CONFIRMED_HYPOTHESIS",
             "actor_id": "auditor-01",
+            "field_id": med_field_id,
             "finding_id": "fake-finding-9999",
             "confirmed_value": "Losartana 50mg",
             "reason": "Testando finding falso.",
@@ -315,12 +337,13 @@ def test_human_review_hypothesis_and_finding_validation():
     assert res_fake_finding.status_code == 400
     assert "não pertence ao documento" in res_fake_finding.json()["detail"]
 
-    # 2. Submissão de hipótese alienígena (não extraída no documento) deve retornar 400
+    # 3. Submissão de hipótese alienígena (não extraída no documento) deve retornar 400
     res_alien_hyp = client.post(
         f"/api/documents/{doc_id}/reviews",
         json={
             "action": "CONFIRMED_HYPOTHESIS",
             "actor_id": "auditor-01",
+            "field_id": med_field_id,
             "confirmed_value": "Morfina 100mg Ampola Injetável",
             "reason": "Tentativa de confirmação de valor arbitrário fora do documento.",
         },
@@ -328,18 +351,183 @@ def test_human_review_hypothesis_and_finding_validation():
     assert res_alien_hyp.status_code == 400
     assert "não corresponde a nenhuma das hipóteses" in res_alien_hyp.json()["detail"]
 
-    # 3. Submissão sem confirmed_value para CONFIRMED_HYPOTHESIS deve retornar 400
+    # 4. Submissão sem confirmed_value para CONFIRMED_HYPOTHESIS deve retornar 400
     res_empty_val = client.post(
         f"/api/documents/{doc_id}/reviews",
         json={
             "action": "CONFIRMED_HYPOTHESIS",
             "actor_id": "auditor-01",
+            "field_id": med_field_id,
             "confirmed_value": "   ",
             "reason": "Valor em branco.",
         },
     )
     assert res_empty_val.status_code == 400
     assert "exige o campo 'confirmed_value'" in res_empty_val.json()["detail"]
+
+
+def test_cross_field_hypothesis_injection_prevented():
+    # Previne que a hipótese de um campo (ex: CRM) seja confirmada em outro campo (ex: medicação)
+    img_path = "backend/data/synthetic/cases/caso_01_losartana_lorazepam.jpg"
+    with open(img_path, "rb") as f:
+        files = {"file": ("caso_01_losartana_lorazepam.jpg", f.read(), "image/jpeg")}
+    doc_id = client.post("/api/documents", files=files).json()["id"]
+    client.post(f"/api/documents/{doc_id}/runs?mode_override=DEMO")
+
+    doc_data = client.get(f"/api/documents/{doc_id}").json()
+    med_field_id = next(f["id"] for f in doc_data["fields"] if f["field_type"] == "medication")
+    crm_field = next(f for f in doc_data["fields"] if f["field_type"] == "crm")
+    crm_value = crm_field["raw_text"]
+
+    # Tenta confirmar o valor do CRM dentro do campo de medicação
+    res_cross = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "CONFIRMED_HYPOTHESIS",
+            "actor_id": "auditor-01",
+            "field_id": med_field_id,
+            "confirmed_value": crm_value,
+            "reason": "Tentando forçar valor de CRM no campo de medicamento.",
+        },
+    )
+    assert res_cross.status_code == 400
+    assert "não corresponde a nenhuma das hipóteses extraídas para o campo específico" in res_cross.json()["detail"]
+
+
+def test_multiple_runs_and_failed_run_isolation():
+    # Verifica que uma execução com falha subsequente não mascara falhas com dados antigos
+    img_path = "backend/data/synthetic/cases/caso_01_losartana_lorazepam.jpg"
+    with open(img_path, "rb") as f:
+        files = {"file": ("caso_01_losartana_lorazepam.jpg", f.read(), "image/jpeg")}
+    doc_id = client.post("/api/documents", files=files).json()["id"]
+
+    # Run 1: Sucesso em DEMO
+    run1 = client.post(f"/api/documents/{doc_id}/runs?mode_override=DEMO")
+    assert run1.status_code == 200
+    detail1 = client.get(f"/api/documents/{doc_id}").json()
+    assert detail1["document"]["findings_count"] > 0
+    assert detail1["document"]["last_execution_status"] in ("REVIEW_REQUIRED", "COMPLETED")
+
+    # Run 2: Falha explícita em REAL (servidor offline)
+    run2 = client.post(f"/api/documents/{doc_id}/runs?mode_override=REAL")
+    assert run2.status_code == 503
+
+    # O detalhe atualizado do documento DEVE exibir last_execution_status == FAILED
+    # e NÃO mascarar o erro retornando os campos e evidências do Run 1 antigo!
+    detail2 = client.get(f"/api/documents/{doc_id}").json()
+    assert detail2["document"]["last_execution_status"] == "FAILED"
+    assert detail2["document"]["last_execution_error"] is not None
+    assert detail2["document"]["findings_count"] == 0
+    assert len(detail2["fields"]) == 0
+    assert len(detail2["findings"]) == 0
+
+
+def test_schema_auto_migration_for_legacy_database(tmp_path):
+    import sqlite3
+    from sqlalchemy import text
+    from backend.models.database import init_db, EvidenceModel, ReviewDecisionModel
+
+    db_file = tmp_path / "legacy_test.db"
+    db_url = f"sqlite:///{db_file}"
+
+    # Cria tabelas legadas simulando versão antiga do banco (sem evidences.run_id e sem review_decisions.run_id/field_id)
+    conn = sqlite3.connect(str(db_file))
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE documents (
+            id VARCHAR(36) PRIMARY KEY,
+            filename_original VARCHAR(255) NOT NULL,
+            storage_key VARCHAR(255) NOT NULL UNIQUE,
+            content_hash VARCHAR(64) NOT NULL,
+            media_type VARCHAR(50) NOT NULL,
+            width INTEGER NOT NULL,
+            height INTEGER NOT NULL,
+            synthetic BOOLEAN NOT NULL,
+            created_at DATETIME NOT NULL
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE processing_runs (
+            id VARCHAR(36) PRIMARY KEY,
+            document_id VARCHAR(36) NOT NULL,
+            mode VARCHAR(20) NOT NULL,
+            provider VARCHAR(50) NOT NULL,
+            model_id VARCHAR(100) NOT NULL,
+            status VARCHAR(30) NOT NULL,
+            started_at DATETIME NOT NULL,
+            schema_version VARCHAR(20) NOT NULL
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE evidences (
+            id VARCHAR(64) PRIMARY KEY,
+            document_id VARCHAR(36) NOT NULL,
+            page INTEGER NOT NULL,
+            bbox JSON,
+            coordinate_system VARCHAR(30) NOT NULL,
+            localization_status VARCHAR(30) NOT NULL,
+            source VARCHAR(50) NOT NULL,
+            excerpt TEXT
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE review_decisions (
+            id VARCHAR(36) PRIMARY KEY,
+            document_id VARCHAR(36) NOT NULL,
+            finding_id VARCHAR(36),
+            actor_id VARCHAR(100) NOT NULL,
+            action VARCHAR(50) NOT NULL,
+            previous_value TEXT,
+            confirmed_value TEXT,
+            reason TEXT NOT NULL,
+            created_at DATETIME NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+    # Inicializa a aplicação com o banco legado: ensure_schema_migrations deve rodar e adicionar colunas
+    SessionMaker = init_db(db_url)
+    session = SessionMaker()
+
+    try:
+        # Inserção de registro usando as novas colunas deve funcionar sem OperationalError
+        ev = EvidenceModel(
+            id="ev-migrated-1",
+            document_id="doc-migrated",
+            run_id="run-migrated-1",
+            page=1,
+            coordinate_system="NORMALIZED_0_1",
+            localization_status="UNLOCALIZED",
+            source="TEST",
+        )
+        session.add(ev)
+
+        dec = ReviewDecisionModel(
+            id="dec-migrated-1",
+            document_id="doc-migrated",
+            run_id="run-migrated-1",
+            field_id="field-migrated-1",
+            actor_id="auditor-test",
+            action="CONFIRMED_HYPOTHESIS",
+            confirmed_value="Losartana",
+            reason="Migração bem-sucedida.",
+        )
+        session.add(dec)
+        session.commit()
+
+        # Consulta e valida que as novas colunas foram persistidas
+        ev_queried = session.query(EvidenceModel).filter_by(id="ev-migrated-1").first()
+        assert ev_queried is not None
+        assert ev_queried.run_id == "run-migrated-1"
+
+        dec_queried = session.query(ReviewDecisionModel).filter_by(id="dec-migrated-1").first()
+        assert dec_queried is not None
+        assert dec_queried.run_id == "run-migrated-1"
+        assert dec_queried.field_id == "field-migrated-1"
+    finally:
+        session.close()
+
 
 
 

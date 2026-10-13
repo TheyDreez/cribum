@@ -20,6 +20,7 @@ interface FindingsPanelProps {
   onSubmitDecision: (decision: {
     action: string;
     confirmed_value?: string;
+    field_id?: string;
     reason: string;
     finding_id?: string;
   }) => void;
@@ -37,12 +38,14 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
   submittingDecision,
 }) => {
   const [selectedHypothesis, setSelectedHypothesis] = useState<string>('');
+  const [selectedFieldId, setSelectedFieldId] = useState<string>('');
   const [decisionAction, setDecisionAction] = useState<string>('CONFIRMED_HYPOTHESIS');
   const [decisionReason, setDecisionReason] = useState<string>('');
 
   // Limpeza de formulário ao alternar documento
   useEffect(() => {
     setSelectedHypothesis('');
+    setSelectedFieldId('');
     setDecisionReason('');
     setDecisionAction('CONFIRMED_HYPOTHESIS');
   }, [documentId]);
@@ -54,6 +57,7 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
     onSubmitDecision({
       action: decisionAction,
       confirmed_value: selectedHypothesis || undefined,
+      field_id: selectedFieldId || undefined,
       reason: decisionReason,
       finding_id: selectedFinding?.id,
     });
@@ -177,7 +181,10 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
                           name={`hyp-${field.id}`}
                           value={hyp.text}
                           checked={isChecked}
-                          onChange={() => setSelectedHypothesis(hyp.text)}
+                          onChange={() => {
+                            setSelectedHypothesis(hyp.text);
+                            setSelectedFieldId(field.id);
+                          }}
                           className="accent-auditTeal-500"
                         />
                         <span>{hyp.text}</span>
