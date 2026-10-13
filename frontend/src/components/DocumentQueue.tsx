@@ -85,7 +85,7 @@ export const DocumentQueue: React.FC<DocumentQueueProps> = ({
   };
 
   return (
-    <aside className="w-80 min-w-[280px] max-w-[340px] shrink-0 border-r border-slate-200 bg-white flex flex-col h-full shadow-xs">
+    <aside id="document-queue" className="w-full min-w-0 border-r border-slate-200 bg-white flex flex-col h-full shadow-xs">
       {/* Header da Fila */}
       <div className="p-3.5 border-b border-slate-200 bg-slate-50/70">
         <div className="flex items-center justify-between mb-2.5">
