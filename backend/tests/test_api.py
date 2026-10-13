@@ -294,4 +294,53 @@ def test_evidence_run_isolation_and_anomaly_unique_ids():
     assert len(anom_ids) == len(set(anom_ids))
 
 
+def test_human_review_hypothesis_and_finding_validation():
+    img_path = "backend/data/synthetic/cases/caso_01_losartana_lorazepam.jpg"
+    with open(img_path, "rb") as f:
+        files = {"file": ("caso_01_losartana_lorazepam.jpg", f.read(), "image/jpeg")}
+    doc_id = client.post("/api/documents", files=files).json()["id"]
+    client.post(f"/api/documents/{doc_id}/runs?mode_override=DEMO")
+
+    # 1. Submissão com finding_id inexistente/de outro documento deve retornar 400
+    res_fake_finding = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "CONFIRMED_HYPOTHESIS",
+            "actor_id": "auditor-01",
+            "finding_id": "fake-finding-9999",
+            "confirmed_value": "Losartana 50mg",
+            "reason": "Testando finding falso.",
+        },
+    )
+    assert res_fake_finding.status_code == 400
+    assert "não pertence ao documento" in res_fake_finding.json()["detail"]
+
+    # 2. Submissão de hipótese alienígena (não extraída no documento) deve retornar 400
+    res_alien_hyp = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "CONFIRMED_HYPOTHESIS",
+            "actor_id": "auditor-01",
+            "confirmed_value": "Morfina 100mg Ampola Injetável",
+            "reason": "Tentativa de confirmação de valor arbitrário fora do documento.",
+        },
+    )
+    assert res_alien_hyp.status_code == 400
+    assert "não corresponde a nenhuma das hipóteses" in res_alien_hyp.json()["detail"]
+
+    # 3. Submissão sem confirmed_value para CONFIRMED_HYPOTHESIS deve retornar 400
+    res_empty_val = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "CONFIRMED_HYPOTHESIS",
+            "actor_id": "auditor-01",
+            "confirmed_value": "   ",
+            "reason": "Valor em branco.",
+        },
+    )
+    assert res_empty_val.status_code == 400
+    assert "exige o campo 'confirmed_value'" in res_empty_val.json()["detail"]
+
+
+
 

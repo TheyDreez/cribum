@@ -544,6 +544,60 @@ def submit_human_review(
     if not doc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento não encontrado.")
 
+    # 1. Validação de integridade referencial: finding_id deve pertencer a este documento
+    if decision_in.finding_id:
+        finding = (
+            db.query(FindingModel)
+            .filter(FindingModel.id == decision_in.finding_id, FindingModel.document_id == doc.id)
+            .first()
+        )
+        if not finding:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"O apontamento (finding_id '{decision_in.finding_id}') não pertence ao documento '{doc.id}'.",
+            )
+
+    # 2. Validação da confirmação de hipótese: exige valor confirmado e valida pertinência ao documento
+    if decision_in.action == "CONFIRMED_HYPOTHESIS":
+        if not decision_in.confirmed_value or not decision_in.confirmed_value.strip():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="A ação CONFIRMED_HYPOTHESIS exige o campo 'confirmed_value' preenchido.",
+            )
+
+        latest_run = (
+            db.query(ProcessingRunModel)
+            .filter(ProcessingRunModel.document_id == doc.id)
+            .order_by(ProcessingRunModel.started_at.desc())
+            .first()
+        )
+        if latest_run:
+            fields = db.query(ExtractedFieldModel).filter(ExtractedFieldModel.run_id == latest_run.id).all()
+            valid_hypotheses = set()
+            for f in fields:
+                if f.normalized_value:
+                    valid_hypotheses.add(f.normalized_value.strip().lower())
+                if f.raw_text:
+                    valid_hypotheses.add(f.raw_text.strip().lower())
+                for h in (f.hypotheses or []):
+                    if isinstance(h, dict) and h.get("text"):
+                        valid_hypotheses.add(h["text"].strip().lower())
+
+            target_val = decision_in.confirmed_value.strip().lower()
+            is_matched = any(
+                target_val == v or target_val in v or v in target_val
+                for v in valid_hypotheses
+            ) if valid_hypotheses else True
+
+            if not is_matched:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=(
+                        f"O valor confirmado '{decision_in.confirmed_value}' não corresponde a nenhuma das hipóteses "
+                        f"extraídas para este documento."
+                    ),
+                )
+
     decision = ReviewDecisionModel(
         document_id=doc.id,
         finding_id=decision_in.finding_id,
