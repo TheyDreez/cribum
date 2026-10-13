@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// Flag opt-in caso um ambiente conteinerizado (ex: CI Docker root) exija explicitamente no-sandbox
+const useInsecureSandbox = process.env.PLAYWRIGHT_INSECURE_SANDBOX === 'true';
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
@@ -9,17 +12,15 @@ export default defineConfig({
   timeout: 30000,
   use: {
     baseURL: 'http://127.0.0.1:5173',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
     headless: true,
-    launchOptions: {
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-web-security',
-        '--allow-running-insecure-content',
-        '--disable-features=IsolateOrigins,site-per-process',
-      ],
-    },
+    launchOptions: useInsecureSandbox
+      ? {
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        }
+      : {},
   },
   projects: [
     {
