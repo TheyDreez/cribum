@@ -203,6 +203,10 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
                     return (
                       <label
                         key={hyp.rank}
+                        onClick={() => {
+                          setSelectedHypothesis(hyp.text);
+                          setSelectedFieldId(field.id);
+                        }}
                         className={`flex items-center justify-between p-2 rounded border cursor-pointer transition text-xs ${
                           isChecked
                             ? 'bg-auditTeal-500/15 border-auditTeal-500/40 text-white font-medium'

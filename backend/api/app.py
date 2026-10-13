@@ -439,9 +439,11 @@ def run_document_processing(
         )
 
     # 1. Salva Evidências isoladas por run_id e document_id
+    id_map = {}
     for idx, ev_data in enumerate(result.evidences, 1):
         raw_id = ev_data.get("id") or f"ev-{run.id[:8]}-{idx}"
         scoped_id = f"{raw_id}-{run.id[:8]}" if not raw_id.endswith(run.id[:8]) else raw_id
+        id_map[raw_id] = scoped_id
         ev = EvidenceModel(
             id=scoped_id,
             document_id=doc.id,
@@ -467,7 +469,7 @@ def run_document_processing(
             uncertainty_status=f_data.get("uncertainty_status", "CERTAIN"),
             confidence_kind=f_data.get("confidence_kind", "HEURISTIC_MODEL"),
             score=f_data.get("score"),
-            evidence_ids=f_data.get("evidence_ids", []),
+            evidence_ids=[id_map.get(eid, eid) for eid in f_data.get("evidence_ids", [])],
             requires_review=f_data.get("requires_review", False),
         )
         db.add(f_model)

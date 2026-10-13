@@ -201,7 +201,9 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
                 return null;
               }
 
-              const isHighlighted = activeEvidenceIds.includes(ev.id);
+              const isHighlighted = activeEvidenceIds.some(
+                (id) => ev.id === id || ev.id.startsWith(id) || id.startsWith(ev.id)
+              );
 
               const left = `${ev.bbox.x_min * 100}%`;
               const top = `${ev.bbox.y_min * 100}%`;

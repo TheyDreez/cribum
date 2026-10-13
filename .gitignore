@@ -64,6 +64,11 @@ Thumbs.db
 *.swp
 *.swo
 
-# Logs
+# Logs & Test outputs
 *.log
 logs/
+test-results/
+frontend/test-results/
+playwright-report/
+frontend/playwright-report/
+docs/FULL_CODEBASE.md
