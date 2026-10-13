@@ -6,6 +6,18 @@ from typing import Any, Dict, List, Optional
 from backend.models.database import DocumentModel, ExtractedFieldModel, FindingModel
 
 
+SEVERITY_MAP: Dict[str, str] = {
+    "CRITICA": "CRITICAL",
+    "CRITICAL": "CRITICAL",
+    "ALTA": "HIGH",
+    "HIGH": "HIGH",
+    "MEDIA": "MEDIUM",
+    "MEDIUM": "MEDIUM",
+    "BAIXA": "LOW",
+    "LOW": "LOW",
+}
+
+
 class RulesEngine:
     """
     Motor de regras determinísticas e rastreáveis do CRIBUM:
@@ -15,6 +27,7 @@ class RulesEngine:
 
     def __init__(self, lasa_path: str = "backend/data/references/lasa_ismp.json"):
         self.lasa_database = self._load_lasa(lasa_path)
+
 
     def _load_lasa(self, path: str) -> List[Dict[str, Any]]:
         if os.path.exists(path):
@@ -84,10 +97,30 @@ class RulesEngine:
                 )
             )
 
-        # 3. Regra MED-001: Ambiguidade de Leitura em Medicamento
+        # 3. Regra MED-001: Ambiguidade ou Ilegibilidade de Leitura em Medicamento
         med_fields = [f for f in fields if f.field_type == "medication"]
         for med in med_fields:
-            if med.uncertainty_status == "AMBIGUOUS":
+            if med.uncertainty_status == "INDETERMINATE":
+                findings.append(
+                    FindingModel(
+                        document_id=document.id,
+                        run_id=run_id,
+                        category="MISSING_MANDATORY_FIELD",
+                        severity="HIGH",
+                        rule_id="MED-003-INDETERMINATE-READING",
+                        rule_version="1.0.0",
+                        title="Prescrição Ilegível ou Indeterminada",
+                        explanation=(
+                            f"O modelo não identificou hipóteses legíveis para a prescrição ('{med.raw_text}'). "
+                            "Exige conferência visual obrigatória pelo auditor humano ou solicitação de receita legível."
+                        ),
+                        evidence_ids=med.evidence_ids,
+                        related_document_ids=[],
+                        limitations="Traçado caligráfico severamente degradado, rasura ou falha de digitalização.",
+                        requires_review=True,
+                    )
+                )
+            elif med.uncertainty_status == "AMBIGUOUS":
                 hyp_texts = [f"{h.get('text')} ({int((h.get('score') or 0)*100)}%)" for h in med.hypotheses]
                 hyp_summary = ", ".join(hyp_texts) if hyp_texts else "Múltiplas opções detectadas"
 
@@ -116,12 +149,15 @@ class RulesEngine:
             lasa_match = self._check_lasa_collision(med.hypotheses)
             if lasa_match:
                 par_info, droga_detectada, droga_conflitante = lasa_match
+                raw_sev = str(par_info.get("gravidade", "HIGH")).upper()
+                norm_sev = SEVERITY_MAP.get(raw_sev, "HIGH")
+
                 findings.append(
                     FindingModel(
                         document_id=document.id,
                         run_id=run_id,
                         category="LASA_SIMILARITY",
-                        severity=par_info.get("gravidade", "HIGH"),
+                        severity=norm_sev,
                         rule_id=f"MED-002-LASA-{par_info.get('par_id')}",
                         rule_version="1.0.0",
                         title=f"Risco Crítico de Troca LASA: {droga_detectada} vs {droga_conflitante}",
@@ -137,6 +173,7 @@ class RulesEngine:
                         requires_review=True,
                     )
                 )
+
 
         return findings
 

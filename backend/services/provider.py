@@ -303,20 +303,23 @@ class RealROCmProvider(BaseInferenceProvider):
                 })
 
             uncertainty = "CERTAIN"
-            if item.get("nivel_incerteza") == "alto":
+            if item.get("nivel_incerteza") in ("alto", "medio"):
                 uncertainty = "AMBIGUOUS"
-            elif item.get("nivel_incerteza") == "medio":
-                uncertainty = "AMBIGUOUS"
+            elif item.get("nivel_incerteza") in ("indeterminado", "vazio", "ilegivel") or not hyp_list:
+                uncertainty = "INDETERMINATE"
 
             top_name = hyp_list[0]["text"] if hyp_list else "Ilegível"
+            if top_name in ("Ilegível", "Indeterminado", "") or not hyp_list:
+                uncertainty = "INDETERMINATE"
+
             fields.append({
                 "field_type": "medication",
                 "raw_text": top_name,
-                "normalized_value": top_name,
+                "normalized_value": top_name if uncertainty != "INDETERMINATE" else None,
                 "hypotheses": hyp_list,
                 "uncertainty_status": uncertainty,
                 "confidence_kind": "HEURISTIC_MODEL",
-                "score": hyp_list[0]["score"] if hyp_list else None,
+                "score": hyp_list[0]["score"] if (hyp_list and uncertainty != "INDETERMINATE") else None,
                 "evidence_ids": [ev_id] if norm_box else [],
                 "requires_review": (uncertainty != "CERTAIN"),
             })

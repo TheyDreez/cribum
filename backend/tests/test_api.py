@@ -200,3 +200,63 @@ def test_graph_endpoint():
     assert data["total_claims"] == 200
     assert len(data["anomalies"]) >= 1
 
+
+def test_rules_engine_severity_mapping_and_indeterminate_handling():
+    from backend.models.database import DocumentModel, ExtractedFieldModel
+    from backend.schemas.contracts import FindingContract
+    from backend.services.rules_engine import RulesEngine
+    from backend.services.provider import RealROCmProvider
+
+    engine = RulesEngine()
+    doc = DocumentModel(id="test-doc-indet", filename_original="test.jpg", content_hash="hash123", media_type="image/jpeg", width=100, height=100)
+
+    # 1. Campo ilegível / indeterminado
+    f_indet = ExtractedFieldModel(
+        id="f1",
+        run_id="run1",
+        field_type="medication",
+        raw_text="Ilegível",
+        hypotheses=[],
+        uncertainty_status="INDETERMINATE",
+        confidence_kind="HEURISTIC_MODEL",
+        requires_review=True,
+    )
+    findings = engine.evaluate(document=doc, run_id="run1", fields=[f_indet])
+    indet_finding = next((fn for fn in findings if fn.rule_id == "MED-003-INDETERMINATE-READING"), None)
+    assert indet_finding is not None
+    assert indet_finding.severity == "HIGH"
+    assert indet_finding.requires_review is True
+
+    # 2. Valida conformidade estrita com o FindingContract Pydantic (sem crash de ValidationError)
+    contract = FindingContract(
+        id="fn-1",
+        document_id=doc.id,
+        run_id="run1",
+        category=indet_finding.category,
+        severity=indet_finding.severity,
+        rule_id=indet_finding.rule_id,
+        rule_version=indet_finding.rule_version,
+        title=indet_finding.title,
+        explanation=indet_finding.explanation,
+        evidence_ids=[],
+        related_document_ids=[],
+        limitations=indet_finding.limitations,
+        requires_review=indet_finding.requires_review,
+    )
+    assert contract.severity in ("LOW", "MEDIUM", "HIGH", "CRITICAL")
+
+    # 3. Teste do RealROCmProvider convertendo item vazio para INDETERMINATE
+    provider = RealROCmProvider()
+    parsed_output = {
+        "cabecalho": {"crm": "12345", "uf_crm": "SP"},
+        "itens": [
+            {"posologia": "1x ao dia", "hipoteses": [], "nivel_incerteza": "indeterminado"}
+        ]
+    }
+    fields, evidences = provider._convert_to_contracts(parsed_output, "doc-test-empty")
+    med_field = next(f for f in fields if f["field_type"] == "medication")
+    assert med_field["uncertainty_status"] == "INDETERMINATE"
+    assert med_field["requires_review"] is True
+    assert med_field["score"] is None
+
+
