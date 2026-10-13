@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AlertTriangle,
   CheckCircle2,
@@ -27,6 +27,7 @@ interface FindingsPanelProps {
 }
 
 export const FindingsPanel: React.FC<FindingsPanelProps> = ({
+  documentId,
   fields,
   findings,
   decisions,
@@ -38,6 +39,13 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
   const [selectedHypothesis, setSelectedHypothesis] = useState<string>('');
   const [decisionAction, setDecisionAction] = useState<string>('CONFIRMED_HYPOTHESIS');
   const [decisionReason, setDecisionReason] = useState<string>('');
+
+  // Limpeza de formulário ao alternar documento
+  useEffect(() => {
+    setSelectedHypothesis('');
+    setDecisionReason('');
+    setDecisionAction('CONFIRMED_HYPOTHESIS');
+  }, [documentId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

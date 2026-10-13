@@ -10,6 +10,24 @@ interface DocumentQueueProps {
   uploading: boolean;
 }
 
+const getReviewStatusInfo = (status: string) => {
+  switch (status) {
+    case 'APPROVED':
+      return { label: 'Aprovado', style: 'text-auditTeal-400 font-medium' };
+    case 'REJECTED':
+      return { label: 'Rejeitado', style: 'text-auditRose-500 font-medium' };
+    case 'IN_REVIEW':
+      return { label: 'Em Revisão', style: 'text-amber-400 font-medium' };
+    case 'ESCALATED':
+      return { label: 'Forense', style: 'text-purple-400 font-medium' };
+    case 'CLARIFICATION_REQUESTED':
+      return { label: 'Esclarecimento', style: 'text-blue-400 font-medium' };
+    case 'PENDING':
+    default:
+      return { label: 'Pendente', style: 'text-slate-400' };
+  }
+};
+
 export const DocumentQueue: React.FC<DocumentQueueProps> = ({
   documents,
   selectedDocId,
@@ -127,12 +145,12 @@ export const DocumentQueue: React.FC<DocumentQueueProps> = ({
                     </span>
                   )}
                 </div>
-
-                <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
-                  <span>ID: {doc.id.slice(0, 8)}...</span>
-                  <span className={`capitalize ${doc.review_status === 'APPROVED' ? 'text-auditTeal-400' : doc.review_status === 'REJECTED' ? 'text-auditRose-500' : 'text-slate-400'}`}>
-                    {doc.review_status === 'PENDING' ? 'Pendente' : doc.review_status === 'APPROVED' ? 'Aprovado' : 'Rejeitado'}
-                  </span>
+                <div className="flex items-center justify-between text-[11px] font-mono">
+                  <span className="text-slate-500">ID: {doc.id.slice(0, 8)}...</span>
+                  {(() => {
+                    const info = getReviewStatusInfo(doc.review_status);
+                    return <span className={info.style}>{info.label}</span>;
+                  })()}
                 </div>
               </button>
             );

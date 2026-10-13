@@ -42,24 +42,42 @@ export const App: React.FC = () => {
     refreshDocuments();
   }, []);
 
-  // 3. Carrega detalhes do documento selecionado
+  // 3. Carrega detalhes do documento selecionado com proteção contra respostas atrasadas (race guard)
   useEffect(() => {
     if (!selectedDocId) {
       setDocDetail(null);
       return;
     }
 
-    fetch(`/api/documents/${selectedDocId}`)
-      .then((r) => r.json())
+    const abortController = new AbortController();
+    let isCurrent = true;
+
+    fetch(`/api/documents/${selectedDocId}`, { signal: abortController.signal })
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP error ${r.status}`);
+        return r.json();
+      })
       .then((detail: DocumentDetail) => {
+        if (!isCurrent) return;
+        // Validação estrita: descarta resposta se pertencer a outro documento
+        if (detail?.document?.id !== selectedDocId) return;
+
         setDocDetail(detail);
-        if (detail.findings.length > 0) {
+        if (detail.findings && detail.findings.length > 0) {
           setSelectedFinding(detail.findings[0]);
         } else {
           setSelectedFinding(null);
         }
       })
-      .catch((err) => console.error('Falha ao carregar detalhe do documento:', err));
+      .catch((err) => {
+        if (err.name === 'AbortError') return;
+        console.error('Falha ao carregar detalhe do documento:', err);
+      });
+
+    return () => {
+      isCurrent = false;
+      abortController.abort();
+    };
   }, [selectedDocId]);
 
   // Ação: Seed dos 20 casos sintéticos
