@@ -349,7 +349,7 @@ def test_human_review_hypothesis_and_finding_validation():
         },
     )
     assert res_alien_hyp.status_code == 400
-    assert "não corresponde a nenhuma das hipóteses" in res_alien_hyp.json()["detail"]
+    assert "não corresponde a uma hipótese deste campo" in res_alien_hyp.json()["detail"]
 
     # 4. Submissão sem confirmed_value para CONFIRMED_HYPOTHESIS deve retornar 400
     res_empty_val = client.post(
@@ -391,7 +391,91 @@ def test_cross_field_hypothesis_injection_prevented():
         },
     )
     assert res_cross.status_code == 400
-    assert "não corresponde a nenhuma das hipóteses extraídas para o campo específico" in res_cross.json()["detail"]
+    assert "não corresponde a uma hipótese deste campo" in res_cross.json()["detail"]
+
+
+def test_exact_hypothesis_validation_and_rejections():
+    img_path = "backend/data/synthetic/cases/caso_01_losartana_lorazepam.jpg"
+    with open(img_path, "rb") as f:
+        files = {"file": ("caso_01_losartana_lorazepam.jpg", f.read(), "image/jpeg")}
+    doc_id = client.post("/api/documents", files=files).json()["id"]
+    run_id = client.post(f"/api/documents/{doc_id}/runs?mode_override=DEMO").json()["id"]
+
+    doc_data = client.get(f"/api/documents/{doc_id}").json()
+    med_field_id = next(f["id"] for f in doc_data["fields"] if f["field_type"] == "medication")
+    findings = doc_data["findings"]
+    finding_id = findings[0]["id"] if findings else None
+
+    # 1. Hipótese exata aceita (com casefold/normalização NFKC)
+    res_exact = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "CONFIRMED_HYPOTHESIS",
+            "actor_id": "auditor-01",
+            "field_id": med_field_id,
+            "run_id": run_id,
+            "finding_id": finding_id,
+            "confirmed_value": "losartana 50mg",
+            "reason": "Conferido visualmente.",
+        },
+    )
+    assert res_exact.status_code == 201
+    assert res_exact.json()["confirmed_value"] == "losartana 50mg"
+
+    # 2. Apenas parte da hipótese (substring) rejeitada
+    res_sub = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "CONFIRMED_HYPOTHESIS",
+            "actor_id": "auditor-01",
+            "field_id": med_field_id,
+            "run_id": run_id,
+            "confirmed_value": "Losartana",
+            "reason": "Tentativa de confirmação de substring.",
+        },
+    )
+    assert res_sub.status_code == 400
+    assert "não corresponde a uma hipótese deste campo" in res_sub.json()["detail"]
+
+    # 3. Hipótese com conteúdo extra (superstring) rejeitada
+    res_super = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "CONFIRMED_HYPOTHESIS",
+            "actor_id": "auditor-01",
+            "field_id": med_field_id,
+            "run_id": run_id,
+            "confirmed_value": "Losartana 50mg comprimidos via oral",
+            "reason": "Tentativa de confirmação de superstring.",
+        },
+    )
+    assert res_super.status_code == 400
+    assert "não corresponde a uma hipótese deste campo" in res_super.json()["detail"]
+
+    # 4. Run de outro documento rejeitado
+    res_alien_run = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "APPROVED_CLAIM",
+            "actor_id": "auditor-01",
+            "run_id": "non-existent-or-alien-run-12345",
+            "reason": "Tentativa de vincular run inexistente.",
+        },
+    )
+    assert res_alien_run.status_code == 400
+    assert "não pertence ao documento" in res_alien_run.json()["detail"]
+
+    # 5. Justificativa com menos de 3 caracteres úteis rejeitada
+    res_short_reason = client.post(
+        f"/api/documents/{doc_id}/reviews",
+        json={
+            "action": "APPROVED_CLAIM",
+            "actor_id": "auditor-01",
+            "reason": "  ok  ",
+        },
+    )
+    assert res_short_reason.status_code == 400
+    assert "pelo menos 3 caracteres" in res_short_reason.json()["detail"]
 
 
 def test_multiple_runs_and_failed_run_isolation():

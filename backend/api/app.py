@@ -1,5 +1,6 @@
 import os
 import shutil
+import unicodedata
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
@@ -122,6 +123,11 @@ def get_config():
     )
 
 
+def normalize_review_value(value: str) -> str:
+    normalized = unicodedata.normalize("NFKC", value)
+    return " ".join(normalized.split()).casefold()
+
+
 def compute_document_review_status(decisions: List[ReviewDecisionModel]) -> str:
     """
     Determina o status de revisão da guia a partir do histórico de decisões do auditor humano:
@@ -162,7 +168,7 @@ def list_documents(db: Session = Depends(get_db)):
         latest_run = (
             db.query(ProcessingRunModel)
             .filter(ProcessingRunModel.document_id == d.id)
-            .order_by(ProcessingRunModel.started_at.desc())
+            .order_by(ProcessingRunModel.started_at.desc(), ProcessingRunModel.id.desc())
             .first()
         )
         findings_count = (
@@ -170,12 +176,18 @@ def list_documents(db: Session = Depends(get_db)):
             if latest_run
             else 0
         )
-        decisions = (
+        decisions_query = (
             db.query(ReviewDecisionModel)
             .filter(ReviewDecisionModel.document_id == d.id)
-            .order_by(ReviewDecisionModel.created_at.desc())
-            .all()
+            .order_by(ReviewDecisionModel.created_at.desc(), ReviewDecisionModel.id.desc())
         )
+        if latest_run:
+            decisions = [
+                dec for dec in decisions_query.all()
+                if dec.run_id == latest_run.id or (dec.created_at and dec.created_at >= latest_run.started_at)
+            ]
+        else:
+            decisions = decisions_query.all()
         review_status = compute_document_review_status(decisions)
 
         results.append(
@@ -263,11 +275,15 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
     if not doc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento não encontrado.")
 
-    runs = db.query(ProcessingRunModel).filter(ProcessingRunModel.document_id == doc.id).all()
+    latest_run = (
+        db.query(ProcessingRunModel)
+        .filter(ProcessingRunModel.document_id == doc.id)
+        .order_by(ProcessingRunModel.started_at.desc(), ProcessingRunModel.id.desc())
+        .first()
+    )
     fields = []
     evidences = []
     findings = []
-    latest_run = runs[-1] if runs else None
     if latest_run and latest_run.status != "FAILED":
         fields = db.query(ExtractedFieldModel).filter(ExtractedFieldModel.run_id == latest_run.id).all()
         evidences = db.query(EvidenceModel).filter(EvidenceModel.run_id == latest_run.id).all()
@@ -276,8 +292,20 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
         evidences = db.query(EvidenceModel).filter(EvidenceModel.document_id == doc.id).all()
         findings = db.query(FindingModel).filter(FindingModel.document_id == doc.id).all()
 
-    decisions = db.query(ReviewDecisionModel).filter(ReviewDecisionModel.document_id == doc.id).order_by(ReviewDecisionModel.created_at.desc()).all()
-    review_status = compute_document_review_status(decisions)
+    decisions = (
+        db.query(ReviewDecisionModel)
+        .filter(ReviewDecisionModel.document_id == doc.id)
+        .order_by(ReviewDecisionModel.created_at.desc(), ReviewDecisionModel.id.desc())
+        .all()
+    )
+    if latest_run:
+        active_decisions = [
+            d for d in decisions
+            if d.run_id == latest_run.id or (d.created_at and d.created_at >= latest_run.started_at)
+        ]
+        review_status = compute_document_review_status(active_decisions)
+    else:
+        review_status = compute_document_review_status(decisions)
 
     return {
         "document": {
@@ -553,7 +581,38 @@ def submit_human_review(
     if not doc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento não encontrado.")
 
-    # 1. Validação de integridade referencial: finding_id deve pertencer a este documento
+    # 1. Validação da justificativa humana (mínimo de 3 caracteres úteis)
+    stripped_reason = decision_in.reason.strip() if decision_in.reason else ""
+    if len(stripped_reason) < 3:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A justificativa da revisão deve conter pelo menos 3 caracteres.",
+        )
+
+    # 2. Resolução e validação estrita da execução (run_id) pertencente ao documento em TODAS as ações
+    target_run_id = None
+    if decision_in.run_id:
+        provided_run = (
+            db.query(ProcessingRunModel)
+            .filter(ProcessingRunModel.id == decision_in.run_id)
+            .first()
+        )
+        if not provided_run or provided_run.document_id != doc.id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"A execução informada '{decision_in.run_id}' não pertence ao documento '{doc.id}'.",
+            )
+        target_run_id = decision_in.run_id
+    else:
+        latest_run = (
+            db.query(ProcessingRunModel)
+            .filter(ProcessingRunModel.document_id == doc.id)
+            .order_by(ProcessingRunModel.started_at.desc(), ProcessingRunModel.id.desc())
+            .first()
+        )
+        target_run_id = latest_run.id if latest_run else None
+
+    # 3. Validação de integridade referencial: finding_id deve pertencer a este documento e à execução correspondente
     if decision_in.finding_id:
         finding = (
             db.query(FindingModel)
@@ -565,10 +624,18 @@ def submit_human_review(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"O apontamento (finding_id '{decision_in.finding_id}') não pertence ao documento '{doc.id}'.",
             )
+        if target_run_id and finding.run_id and finding.run_id != target_run_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"O apontamento '{finding.id}' pertence à execução '{finding.run_id}', não à execução '{target_run_id}'.",
+            )
 
-    # 2. Validação da confirmação de hipótese: exige valor confirmado, field_id e valida pertinência ao campo específico
+    # 4. Validação da ação e das hipóteses
     field_record = None
-    target_run_id = decision_in.run_id
+    confirmed_value_to_save: Optional[str] = None
+    field_id_to_save: Optional[str] = None
+    previous_value_to_save: Optional[str] = None
+
     if decision_in.action == "CONFIRMED_HYPOTHESIS":
         if not decision_in.confirmed_value or not decision_in.confirmed_value.strip():
             raise HTTPException(
@@ -604,58 +671,66 @@ def submit_human_review(
                 detail=f"O campo '{field_record.id}' não pertence a nenhuma execução do documento '{doc.id}'.",
             )
 
-        if decision_in.run_id and decision_in.run_id != field_record.run_id:
+        if target_run_id and field_record.run_id != target_run_id:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"O campo '{field_record.id}' pertence à execução '{field_record.run_id}', não à execução informada '{decision_in.run_id}'.",
+                detail=f"O campo '{field_record.id}' pertence à execução '{field_record.run_id}', não à execução informada '{target_run_id}'.",
             )
 
         target_run_id = field_record.run_id
 
-        # Valida contra o conjunto de hipóteses daquele campo específico
-        valid_field_hypotheses = set()
-        if field_record.normalized_value:
-            valid_field_hypotheses.add(field_record.normalized_value.strip().lower())
-        if field_record.raw_text:
-            valid_field_hypotheses.add(field_record.raw_text.strip().lower())
-        for h in (field_record.hypotheses or []):
-            if isinstance(h, dict) and h.get("text"):
-                valid_field_hypotheses.add(h["text"].strip().lower())
+        # Validação estrita por igualdade exata após normalização Unicode NFKC (sem correspondência por substring)
+        valid_values = {
+            normalize_review_value(h["text"])
+            for h in (field_record.hypotheses or [])
+            if isinstance(h, dict)
+            and isinstance(h.get("text"), str)
+            and h["text"].strip()
+        }
 
-        target_val = decision_in.confirmed_value.strip().lower()
-        is_matched = any(
-            target_val == v or target_val in v or v in target_val
-            for v in valid_field_hypotheses
-        ) if valid_field_hypotheses else False
+        target_value = normalize_review_value(decision_in.confirmed_value)
 
-        if not is_matched:
+        if target_value not in valid_values:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=(
-                    f"O valor confirmado '{decision_in.confirmed_value}' não corresponde a nenhuma das hipóteses "
-                    f"extraídas para o campo específico '{field_record.field_type}' (id: '{field_record.id}')."
-                ),
+                detail="O valor confirmado não corresponde a uma hipótese deste campo.",
             )
+
+        confirmed_value_to_save = decision_in.confirmed_value.strip()
+        field_id_to_save = field_record.id
+        previous_value_to_save = decision_in.previous_value or field_record.raw_text
     else:
-        if not target_run_id:
-            latest_run = (
-                db.query(ProcessingRunModel)
-                .filter(ProcessingRunModel.document_id == doc.id)
-                .order_by(ProcessingRunModel.started_at.desc())
+        # Ações em nível de guia não herdam hipóteses nem confirmed_value
+        if decision_in.field_id:
+            field_record = (
+                db.query(ExtractedFieldModel)
+                .filter(ExtractedFieldModel.id == decision_in.field_id)
                 .first()
             )
-            target_run_id = latest_run.id if latest_run else None
+            if not field_record:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Campo extraído (field_id '{decision_in.field_id}') não encontrado.",
+                )
+            if target_run_id and field_record.run_id != target_run_id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"O campo '{field_record.id}' pertence à execução '{field_record.run_id}', não à execução '{target_run_id}'.",
+                )
+            field_id_to_save = field_record.id
+        confirmed_value_to_save = None
+        previous_value_to_save = None
 
     decision = ReviewDecisionModel(
         document_id=doc.id,
         run_id=target_run_id,
-        field_id=field_record.id if field_record else decision_in.field_id,
+        field_id=field_id_to_save,
         finding_id=decision_in.finding_id,
         actor_id=decision_in.actor_id,
         action=decision_in.action,
-        previous_value=decision_in.previous_value or (field_record.raw_text if field_record else None),
-        confirmed_value=decision_in.confirmed_value,
-        reason=decision_in.reason,
+        previous_value=previous_value_to_save,
+        confirmed_value=confirmed_value_to_save,
+        reason=stripped_reason,
     )
     db.add(decision)
     db.flush()
@@ -668,10 +743,10 @@ def submit_human_review(
         metadata_sanitized={
             "document_id": doc.id,
             "run_id": target_run_id,
-            "field_id": field_record.id if field_record else decision_in.field_id,
+            "field_id": field_id_to_save,
             "action": decision_in.action,
-            "confirmed_value": decision_in.confirmed_value,
-            "reason": decision_in.reason,
+            "confirmed_value": confirmed_value_to_save,
+            "reason": stripped_reason,
         },
     )
     db.add(audit)
