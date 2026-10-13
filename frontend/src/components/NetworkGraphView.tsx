@@ -63,45 +63,45 @@ export const NetworkGraphView: React.FC = () => {
   const clinicsInvolved = anomalyNodes.filter((n) => n.type === 'clinica');
 
   return (
-    <div className="flex-1 flex overflow-hidden bg-graphite-950">
+    <div className="flex-1 flex overflow-hidden bg-slate-100">
       {/* Visualização de Resumo da Rede */}
       <div className="flex-1 p-6 overflow-y-auto">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Network className="w-5 h-5 text-auditTeal-400" />
+            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Network className="w-5 h-5 text-slate-700" />
               Grafo Relacional Multi-Entidade (NetworkX)
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Análise cruzada de conexões entre Pacientes, Médicos, Clínicas e Procedimentos.
             </p>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-mono text-slate-300 bg-graphite-900 px-4 py-2 rounded-lg border border-graphite-800">
+          <div className="flex items-center gap-4 text-xs font-mono text-slate-700 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-2xs">
             <div>
-              <span className="text-slate-500 block text-[10px]">TOTAL DE GUIAS</span>
-              <span className="text-white font-bold">{data.total_claims}</span>
+              <span className="text-slate-400 block text-[10px]">TOTAL DE GUIAS</span>
+              <span className="text-slate-900 font-bold">{data.total_claims}</span>
             </div>
             <div>
-              <span className="text-slate-500 block text-[10px]">NÓS MAPEADOS</span>
-              <span className="text-white font-bold">{data.nodes.length}</span>
+              <span className="text-slate-400 block text-[10px]">NÓS MAPEADOS</span>
+              <span className="text-slate-900 font-bold">{data.nodes.length}</span>
             </div>
             <div>
-              <span className="text-slate-500 block text-[10px]">CONEXÕES</span>
-              <span className="text-white font-bold">{data.links.length}</span>
+              <span className="text-slate-400 block text-[10px]">CONEXÕES</span>
+              <span className="text-slate-900 font-bold">{data.links.length}</span>
             </div>
             <div>
-              <span className="text-slate-500 block text-[10px]">ANOMALIAS</span>
-              <span className="text-auditRose-500 font-bold">{data.anomalies.length}</span>
+              <span className="text-slate-400 block text-[10px]">ANOMALIAS</span>
+              <span className="text-rose-600 font-bold">{data.anomalies.length}</span>
             </div>
           </div>
         </div>
 
         {/* Aviso de Limites Probatórios e Interpretação Pericial */}
-        <div className="mb-6 p-3.5 bg-auditAmber-500/10 border border-auditAmber-500/30 rounded-lg text-xs text-auditAmber-300 flex items-start gap-2.5">
-          <AlertOctagon className="w-4 h-4 text-auditAmber-400 shrink-0 mt-0.5" />
+        <div className="mb-6 p-3.5 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900 flex items-start gap-2.5">
+          <AlertOctagon className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            <span className="font-semibold block text-auditAmber-200 mb-0.5">
+            <span className="font-semibold block text-amber-950 mb-0.5">
               Limites Probatórios do Grafo de Relações:
             </span>
             <span>
@@ -112,56 +112,56 @@ export const NetworkGraphView: React.FC = () => {
 
         {/* Grade de Entidades Dinâmicas */}
         <div className="grid grid-cols-4 gap-4 mb-6">
-          <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-auditTeal-500/10 text-auditTeal-400">
+          <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center gap-3 shadow-2xs">
+            <div className="p-2.5 rounded-lg bg-slate-100 text-slate-700">
               <User className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[11px] text-slate-400 block font-mono">Profissionais</span>
-              <span className="text-base font-bold text-white">{profCount} Médicos</span>
+              <span className="text-[11px] text-slate-500 block">Profissionais</span>
+              <span className="text-base font-bold text-slate-900">{profCount} Médicos</span>
             </div>
           </div>
 
-          <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-400">
+          <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center gap-3 shadow-2xs">
+            <div className="p-2.5 rounded-lg bg-blue-50 text-blue-700">
               <Building className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[11px] text-slate-400 block font-mono">Clínicas/Hospitais</span>
-              <span className="text-base font-bold text-white">{clinicCount} Unidades</span>
+              <span className="text-[11px] text-slate-500 block">Clínicas/Hospitais</span>
+              <span className="text-base font-bold text-slate-900">{clinicCount} Unidades</span>
             </div>
           </div>
 
-          <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-purple-500/10 text-purple-400">
+          <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center gap-3 shadow-2xs">
+            <div className="p-2.5 rounded-lg bg-purple-50 text-purple-700">
               <Activity className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[11px] text-slate-400 block font-mono">Procedimentos</span>
-              <span className="text-base font-bold text-white">{procCount} Tipos</span>
+              <span className="text-[11px] text-slate-500 block">Procedimentos</span>
+              <span className="text-base font-bold text-slate-900">{procCount} Tipos</span>
             </div>
           </div>
 
-          <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-amber-500/10 text-amber-400">
+          <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center gap-3 shadow-2xs">
+            <div className="p-2.5 rounded-lg bg-amber-50 text-amber-700">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[11px] text-slate-400 block font-mono">Pacientes</span>
-              <span className="text-base font-bold text-white">{patientCount} Indivíduos</span>
+              <span className="text-[11px] text-slate-500 block">Pacientes</span>
+              <span className="text-base font-bold text-slate-900">{patientCount} Indivíduos</span>
             </div>
           </div>
         </div>
 
         {/* Representação Dinâmica do Subgrafo da Anomalia Selecionada */}
-        <div className="bg-graphite-900/60 p-6 rounded-xl border border-graphite-800 min-h-[380px] flex flex-col justify-between">
+        <div className="bg-white p-6 rounded-xl border border-slate-200 min-h-[380px] flex flex-col justify-between shadow-2xs">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">
               Topologia do Cluster Selecionado ({activeAnomaly?.rule_id || 'Nenhuma anomalia'})
             </span>
             {activeAnomaly && (
-              <span className="text-xs font-mono text-auditRose-500 flex items-center gap-1.5 bg-auditRose-500/10 px-2.5 py-1 rounded border border-auditRose-500/20">
-                <AlertOctagon className="w-3.5 h-3.5" />
+              <span className="text-xs font-mono text-rose-700 flex items-center gap-1.5 bg-rose-50 px-2.5 py-1 rounded border border-rose-200 font-semibold">
+                <AlertOctagon className="w-3.5 h-3.5 text-rose-600" />
                 {activeAnomaly.severity} — {activeAnomaly.title}
               </span>
             )}
@@ -174,15 +174,15 @@ export const NetworkGraphView: React.FC = () => {
                 {profsInvolved.map((prof) => (
                   <div
                     key={prof.id}
-                    className="text-center p-4 bg-graphite-950 rounded-lg border border-auditRose-500/40 shadow-lg shadow-auditRose-500/5 min-w-[180px]"
+                    className="text-center p-4 bg-rose-50/50 rounded-lg border border-rose-200 min-w-[180px] shadow-2xs"
                   >
-                    <span className="text-[11px] font-mono text-auditRose-400 font-bold block mb-1">
+                    <span className="text-[11px] font-mono text-rose-800 font-bold block mb-1">
                       {prof.label}
                     </span>
-                    <span className="text-[10px] text-slate-400 block font-mono">
+                    <span className="text-[10px] text-slate-500 block font-mono">
                       Grau de Conexão: {prof.degree}
                     </span>
-                    <span className="text-[10px] text-slate-500 mt-1 block">
+                    <span className="text-[10px] text-slate-600 mt-1 block">
                       {activeAnomaly.related_document_ids.length} guias na data analisada
                     </span>
                   </div>
@@ -192,15 +192,15 @@ export const NetworkGraphView: React.FC = () => {
                 {clinicsInvolved.map((clinic) => (
                   <div
                     key={clinic.id}
-                    className="text-center p-4 bg-graphite-950 rounded-lg border border-graphite-700 min-w-[180px]"
+                    className="text-center p-4 bg-slate-50 rounded-lg border border-slate-200 min-w-[180px] shadow-2xs"
                   >
-                    <span className="text-[11px] font-mono text-auditTeal-400 font-bold block mb-1">
+                    <span className="text-[11px] font-mono text-slate-800 font-bold block mb-1">
                       {clinic.label}
                     </span>
-                    <span className="text-xs text-slate-300 block">
+                    <span className="text-xs text-slate-600 block">
                       {clinic.cidade ? `Município: ${clinic.cidade}` : 'Local não informado'}
                     </span>
-                    <span className="text-[10px] text-slate-500 mt-1 block font-mono">
+                    <span className="text-[10px] text-slate-400 mt-1 block font-mono">
                       {clinic.id}
                     </span>
                   </div>
@@ -208,22 +208,22 @@ export const NetworkGraphView: React.FC = () => {
               </div>
 
               {/* Relações Extraídas */}
-              <div className="mt-4 p-3 bg-graphite-950/80 rounded-lg border border-graphite-800 text-xs">
-                <span className="text-slate-400 font-mono text-[11px] block mb-1">
+              <div className="mt-4 p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-xs">
+                <span className="text-slate-600 font-semibold text-[11px] block mb-1">
                   Parecer Descritivo do Investigador:
                 </span>
-                <p className="text-slate-300 leading-relaxed font-sans">
+                <p className="text-slate-700 leading-relaxed font-sans">
                   {activeAnomaly.explanation}
                 </p>
               </div>
             </div>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-slate-500 text-xs">
+            <div className="flex-1 flex items-center justify-center text-slate-400 text-xs">
               Nenhuma anomalia ativa selecionada.
             </div>
           )}
 
-          <div className="text-[11px] text-slate-500 font-mono flex items-center justify-between border-t border-graphite-800/80 pt-3">
+          <div className="text-[11px] text-slate-500 font-mono flex items-center justify-between border-t border-slate-100 pt-3">
             <span>Motor: NetworkX MultiGraph Anomaly Detection</span>
             <span>Entidades e evidências mapeadas diretamente das guias sintéticas</span>
           </div>
@@ -231,14 +231,14 @@ export const NetworkGraphView: React.FC = () => {
       </div>
 
       {/* Painel Lateral de Anomalias de Rede */}
-      <div className="w-96 border-l border-graphite-800 bg-graphite-900/80 p-4 overflow-y-auto">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300 font-mono mb-3 flex items-center gap-2">
-          <AlertOctagon className="w-4 h-4 text-auditRose-500" />
+      <div className="w-96 border-l border-slate-200 bg-white p-4 overflow-y-auto shadow-xs">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-1.5">
+          <AlertOctagon className="w-4 h-4 text-rose-600" />
           Anomalias Detectadas ({data.anomalies.length})
         </h3>
 
         {data.anomalies.length === 0 ? (
-          <p className="text-xs text-slate-500 italic">Nenhuma anomalia de rede detectada.</p>
+          <p className="text-xs text-slate-400 italic">Nenhuma anomalia de rede detectada.</p>
         ) : (
           <div className="space-y-3">
             {data.anomalies.map((anom) => {
@@ -248,45 +248,45 @@ export const NetworkGraphView: React.FC = () => {
                 <div
                   key={anomKey}
                   onClick={() => setSelectedAnomalyId(anomKey)}
-                  className={`p-3.5 rounded-lg border transition cursor-pointer ${
+                  className={`p-3.5 rounded-lg border transition cursor-pointer shadow-2xs ${
                     isSelected
-                      ? 'bg-auditRose-500/10 border-auditRose-500/50'
-                      : 'bg-graphite-950 border-graphite-800 hover:border-graphite-700'
+                      ? 'bg-rose-50/50 border-rose-300 ring-1 ring-rose-200'
+                      : 'bg-white border-slate-200 hover:border-slate-300'
                   }`}
                 >
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold text-white">{anom.title}</span>
-                  <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-auditRose-500/20 text-auditRose-400">
-                    {anom.severity}
-                  </span>
-                </div>
-
-                <p className="text-xs text-slate-300 leading-relaxed mb-3">
-                  {anom.explanation}
-                </p>
-
-                <div className="p-2 bg-graphite-900 rounded border border-graphite-800 mb-2">
-                  <span className="text-[10px] text-slate-400 block font-mono mb-1">
-                    Guias Relacionadas no Esquema ({anom.related_document_ids.length}):
-                  </span>
-                  <div className="flex flex-wrap gap-1">
-                    {anom.related_document_ids.map((id) => (
-                      <span
-                        key={id}
-                        className="text-[10px] font-mono bg-graphite-950 px-1.5 py-0.5 rounded border border-graphite-800 text-slate-300"
-                      >
-                        {id}
-                      </span>
-                    ))}
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-bold text-slate-900">{anom.title}</span>
+                    <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 font-semibold">
+                      {anom.severity}
+                    </span>
                   </div>
-                </div>
 
-                <p className="text-[10px] text-slate-500 italic">
-                  Limitação: {anom.limitations}
-                </p>
-              </div>
-            );
-          })}
+                  <p className="text-xs text-slate-600 leading-relaxed mb-3 font-sans">
+                    {anom.explanation}
+                  </p>
+
+                  <div className="p-2 bg-slate-50 rounded border border-slate-200 mb-2">
+                    <span className="text-[10px] text-slate-500 block font-semibold mb-1">
+                      Guias Relacionadas no Esquema ({anom.related_document_ids.length}):
+                    </span>
+                    <div className="flex flex-wrap gap-1">
+                      {anom.related_document_ids.map((id) => (
+                        <span
+                          key={id}
+                          className="text-[10px] font-mono bg-white px-1.5 py-0.5 rounded border border-slate-200 text-slate-700"
+                        >
+                          {id}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="text-[10px] text-slate-400 italic">
+                    Limitação: {anom.limitations}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

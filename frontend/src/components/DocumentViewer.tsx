@@ -74,29 +74,32 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   };
 
   return (
-    <div className="flex-1 min-w-0 flex flex-col bg-graphite-950 overflow-hidden relative">
+    <div className="flex-1 min-w-0 flex flex-col bg-slate-100 overflow-hidden relative">
       {/* Top Toolbar */}
-      <div className="h-10 px-4 border-b border-graphite-800 bg-graphite-900/80 flex items-center justify-between z-10 shrink-0">
-        <div className="flex items-center gap-2 text-xs text-slate-300 font-mono truncate mr-2">
-          <span className="shrink-0 font-medium">Visualizador Pericial:</span>
+      <div className="h-11 px-4 border-b border-slate-200 bg-white flex items-center justify-between z-10 shrink-0 shadow-2xs">
+        <div className="flex-1 min-w-0 flex items-center gap-2 text-xs text-slate-700 mr-4">
+          <span className="shrink-0 font-semibold text-slate-800">Visualizador Pericial:</span>
           {selectedFinding ? (
-            <span className="px-2 py-0.5 rounded bg-auditRose-500/15 text-auditRose-500 border border-auditRose-500/20 text-[11px] truncate">
+            <span
+              className="px-2.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 text-xs truncate font-medium max-w-[500px]"
+              title={selectedFinding.title}
+            >
               Alerta Ativo: {selectedFinding.title}
             </span>
           ) : (
-            <span className="text-slate-500 text-[11px]">Nenhum alerta selecionado</span>
+            <span className="text-slate-400 text-xs">Nenhum alerta selecionado</span>
           )}
         </div>
 
         {/* Toolbar Controls */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5 shrink-0">
           {/* Ajustar à Largura */}
           <button
             onClick={handleFitWidth}
-            className={`px-2 py-1 rounded text-xs font-mono flex items-center gap-1 transition ${
+            className={`px-2.5 py-1 rounded text-xs flex items-center gap-1 transition ${
               viewMode === 'fit-width'
-                ? 'bg-auditTeal-500/20 text-auditTeal-400 border border-auditTeal-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-graphite-800'
+                ? 'bg-slate-800 text-white font-medium shadow-2xs'
+                : 'text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
             title="Ajustar documento à largura disponível"
           >
@@ -107,10 +110,10 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
           {/* Ajustar à Altura */}
           <button
             onClick={handleFitHeight}
-            className={`px-2 py-1 rounded text-xs font-mono flex items-center gap-1 transition ${
+            className={`px-2.5 py-1 rounded text-xs flex items-center gap-1 transition ${
               viewMode === 'fit-height'
-                ? 'bg-auditTeal-500/20 text-auditTeal-400 border border-auditTeal-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-graphite-800'
+                ? 'bg-slate-800 text-white font-medium shadow-2xs'
+                : 'text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
             title="Ajustar documento à altura disponível"
           >
@@ -118,20 +121,20 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
             <span className="hidden sm:inline text-[11px]">Altura</span>
           </button>
 
-          <div className="h-4 w-[1px] bg-graphite-800 mx-1" />
+          <div className="h-4 w-[1px] bg-slate-200 mx-1" />
 
           {/* Zoom Out */}
           <button
             onClick={handleZoomOut}
-            className="p-1 rounded hover:bg-graphite-800 text-slate-400 hover:text-white transition"
+            className="p-1 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 transition"
             title="Reduzir zoom (-20%)"
           >
-            <ZoomOut className="w-4 h-4" />
+            <ZoomOut className="w-3.5 h-3.5" />
           </button>
 
           <span
             onClick={handleResetZoom}
-            className="text-[11px] font-mono text-slate-300 w-12 text-center cursor-pointer hover:text-auditTeal-400 transition"
+            className="text-xs font-mono text-slate-700 w-12 text-center cursor-pointer hover:text-blue-600 font-semibold transition"
             title="Clique para redefinir para 100%"
           >
             {Math.round(zoom * 100)}%
@@ -140,16 +143,16 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
           {/* Zoom In */}
           <button
             onClick={handleZoomIn}
-            className="p-1 rounded hover:bg-graphite-800 text-slate-400 hover:text-white transition"
+            className="p-1 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 transition"
             title="Aumentar zoom (+20%)"
           >
-            <ZoomIn className="w-4 h-4" />
+            <ZoomIn className="w-3.5 h-3.5" />
           </button>
 
           {/* 100% Reset */}
           <button
             onClick={handleResetZoom}
-            className="p-1 rounded hover:bg-graphite-800 text-slate-400 hover:text-white transition"
+            className="p-1 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 transition"
             title="Redefinir visualização original (100%)"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -164,17 +167,17 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        className={`flex-1 overflow-auto p-6 flex items-center justify-center bg-graphite-950/90 select-none ${
+        className={`flex-1 overflow-auto p-6 flex items-center justify-center bg-slate-200/50 select-none ${
           isPanning ? 'cursor-grabbing' : zoom > 1.0 ? 'cursor-grab' : 'cursor-default'
         }`}
       >
         <div
-          className={`relative shadow-2xl transition-transform duration-100 ease-out origin-center border border-graphite-800 rounded-sm overflow-hidden ${
+          className={`relative shadow-md transition-transform duration-100 ease-out origin-center border border-slate-300 rounded bg-white overflow-hidden ${
             viewMode === 'fit-width'
-              ? 'w-full max-w-[950px]'
+              ? 'w-full max-w-[1300px]'
               : viewMode === 'fit-height'
-              ? 'max-h-[calc(100vh-140px)] w-auto'
-              : 'w-auto'
+              ? 'max-h-[calc(100vh-130px)] w-auto'
+              : 'w-auto max-w-[920px] 2xl:max-w-[1100px]'
           }`}
           style={{
             transform: viewMode === 'custom' && zoom !== 1.0 ? `scale(${zoom})` : undefined,
@@ -188,8 +191,8 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
               viewMode === 'fit-width'
                 ? 'w-full h-auto'
                 : viewMode === 'fit-height'
-                ? 'max-h-[calc(100vh-150px)] w-auto'
-                : 'max-w-[760px] h-auto'
+                ? 'max-h-[calc(100vh-140px)] w-auto'
+                : 'w-full max-w-[920px] 2xl:max-w-[1100px] h-auto'
             }`}
             crossOrigin="anonymous"
           />
@@ -216,14 +219,14 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
                   className="transition-all duration-200"
                   onClick={() => onSelectEvidence && onSelectEvidence(ev.id)}
                 >
-                  {/* Retângulo de destaque */}
+                  {/* Retângulo de destaque pericial */}
                   <rect
                     x={left}
                     y={top}
                     width={width}
                     height={height}
-                    fill={isHighlighted ? 'rgba(244, 63, 94, 0.25)' : 'rgba(20, 184, 166, 0.08)'}
-                    stroke={isHighlighted ? '#f43f5e' : '#14b8a6'}
+                    fill={isHighlighted ? 'rgba(244, 63, 94, 0.20)' : 'rgba(2, 132, 199, 0.08)'}
+                    stroke={isHighlighted ? '#f43f5e' : '#0284c7'}
                     strokeWidth={isHighlighted ? '2.5' : '1.5'}
                     strokeDasharray={isHighlighted ? 'none' : '4 2'}
                     className="cursor-pointer transition-all"
@@ -238,14 +241,14 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
                         width="150"
                         height="18"
                         rx="3"
-                        fill="#0f172a"
+                        fill="#ffffff"
                         stroke="#f43f5e"
                         strokeWidth="1"
                       />
                       <text
                         x="5"
                         y="12"
-                        fill="#fda4af"
+                        fill="#be123c"
                         fontSize="9"
                         fontFamily="monospace"
                         fontWeight="bold"

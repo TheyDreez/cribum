@@ -160,7 +160,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-graphite-950 font-sans">
+    <div className="h-screen flex flex-col bg-slate-100 font-sans text-slate-800 overflow-hidden">
       <Header
         config={config}
         activeTab={activeTab}
@@ -170,7 +170,7 @@ export const App: React.FC = () => {
       />
 
       {activeTab === 'auditoria' ? (
-        <main className="flex-1 flex overflow-hidden">
+        <main className="flex-1 min-h-0 flex overflow-hidden">
           {/* Fila de Documentos */}
           <DocumentQueue
             documents={documents}
@@ -188,7 +188,7 @@ export const App: React.FC = () => {
               selectedFinding={selectedFinding}
             />
           ) : (
-            <div className="flex-1 flex items-center justify-center text-slate-500 font-mono text-xs">
+            <div className="flex-1 flex items-center justify-center text-slate-500 font-sans text-sm">
               Selecione um documento na fila ou clique em "Carregar 20 Casos Sintéticos".
             </div>
           )}

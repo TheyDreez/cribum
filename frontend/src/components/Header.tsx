@@ -20,44 +20,46 @@ export const Header: React.FC<HeaderProps> = ({
   const isDemo = config?.execution_mode === 'DEMO';
 
   return (
-    <header className="border-b border-graphite-800 bg-graphite-900 sticky top-0 z-30">
-      {/* Top Banner se for Modo DEMO */}
+    <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-xs">
+      {/* Top Banner discreto para Modo DEMO */}
       {isDemo && (
-        <div className="bg-auditAmber-500/15 border-b border-auditAmber-500/30 px-4 py-1.5 text-xs text-auditAmber-400 flex items-center justify-between font-mono">
-          <span>⚠️ {config.demo_banner_message || 'MODO DEMO ATIVO: Resultados de fixtures sintéticas documentadas.'}</span>
-          <span className="text-[11px] opacity-80">AMD ACT III · Health & Wellbeing Track</span>
+        <div className="bg-amber-50 border-b border-amber-200/80 px-4 py-1 text-xs text-amber-900 flex items-center justify-between">
+          <span className="font-medium">
+            ⚠️ {config?.demo_banner_message?.includes('MODO DEMO ATIVO') ? config.demo_banner_message : `MODO DEMO ATIVO: ${config?.demo_banner_message || 'Resultados de fixtures sintéticas documentadas.'}`}
+          </span>
+          <span className="text-[11px] text-amber-800">Ambiente de Demonstração e Validação</span>
         </div>
       )}
 
-      <div className="w-full px-6 py-3 flex items-center justify-between">
+      <div className="w-full px-6 py-2.5 flex items-center justify-between">
         {/* Brand & Identity */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-auditTeal-500 to-auditTeal-600 flex items-center justify-center text-graphite-950 font-bold shadow-lg shadow-auditTeal-500/10">
-            <Shield className="w-5 h-5 text-graphite-950" />
+          <div className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center text-white shadow-xs">
+            <Shield className="w-5 h-5 text-white" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-bold text-lg tracking-tight text-white">
+              <h1 className="font-bold text-base tracking-tight text-slate-900">
                 {config?.app_name || 'CRIBUM'}
               </h1>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-graphite-800 border border-graphite-700 text-slate-400 font-mono">
+              <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-600 font-mono">
                 v{config?.version || '1.0.0'}
               </span>
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Auditor Pericial de Guias & Prescrições Médicas · Inédito Viável
             </p>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-1 bg-graphite-950 p-1 rounded-lg border border-graphite-800">
+        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
           <button
             onClick={() => onTabChange('auditoria')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               activeTab === 'auditoria'
-                ? 'bg-auditTeal-500 text-graphite-950 shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-white text-slate-900 shadow-xs font-semibold'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -67,8 +69,8 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => onTabChange('rede')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               activeTab === 'rede'
-                ? 'bg-auditTeal-500 text-graphite-950 shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-white text-slate-900 shadow-xs font-semibold'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Network className="w-3.5 h-3.5" />
@@ -81,16 +83,16 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onSeedDemo}
             disabled={loadingSeed}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-graphite-800 hover:bg-graphite-700 text-xs font-medium rounded-lg text-slate-200 border border-graphite-700 transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg border border-slate-300 transition shadow-xs disabled:opacity-50"
             title="Carregar os 20 casos sintéticos gabaritados na fila"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loadingSeed ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loadingSeed ? 'animate-spin text-slate-400' : 'text-slate-500'}`} />
             Carregar 20 Casos Sintéticos
           </button>
 
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-graphite-950 rounded-lg border border-graphite-800 font-mono text-xs">
-            <Cpu className="w-3.5 h-3.5 text-auditTeal-400" />
-            <span className="text-slate-300">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-lg border border-slate-200 font-mono text-xs text-slate-700">
+            <Cpu className="w-3.5 h-3.5 text-slate-500" />
+            <span>
               {config?.execution_mode === 'REAL' ? 'AMD ROCm (vLLM)' : 'Fixture Demo Engine'}
             </span>
           </div>

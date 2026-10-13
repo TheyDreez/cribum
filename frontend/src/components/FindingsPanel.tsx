@@ -32,20 +32,20 @@ const getUncertaintyBadge = (status: string) => {
     case 'AMBIGUOUS':
       return {
         label: 'Ambiguidade Caligráfica',
-        style: 'bg-auditAmber-500/15 text-auditAmber-400 border-auditAmber-500/30',
+        style: 'bg-amber-50 text-amber-800 border-amber-200',
         icon: AlertTriangle,
       };
     case 'INDETERMINATE':
       return {
         label: 'Leitura Indeterminada',
-        style: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+        style: 'bg-purple-50 text-purple-800 border-purple-200',
         icon: HelpCircle,
       };
     case 'CERTAIN':
     default:
       return {
         label: 'Leitura Unívoca',
-        style: 'bg-auditTeal-500/15 text-auditTeal-400 border-auditTeal-500/30',
+        style: 'bg-emerald-50 text-emerald-800 border-emerald-200',
         icon: CheckCircle2,
       };
   }
@@ -65,6 +65,7 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
   const [selectedFieldId, setSelectedFieldId] = useState<string>('');
   const [decisionAction, setDecisionAction] = useState<string>('CONFIRMED_HYPOTHESIS');
   const [decisionReason, setDecisionReason] = useState<string>('');
+  const [historyOpen, setHistoryOpen] = useState<boolean>(true);
 
   // Limpeza de formulário ao alternar documento
   useEffect(() => {
@@ -94,24 +95,26 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
   };
 
   return (
-    <div className="w-[440px] min-w-[380px] max-w-[480px] shrink-0 border-l border-graphite-800 bg-graphite-900/90 flex flex-col h-[calc(100vh-65px)] overflow-y-auto">
-      {/* 1. Alertas e Achados Periciais */}
-      <div className="p-4 border-b border-graphite-800">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center justify-between mb-3 font-mono">
+    <div className="w-[440px] min-w-[380px] max-w-[480px] shrink-0 border-l border-slate-200 bg-white flex flex-col h-full overflow-y-auto shadow-xs">
+      {/* 1. Alertas de Inconsistência e Achados Periciais */}
+      <div className="p-4 border-b border-slate-200">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center justify-between mb-3">
           <span>Alertas de Inconsistência ({findings.length})</span>
           {findings.length > 0 && (
-            <span className="text-[10px] px-2 py-0.5 rounded bg-auditRose-500/15 text-auditRose-500 border border-auditRose-500/20">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 font-medium">
               Revisão Obrigatória
             </span>
           )}
         </h3>
 
         {findings.length === 0 ? (
-          <div className="p-3 bg-graphite-950 rounded-lg border border-graphite-800 flex items-start gap-2.5 text-xs text-auditTeal-400">
-            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-auditTeal-400" />
-            <div className="leading-relaxed text-slate-300">
-              <span className="font-medium text-auditTeal-400 block mb-0.5">Sem inconsistências de regra detectadas pelo motor determinístico</span>
-              <span className="text-[11px] text-slate-400 block">
+          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-start gap-2.5 text-xs text-slate-700">
+            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
+            <div className="leading-relaxed">
+              <span className="font-semibold text-slate-800 block mb-0.5">
+                Sem inconsistências de regra detectadas pelo motor determinístico
+              </span>
+              <span className="text-[11px] text-slate-500 block">
                 Não substitui conferência clínica, posológica e cadastral do auditor responsável.
               </span>
             </div>
@@ -124,43 +127,43 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
                 <div
                   key={fn.id}
                   onClick={() => onSelectFinding(isSelected ? null : fn)}
-                  className={`p-3 rounded-lg border transition cursor-pointer ${
+                  className={`p-3 rounded-lg border transition cursor-pointer shadow-2xs ${
                     isSelected
-                      ? 'bg-auditRose-500/10 border-auditRose-500/40 shadow-sm'
-                      : 'bg-graphite-950 border-graphite-800 hover:border-graphite-700'
+                      ? 'bg-rose-50/50 border-rose-300 ring-1 ring-rose-200'
+                      : 'bg-white border-slate-200 hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <span className="font-semibold text-xs text-white leading-snug">
+                    <span className="font-semibold text-xs text-slate-900 leading-snug">
                       {fn.title}
                     </span>
                     <span
-                      className={`text-[10px] font-mono px-1.5 py-0.2 rounded uppercase shrink-0 font-medium ${
+                      className={`text-[10px] font-mono px-1.5 py-0.5 rounded uppercase shrink-0 font-medium ${
                         fn.severity === 'CRITICAL'
-                          ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                          ? 'bg-red-50 text-red-700 border border-red-200'
                           : fn.severity === 'HIGH'
-                          ? 'bg-auditRose-500/20 text-auditRose-400 border border-auditRose-500/30'
-                          : 'bg-auditAmber-500/20 text-auditAmber-400 border border-auditAmber-500/30'
+                          ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                          : 'bg-amber-50 text-amber-800 border border-amber-200'
                       }`}
                     >
                       {fn.severity}
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-300 leading-relaxed mb-2">
+                  <p className="text-xs text-slate-600 leading-relaxed mb-2 font-sans">
                     {fn.explanation}
                   </p>
 
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-graphite-800/80">
-                    <span className="font-mono text-[10px] opacity-75">{fn.rule_id}</span>
-                    <button className="flex items-center gap-1 text-auditTeal-400 hover:underline">
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100">
+                    <span className="font-mono text-[10px] text-slate-400">{fn.rule_id}</span>
+                    <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium">
                       <Crosshair className="w-3 h-3" />
                       <span>{isSelected ? 'Ocultar BBox' : 'Ver Evidência'}</span>
                     </button>
                   </div>
 
                   {fn.limitations && (
-                    <p className="mt-2 text-[10px] text-slate-400 italic bg-graphite-900/60 p-1.5 rounded border border-graphite-800/50">
+                    <p className="mt-2 text-[10px] text-slate-500 italic bg-slate-50 p-1.5 rounded border border-slate-200 font-sans">
                       Limitação: {fn.limitations}
                     </p>
                   )}
@@ -171,10 +174,10 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
         )}
       </div>
 
-      {/* 2. Leitura com Admissão de Dúvida (Hipóteses) */}
-      <div className="p-4 border-b border-graphite-800">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-3 font-mono flex items-center gap-2">
-          <HelpCircle className="w-4 h-4 text-auditAmber-400" />
+      {/* 2. Leitura com Admissão de Dúvida (Hipóteses do VLM) */}
+      <div className="p-4 border-b border-slate-200">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-1.5">
+          <HelpCircle className="w-4 h-4 text-amber-600" />
           Hipóteses de Leitura do VLM
         </h3>
 
@@ -184,13 +187,13 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
             const BadgeIcon = badge.icon;
 
             return (
-              <div key={field.id} className="bg-graphite-950 p-3 rounded-lg border border-graphite-800">
+              <div key={field.id} className="bg-slate-50/70 p-3 rounded-lg border border-slate-200">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] font-mono uppercase text-slate-400">
+                  <span className="text-[11px] font-mono uppercase text-slate-500 font-semibold">
                     Campo: {field.field_type}
                   </span>
                   <span
-                    className={`text-[10px] font-mono px-2 py-0.5 rounded border flex items-center gap-1 ${badge.style}`}
+                    className={`text-[10px] font-medium px-2 py-0.5 rounded border flex items-center gap-1 ${badge.style}`}
                   >
                     <BadgeIcon className="w-3 h-3" />
                     {badge.label}
@@ -207,10 +210,10 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
                           setSelectedHypothesis(hyp.text);
                           setSelectedFieldId(field.id);
                         }}
-                        className={`flex items-center justify-between p-2 rounded border cursor-pointer transition text-xs ${
+                        className={`flex items-center justify-between p-2 rounded border cursor-pointer transition text-xs shadow-2xs ${
                           isChecked
-                            ? 'bg-auditTeal-500/15 border-auditTeal-500/40 text-white font-medium'
-                            : 'bg-graphite-900/70 border-graphite-800 text-slate-300 hover:border-graphite-700'
+                            ? 'bg-blue-50 border-blue-400 text-blue-950 font-medium'
+                            : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
                         }`}
                       >
                         <div className="flex items-center gap-2">
@@ -223,9 +226,9 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
                               setSelectedHypothesis(hyp.text);
                               setSelectedFieldId(field.id);
                             }}
-                            className="accent-auditTeal-500"
+                            className="accent-blue-600"
                           />
-                          <span>{hyp.text}</span>
+                          <span className="font-sans">{hyp.text}</span>
                         </div>
                         {hyp.score !== null && hyp.score !== undefined && (
                           <span
@@ -246,19 +249,19 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
       </div>
 
       {/* 3. Decisão Humana Obrigatória (Human-in-the-Loop) */}
-      <div className="p-4 border-b border-graphite-800 bg-graphite-950/40">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-200 mb-3 font-mono flex items-center gap-2">
-          <FileCheck className="w-4 h-4 text-auditTeal-400" />
+      <div className="p-4 border-b border-slate-200 bg-slate-50/50">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-800 mb-3 flex items-center gap-1.5">
+          <FileCheck className="w-4 h-4 text-blue-600" />
           Parecer do Auditor Humano (HITL)
         </h3>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Ação da Decisão</label>
+            <label className="block text-[11px] text-slate-600 font-medium mb-1">Ação da Decisão</label>
             <select
               value={decisionAction}
               onChange={(e) => setDecisionAction(e.target.value)}
-              className="w-full bg-graphite-950 border border-graphite-800 rounded p-2 text-xs text-white focus:outline-none focus:border-auditTeal-500"
+              className="w-full bg-white border border-slate-300 rounded p-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-2xs font-sans"
             >
               <option value="CONFIRMED_HYPOTHESIS">Confirmar Hipótese Selecionada</option>
               <option value="APPROVED_CLAIM">Aprovar Guia Integralmente</option>
@@ -269,12 +272,12 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
           </div>
 
           {isConfirmation && (
-            <div className="p-2.5 bg-graphite-950 rounded border border-graphite-800 text-xs">
-              <span className="text-slate-400 block text-[10px] mb-0.5">Hipótese a confirmar:</span>
+            <div className="p-2.5 bg-white rounded border border-slate-200 text-xs shadow-2xs">
+              <span className="text-slate-500 block text-[10px] mb-0.5">Hipótese a confirmar:</span>
               {selectedHypothesis ? (
-                <span className="font-mono text-auditTeal-400 font-semibold">{selectedHypothesis}</span>
+                <span className="font-mono text-blue-700 font-bold">{selectedHypothesis}</span>
               ) : (
-                <span className="text-auditAmber-400 text-[11px] italic">
+                <span className="text-amber-800 text-[11px] italic">
                   Selecione uma das opções acima nas hipóteses de leitura antes de confirmar.
                 </span>
               )}
@@ -282,8 +285,8 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
           )}
 
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">
-              Justificativa Obrigatória do Auditor <span className="text-red-400">*</span>
+            <label className="block text-[11px] text-slate-600 font-medium mb-1">
+              Justificativa Obrigatória do Auditor <span className="text-red-500">*</span>
             </label>
             <textarea
               required
@@ -291,14 +294,14 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
               placeholder="Descreva a fundamentação da conferência visual, contexto clínico ou indício documental..."
               value={decisionReason}
               onChange={(e) => setDecisionReason(e.target.value)}
-              className="w-full bg-graphite-950 border border-graphite-800 rounded p-2 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-auditTeal-500 resize-none font-sans"
+              className="w-full bg-white border border-slate-300 rounded p-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 resize-none font-sans shadow-2xs"
             />
           </div>
 
           <button
             type="submit"
             disabled={submittingDecision || !isFormValid}
-            className="w-full py-2 px-3 bg-auditTeal-500 hover:bg-auditTeal-400 disabled:opacity-50 text-graphite-950 font-bold text-xs rounded-md transition flex items-center justify-center gap-1.5 shadow-sm"
+            className="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-semibold text-xs rounded-md transition flex items-center justify-center gap-1.5 shadow-2xs"
           >
             <Send className="w-3.5 h-3.5" />
             {submittingDecision ? 'Registrando revisão...' : 'Registrar revisão'}
@@ -306,40 +309,52 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
         </form>
       </div>
 
-      {/* 4. Histórico de Decisões Persistidas */}
+      {/* 4. Histórico de Decisões Persistidas (Acessível sem disputar espaço) */}
       <div className="p-4 flex-1">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 font-mono flex items-center gap-2">
-          <History className="w-3.5 h-3.5" />
-          Histórico Persistido ({decisions.length})
-        </h3>
+        <div
+          onClick={() => setHistoryOpen(!historyOpen)}
+          className="cursor-pointer flex items-center justify-between mb-3 text-xs font-semibold uppercase tracking-wider text-slate-600 select-none hover:text-slate-900"
+        >
+          <span className="flex items-center gap-1.5">
+            <History className="w-3.5 h-3.5 text-slate-500" />
+            Histórico Persistido ({decisions.length})
+          </span>
+          <span className="text-[10px] text-slate-400">
+            {historyOpen ? 'Recolher ▲' : 'Expandir ▼'}
+          </span>
+        </div>
 
-        {decisions.length === 0 ? (
-          <p className="text-xs text-slate-600 italic text-center py-2">
-            Nenhuma decisão humana registrada ainda.
-          </p>
-        ) : (
-          <div className="space-y-2">
-            {decisions.map((dec) => (
-              <div key={dec.id} className="p-2.5 rounded bg-graphite-950 border border-graphite-800 text-xs">
-                <div className="flex items-center justify-between text-[11px] mb-1">
-                  <span className="font-mono text-auditTeal-400 font-medium">{dec.action}</span>
-                  <span className="text-slate-500 font-mono text-[10px]">
-                    {new Date(dec.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                </div>
-                {dec.confirmed_value && (
-                  <p className="text-[11px] text-slate-300 font-mono mb-1">
-                    Valor: <span className="text-white font-semibold">{dec.confirmed_value}</span>
-                  </p>
-                )}
-                <p className="text-slate-400 text-[11px] leading-relaxed italic">
-                  "{dec.reason}"
-                </p>
-                <span className="text-[10px] text-slate-600 block mt-1 font-mono">
-                  Por: {dec.actor_id}
-                </span>
+        {historyOpen && (
+          <div>
+            {decisions.length === 0 ? (
+              <p className="text-xs text-slate-400 italic text-center py-2 font-sans">
+                Nenhuma decisão humana registrada ainda.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {decisions.map((dec) => (
+                  <div key={dec.id} className="p-2.5 rounded bg-slate-50 border border-slate-200 text-xs shadow-2xs">
+                    <div className="flex items-center justify-between text-[11px] mb-1">
+                      <span className="font-semibold text-slate-900">{dec.action}</span>
+                      <span className="text-slate-400 font-mono text-[10px]">
+                        {new Date(dec.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                    {dec.confirmed_value && (
+                      <p className="text-[11px] text-slate-700 font-mono mb-1">
+                        Valor: <span className="text-blue-900 font-bold">{dec.confirmed_value}</span>
+                      </p>
+                    )}
+                    <p className="text-slate-600 text-[11px] leading-relaxed italic font-sans">
+                      "{dec.reason}"
+                    </p>
+                    <span className="text-[10px] text-slate-400 block mt-1 font-mono">
+                      Por: {dec.actor_id}
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>
