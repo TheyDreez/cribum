@@ -67,6 +67,15 @@ export interface ReviewDecision {
   created_at: string;
 }
 
+export interface ReviewSubmission {
+  action: string;
+  confirmed_value?: string;
+  field_id?: string;
+  run_id?: string;
+  reason: string;
+  finding_id?: string;
+}
+
 export interface DocumentItem {
   id: string;
   filename_original: string;

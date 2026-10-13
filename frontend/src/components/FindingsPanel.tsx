@@ -8,7 +8,7 @@ import {
   History,
   Crosshair,
 } from 'lucide-react';
-import { ExtractedField, Finding, ReviewDecision } from '../types';
+import { ExtractedField, Finding, ReviewDecision, ReviewSubmission } from '../types';
 
 interface FindingsPanelProps {
   documentId: string;
@@ -17,14 +17,9 @@ interface FindingsPanelProps {
   decisions: ReviewDecision[];
   selectedFinding: Finding | null;
   onSelectFinding: (finding: Finding | null) => void;
-  onSubmitDecision: (decision: {
-    action: string;
-    confirmed_value?: string;
-    field_id?: string;
-    reason: string;
-    finding_id?: string;
-  }) => void;
+  onSubmitDecision: (decision: ReviewSubmission) => Promise<boolean>;
   submittingDecision: boolean;
+  reviewError?: string | null;
 }
 
 const getUncertaintyBadge = (status: string) => {
@@ -60,6 +55,7 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
   onSelectFinding,
   onSubmitDecision,
   submittingDecision,
+  reviewError,
 }) => {
   const [selectedHypothesis, setSelectedHypothesis] = useState<string>('');
   const [selectedFieldId, setSelectedFieldId] = useState<string>('');
@@ -77,25 +73,28 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
 
   const isConfirmation = decisionAction === 'CONFIRMED_HYPOTHESIS';
   const isFormValid =
-    decisionReason.trim().length > 0 &&
+    decisionReason.trim().length >= 3 &&
     (!isConfirmation || (selectedHypothesis.length > 0 && selectedFieldId.length > 0));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid || submittingDecision) return;
 
-    onSubmitDecision({
+    const saved = await onSubmitDecision({
       action: decisionAction,
-      confirmed_value: selectedHypothesis || undefined,
-      field_id: selectedFieldId || undefined,
+      confirmed_value: isConfirmation ? selectedHypothesis : undefined,
+      field_id: isConfirmation ? selectedFieldId : undefined,
       reason: decisionReason.trim(),
       finding_id: selectedFinding?.id,
     });
-    setDecisionReason('');
+
+    if (saved) {
+      setDecisionReason('');
+    }
   };
 
   return (
-    <div className="w-[440px] min-w-[380px] max-w-[480px] shrink-0 border-l border-slate-200 bg-white flex flex-col h-full overflow-y-auto shadow-xs">
+    <div id="review-panel" className="w-full min-w-0 border-l border-slate-200 bg-white flex flex-col h-full overflow-y-auto shadow-xs">
       {/* 1. Alertas de Inconsistência e Achados Periciais */}
       <div className="p-4 border-b border-slate-200">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center justify-between mb-3">
@@ -297,6 +296,16 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
               className="w-full bg-white border border-slate-300 rounded p-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 resize-none font-sans shadow-2xs"
             />
           </div>
+
+          {reviewError && (
+            <div
+              role="alert"
+              className="p-2.5 rounded bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-1.5 shadow-2xs"
+            >
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+              <span>{reviewError}</span>
+            </div>
+          )}
 
           <button
             type="submit"
