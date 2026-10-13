@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileUp, AlertTriangle, CheckCircle, Clock, Search } from 'lucide-react';
+import { FileUp, AlertTriangle, CheckCircle, Clock, Search, XCircle } from 'lucide-react';
 import { DocumentItem } from '../types';
 
 interface DocumentQueueProps {
@@ -9,6 +9,32 @@ interface DocumentQueueProps {
   onUpload: (file: File) => void;
   uploading: boolean;
 }
+
+export const getFriendlyCaseName = (filename: string): string => {
+  const map: Record<string, string> = {
+    'caso_01_losartana_lorazepam.jpg': 'Caso 01: Losartana vs Lorazepam (LASA)',
+    'caso_02_fluoxetina_flunarizina.jpg': 'Caso 02: Fluoxetina vs Flunarizina (LASA)',
+    'caso_03_digoxina_dipirona.jpg': 'Caso 03: Digoxina vs Dipirona (LASA)',
+    'caso_04_citalopram_escitalopram.jpg': 'Caso 04: Citalopram vs Escitalopram (LASA)',
+    'caso_05_tramadol_trazodona.jpg': 'Caso 05: Tramadol vs Trazodona (LASA)',
+    'caso_06_sem_crm.jpg': 'Caso 06: Ausência de CRM do Prescritor',
+    'caso_07_sem_unidade.jpg': 'Caso 07: Ausência de Unidade Posológica',
+    'caso_08_crm_incompleto.jpg': 'Caso 08: CRM Incompleto / Formato Inválido',
+    'caso_09_cid_incompativel.jpg': 'Caso 09: CID Incompatível com Prescrição',
+    'caso_10_posologia_contraditoria.jpg': 'Caso 10: Posologia Contraditória',
+    'caso_11_duplicidade_declarada.jpg': 'Caso 11: Guia Duplicada (Lote A)',
+    'caso_12_duplicidade_declarada.jpg': 'Caso 12: Guia Duplicada (Lote B)',
+    'caso_13_duplicidade_declarada.jpg': 'Caso 13: Guia Duplicada (Lote C)',
+    'caso_14_duplicidade_declarada.jpg': 'Caso 14: Guia Duplicada (Lote D)',
+    'caso_15_duplicidade_declarada.jpg': 'Caso 15: Guia Duplicada (Lote E)',
+    'caso_16_controle_limpo.jpg': 'Caso 16: Controle Regular 01',
+    'caso_17_controle_limpo.jpg': 'Caso 17: Controle Regular 02',
+    'caso_18_controle_limpo.jpg': 'Caso 18: Controle Regular 03',
+    'caso_19_controle_limpo.jpg': 'Caso 19: Controle Regular 04',
+    'caso_20_controle_limpo.jpg': 'Caso 20: Controle Regular 05',
+  };
+  return map[filename.toLowerCase()] || filename;
+};
 
 const getReviewStatusInfo = (status: string) => {
   switch (status) {
@@ -39,7 +65,13 @@ export const DocumentQueue: React.FC<DocumentQueueProps> = ({
   const [search, setSearch] = useState('');
 
   const filteredDocs = documents.filter((doc) => {
-    const matchesSearch = doc.filename_original.toLowerCase().includes(search.toLowerCase()) || doc.id.includes(search);
+    const friendlyName = getFriendlyCaseName(doc.filename_original);
+    const query = search.toLowerCase();
+    const matchesSearch =
+      friendlyName.toLowerCase().includes(query) ||
+      doc.filename_original.toLowerCase().includes(query) ||
+      doc.id.toLowerCase().includes(query);
+
     if (!matchesSearch) return false;
     if (filter === 'PENDING') return doc.review_status === 'PENDING';
     if (filter === 'FINDINGS') return doc.findings_count > 0;
@@ -53,7 +85,7 @@ export const DocumentQueue: React.FC<DocumentQueueProps> = ({
   };
 
   return (
-    <aside className="w-80 border-r border-graphite-800 bg-graphite-900/70 flex flex-col h-[calc(100vh-65px)]">
+    <aside className="w-80 min-w-[280px] max-w-[340px] shrink-0 border-r border-graphite-800 bg-graphite-900/70 flex flex-col h-[calc(100vh-65px)]">
       {/* Header da Fila */}
       <div className="p-4 border-b border-graphite-800">
         <div className="flex items-center justify-between mb-3">
@@ -80,10 +112,10 @@ export const DocumentQueue: React.FC<DocumentQueueProps> = ({
           <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-500" />
           <input
             type="text"
-            placeholder="Buscar por caso ou ID..."
+            placeholder="Buscar por caso, nome ou ID..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-graphite-950 border border-graphite-800 rounded-md pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-auditTeal-500 font-mono"
+            className="w-full bg-graphite-950 border border-graphite-800 rounded-md pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-auditTeal-500 font-sans"
           />
         </div>
 
@@ -119,6 +151,9 @@ export const DocumentQueue: React.FC<DocumentQueueProps> = ({
         ) : (
           filteredDocs.map((doc) => {
             const isSelected = doc.id === selectedDocId;
+            const friendlyName = getFriendlyCaseName(doc.filename_original);
+            const isFailed = doc.last_execution_status === 'FAILED';
+
             return (
               <button
                 key={doc.id}
@@ -129,23 +164,46 @@ export const DocumentQueue: React.FC<DocumentQueueProps> = ({
                     : 'hover:bg-graphite-850 border-l-2 border-transparent'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-semibold text-slate-200 truncate max-w-[170px]" title={doc.filename_original}>
-                    {doc.filename_original}
-                  </span>
-                  {doc.findings_count > 0 ? (
-                    <span className="flex items-center gap-1 text-[11px] font-mono font-medium px-1.5 py-0.5 rounded bg-auditRose-500/15 text-auditRose-500 border border-auditRose-500/20">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <span
+                      className="font-medium text-xs text-slate-200 block truncate"
+                      title={friendlyName}
+                    >
+                      {friendlyName}
+                    </span>
+                    {friendlyName !== doc.filename_original && (
+                      <span className="font-mono text-[10px] text-slate-500 block truncate">
+                        {doc.filename_original}
+                      </span>
+                    )}
+                  </div>
+
+                  {isFailed ? (
+                    <span
+                      className="flex items-center gap-1 text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-red-500/15 text-red-400 border border-red-500/30 shrink-0"
+                      title={doc.last_execution_error || 'Falha de processamento nesta execução.'}
+                    >
+                      <XCircle className="w-3 h-3" />
+                      Falha
+                    </span>
+                  ) : doc.findings_count > 0 ? (
+                    <span className="flex items-center gap-1 text-[11px] font-mono font-medium px-1.5 py-0.5 rounded bg-auditRose-500/15 text-auditRose-500 border border-auditRose-500/20 shrink-0">
                       <AlertTriangle className="w-3 h-3" />
                       {doc.findings_count} {doc.findings_count === 1 ? 'alerta' : 'alertas'}
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-[11px] font-mono px-1.5 py-0.5 rounded bg-auditTeal-500/10 text-auditTeal-400 border border-auditTeal-500/20">
+                    <span
+                      className="flex items-center gap-1 text-[10px] font-mono px-1.5 py-0.5 rounded bg-auditTeal-500/10 text-auditTeal-400 border border-auditTeal-500/20 shrink-0"
+                      title="Sem inconsistências de regra detectadas pelo motor determinístico"
+                    >
                       <CheckCircle className="w-3 h-3" />
-                      Limpo
+                      Sem inconsistências
                     </span>
                   )}
                 </div>
-                <div className="flex items-center justify-between text-[11px] font-mono">
+
+                <div className="flex items-center justify-between text-[11px] font-mono pt-0.5">
                   <span className="text-slate-500">ID: {doc.id.slice(0, 8)}...</span>
                   {(() => {
                     const info = getReviewStatusInfo(doc.review_status);

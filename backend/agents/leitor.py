@@ -83,7 +83,7 @@ class LeitorAgent:
 
     @staticmethod
     def compute_sha256(file_path: str) -> str:
-        """Gera hash SHA-256 para garantia pericial e integridade jurídica da imagem."""
+        """Gera hash SHA-256 para rastreabilidade pericial e verificação de integridade da imagem."""
         sha256_hash = hashlib.sha256()
         with open(file_path, "rb") as f:
             for byte_block in iter(lambda: f.read(65536), b""):

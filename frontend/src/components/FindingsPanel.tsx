@@ -27,6 +27,30 @@ interface FindingsPanelProps {
   submittingDecision: boolean;
 }
 
+const getUncertaintyBadge = (status: string) => {
+  switch (status) {
+    case 'AMBIGUOUS':
+      return {
+        label: 'Ambiguidade Caligráfica',
+        style: 'bg-auditAmber-500/15 text-auditAmber-400 border-auditAmber-500/30',
+        icon: AlertTriangle,
+      };
+    case 'INDETERMINATE':
+      return {
+        label: 'Leitura Indeterminada',
+        style: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+        icon: HelpCircle,
+      };
+    case 'CERTAIN':
+    default:
+      return {
+        label: 'Leitura Unívoca',
+        style: 'bg-auditTeal-500/15 text-auditTeal-400 border-auditTeal-500/30',
+        icon: CheckCircle2,
+      };
+  }
+};
+
 export const FindingsPanel: React.FC<FindingsPanelProps> = ({
   documentId,
   fields,
@@ -50,22 +74,27 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
     setDecisionAction('CONFIRMED_HYPOTHESIS');
   }, [documentId]);
 
+  const isConfirmation = decisionAction === 'CONFIRMED_HYPOTHESIS';
+  const isFormValid =
+    decisionReason.trim().length > 0 &&
+    (!isConfirmation || (selectedHypothesis.length > 0 && selectedFieldId.length > 0));
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!decisionReason.trim()) return;
+    if (!isFormValid) return;
 
     onSubmitDecision({
       action: decisionAction,
       confirmed_value: selectedHypothesis || undefined,
       field_id: selectedFieldId || undefined,
-      reason: decisionReason,
+      reason: decisionReason.trim(),
       finding_id: selectedFinding?.id,
     });
     setDecisionReason('');
   };
 
   return (
-    <div className="w-[430px] border-l border-graphite-800 bg-graphite-900/90 flex flex-col h-[calc(100vh-65px)] overflow-y-auto">
+    <div className="w-[440px] min-w-[380px] max-w-[480px] shrink-0 border-l border-graphite-800 bg-graphite-900/90 flex flex-col h-[calc(100vh-65px)] overflow-y-auto">
       {/* 1. Alertas e Achados Periciais */}
       <div className="p-4 border-b border-graphite-800">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center justify-between mb-3 font-mono">
@@ -78,9 +107,14 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
         </h3>
 
         {findings.length === 0 ? (
-          <div className="p-3 bg-graphite-950 rounded-lg border border-graphite-800 flex items-center gap-2 text-xs text-auditTeal-400">
-            <CheckCircle2 className="w-4 h-4 shrink-0" />
-            <span>Nenhuma inconsistência ou colisão LASA detectada neste documento.</span>
+          <div className="p-3 bg-graphite-950 rounded-lg border border-graphite-800 flex items-start gap-2.5 text-xs text-auditTeal-400">
+            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-auditTeal-400" />
+            <div className="leading-relaxed text-slate-300">
+              <span className="font-medium text-auditTeal-400 block mb-0.5">Sem inconsistências de regra detectadas pelo motor determinístico</span>
+              <span className="text-[11px] text-slate-400 block">
+                Não substitui conferência clínica, posológica e cadastral do auditor responsável.
+              </span>
+            </div>
           </div>
         ) : (
           <div className="space-y-2.5">
@@ -126,7 +160,7 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
                   </div>
 
                   {fn.limitations && (
-                    <p className="mt-2 text-[10px] text-slate-500 italic bg-graphite-900/60 p-1.5 rounded">
+                    <p className="mt-2 text-[10px] text-slate-400 italic bg-graphite-900/60 p-1.5 rounded border border-graphite-800/50">
                       Limitação: {fn.limitations}
                     </p>
                   )}
@@ -145,61 +179,65 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
         </h3>
 
         <div className="space-y-3">
-          {fields.map((field) => (
-            <div key={field.id} className="bg-graphite-950 p-3 rounded-lg border border-graphite-800">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-mono uppercase text-slate-400">
-                  Campo: {field.field_type}
-                </span>
-                {field.uncertainty_status === 'AMBIGUOUS' ? (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-auditAmber-500/15 text-auditAmber-400 border border-auditAmber-500/30 flex items-center gap-1">
-                    <AlertTriangle className="w-3 h-3" />
-                    Ambiguidade Detectada
-                  </span>
-                ) : (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-auditTeal-500/15 text-auditTeal-400">
-                    Certeza Visual
-                  </span>
-                )}
-              </div>
+          {fields.map((field) => {
+            const badge = getUncertaintyBadge(field.uncertainty_status);
+            const BadgeIcon = badge.icon;
 
-              <div className="space-y-1.5">
-                {field.hypotheses.map((hyp) => {
-                  const isChecked = selectedHypothesis === hyp.text;
-                  return (
-                    <label
-                      key={hyp.rank}
-                      className={`flex items-center justify-between p-2 rounded border cursor-pointer transition text-xs ${
-                        isChecked
-                          ? 'bg-auditTeal-500/15 border-auditTeal-500/40 text-white font-medium'
-                          : 'bg-graphite-900/70 border-graphite-800 text-slate-300 hover:border-graphite-700'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          name={`hyp-${field.id}`}
-                          value={hyp.text}
-                          checked={isChecked}
-                          onChange={() => {
-                            setSelectedHypothesis(hyp.text);
-                            setSelectedFieldId(field.id);
-                          }}
-                          className="accent-auditTeal-500"
-                        />
-                        <span>{hyp.text}</span>
-                      </div>
-                      {hyp.score !== null && hyp.score !== undefined && (
-                        <span className="text-[11px] font-mono text-slate-400">
-                          {Math.round(hyp.score * 100)}%
-                        </span>
-                      )}
-                    </label>
-                  );
-                })}
+            return (
+              <div key={field.id} className="bg-graphite-950 p-3 rounded-lg border border-graphite-800">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[11px] font-mono uppercase text-slate-400">
+                    Campo: {field.field_type}
+                  </span>
+                  <span
+                    className={`text-[10px] font-mono px-2 py-0.5 rounded border flex items-center gap-1 ${badge.style}`}
+                  >
+                    <BadgeIcon className="w-3 h-3" />
+                    {badge.label}
+                  </span>
+                </div>
+
+                <div className="space-y-1.5">
+                  {field.hypotheses.map((hyp) => {
+                    const isChecked = selectedHypothesis === hyp.text && selectedFieldId === field.id;
+                    return (
+                      <label
+                        key={hyp.rank}
+                        className={`flex items-center justify-between p-2 rounded border cursor-pointer transition text-xs ${
+                          isChecked
+                            ? 'bg-auditTeal-500/15 border-auditTeal-500/40 text-white font-medium'
+                            : 'bg-graphite-900/70 border-graphite-800 text-slate-300 hover:border-graphite-700'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name={`hyp-${field.id}`}
+                            value={hyp.text}
+                            checked={isChecked}
+                            onChange={() => {
+                              setSelectedHypothesis(hyp.text);
+                              setSelectedFieldId(field.id);
+                            }}
+                            className="accent-auditTeal-500"
+                          />
+                          <span>{hyp.text}</span>
+                        </div>
+                        {hyp.score !== null && hyp.score !== undefined && (
+                          <span
+                            className="text-[10px] font-mono text-slate-400"
+                            title="Score heurístico do modelo VLM (não calibrado probabilisticamente)"
+                          >
+                            Score: {Number(hyp.score).toFixed(2)} (não calibrado)
+                          </span>
+                        )}
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -226,10 +264,16 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
             </select>
           </div>
 
-          {selectedHypothesis && (
-            <div className="p-2 bg-graphite-950 rounded border border-graphite-800 text-xs">
-              <span className="text-slate-400 block text-[10px]">Valor Confirmado:</span>
-              <span className="font-mono text-auditTeal-400 font-semibold">{selectedHypothesis}</span>
+          {isConfirmation && (
+            <div className="p-2.5 bg-graphite-950 rounded border border-graphite-800 text-xs">
+              <span className="text-slate-400 block text-[10px] mb-0.5">Hipótese a confirmar:</span>
+              {selectedHypothesis ? (
+                <span className="font-mono text-auditTeal-400 font-semibold">{selectedHypothesis}</span>
+              ) : (
+                <span className="text-auditAmber-400 text-[11px] italic">
+                  Selecione uma das opções acima nas hipóteses de leitura antes de confirmar.
+                </span>
+              )}
             </div>
           )}
 
@@ -240,7 +284,7 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
             <textarea
               required
               rows={3}
-              placeholder="Descreva a fundamentação da conferência visual, contexto clínico ou indício..."
+              placeholder="Descreva a fundamentação da conferência visual, contexto clínico ou indício documental..."
               value={decisionReason}
               onChange={(e) => setDecisionReason(e.target.value)}
               className="w-full bg-graphite-950 border border-graphite-800 rounded p-2 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-auditTeal-500 resize-none font-sans"
@@ -249,11 +293,11 @@ export const FindingsPanel: React.FC<FindingsPanelProps> = ({
 
           <button
             type="submit"
-            disabled={submittingDecision || !decisionReason.trim()}
+            disabled={submittingDecision || !isFormValid}
             className="w-full py-2 px-3 bg-auditTeal-500 hover:bg-auditTeal-400 disabled:opacity-50 text-graphite-950 font-bold text-xs rounded-md transition flex items-center justify-center gap-1.5 shadow-sm"
           >
             <Send className="w-3.5 h-3.5" />
-            {submittingDecision ? 'Registrando Decisão...' : 'Registrar Decisão no Prontuário'}
+            {submittingDecision ? 'Registrando revisão...' : 'Registrar revisão'}
           </button>
         </form>
       </div>

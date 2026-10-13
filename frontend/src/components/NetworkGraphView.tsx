@@ -97,6 +97,19 @@ export const NetworkGraphView: React.FC = () => {
           </div>
         </div>
 
+        {/* Aviso de Limites Probatórios e Interpretação Pericial */}
+        <div className="mb-6 p-3.5 bg-auditAmber-500/10 border border-auditAmber-500/30 rounded-lg text-xs text-auditAmber-300 flex items-start gap-2.5">
+          <AlertOctagon className="w-4 h-4 text-auditAmber-400 shrink-0 mt-0.5" />
+          <div className="leading-relaxed">
+            <span className="font-semibold block text-auditAmber-200 mb-0.5">
+              Limites Probatórios do Grafo de Relações:
+            </span>
+            <span>
+              Mesmo dia e distância geográfica constituem indício documental de faturamento que exige conferência humana; não comprovam simultaneidade física (podem decorrer de telemedicina legítima ou escala de plantão).
+            </span>
+          </div>
+        </div>
+
         {/* Grade de Entidades Dinâmicas */}
         <div className="grid grid-cols-4 gap-4 mb-6">
           <div className="p-4 bg-graphite-900 rounded-xl border border-graphite-800 flex items-center gap-3">

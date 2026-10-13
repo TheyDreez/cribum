@@ -77,7 +77,7 @@ class HumanDecision(BaseModel):
 class AuditDossier(BaseModel):
     """Dossiê completo de auditoria da guia (integrando todos os agentes e a cadeia de custódia)."""
     documento_id: str = Field(..., description="ID único da guia auditada")
-    documento_sha256: str = Field(..., description="Hash criptográfico SHA-256 do arquivo original para integridade jurídica")
+    documento_sha256: str = Field(..., description="Hash criptográfico SHA-256 do arquivo original para verificação de integridade documental")
     image_path: str = Field(..., description="Caminho relativo ou absoluto da imagem original")
     timestamp_auditoria: str = Field(default_factory=lambda: datetime.utcnow().isoformat(), description="Timestamp ISO da auditoria")
     score_risco_global: float = Field(..., ge=0.0, le=100.0, description="Risco consolidado (0 = seguro, 100 = fraude/erro crítico)")

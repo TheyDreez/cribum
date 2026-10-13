@@ -48,7 +48,7 @@ from backend.services.storage import (
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./cribum.db")
 SessionLocal = init_db(DATABASE_URL)
 
-APP_NAME = os.getenv("APP_NAME", "AuditRx / CRIBUM")
+APP_NAME = os.getenv("APP_NAME", "CRIBUM")
 VERSION = "1.0.0"
 EXECUTION_MODE = os.getenv("EXECUTION_MODE", "DEMO").upper()  # DEMO ou REAL
 AMD_INFERENCE_ENABLED = os.getenv("AMD_INFERENCE_ENABLED", "false").lower() == "true"

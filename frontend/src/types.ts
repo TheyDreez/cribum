@@ -56,6 +56,9 @@ export interface Finding {
 
 export interface ReviewDecision {
   id: string;
+  run_id?: string | null;
+  field_id?: string | null;
+  finding_id?: string | null;
   action: string;
   actor_id: string;
   previous_value?: string | null;
@@ -83,6 +86,8 @@ export interface DocumentItem {
     | 'CLARIFICATION_REQUESTED'
     | string;
   last_execution_mode?: string | null;
+  last_execution_status?: 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED' | string | null;
+  last_execution_error?: string | null;
 }
 
 

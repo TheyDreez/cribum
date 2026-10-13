@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="w-full px-6 py-3 flex items-center justify-between">
         {/* Brand & Identity */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-auditTeal-500 to-auditTeal-600 flex items-center justify-center text-graphite-950 font-bold shadow-lg shadow-auditTeal-500/10">
