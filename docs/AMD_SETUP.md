@@ -74,9 +74,13 @@ VLLM_API_BASE=http://localhost:8000/v1
 VLLM_MODEL_NAME=Qwen/Qwen2-VL-7B-Instruct
 ```
 
-Para testar a inferência no pipeline:
+Para testar a inferência no pipeline com servidor ativo:
 ```bash
-.venv/Scripts/python backend/tests/test_leitor.py
+# Teste estrito de protocolo que falha se o endpoint vLLM estiver offline:
+.\.venv\Scripts\python -m pytest backend/tests/test_amd_protocol.py
+
+# Disparo direto de execução em modo REAL via API local:
+curl -X POST "http://127.0.0.1:8000/api/documents/CASE-CTR-020/runs?mode_override=REAL"
 ```
 
 ---

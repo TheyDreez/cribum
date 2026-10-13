@@ -7,7 +7,7 @@
 
 **CRIBUM** is a local, privacy-first multi-agent medical claim and prescription audit system built entirely on **AMD GPUs via ROCm**. Designed as an intelligent assistant for human auditors, health insurance compliance teams, and forensic analysts, CRIBUM detects medication errors, Look-Alike Sound-Alike (LASA) confusions, and systemic fraud networks without any sensitive patient data ever leaving the secure server.
 
-Built by **Inédito Viável** (*"Untested Feasibility"*) — Sorocaba/SP, Brazil — for the **AMD Developer Hackathon: ACT III**.
+Built by **Inédito Viável** (*"Untested Feasibility"*) for the **AMD Developer Hackathon: ACT III** (Health & Wellbeing Track).
 
 ---
 
@@ -75,17 +75,16 @@ Unlike traditional OCR solutions or opaque black-box APIs:
 In strict compliance with the **Health and Wellbeing Track Safety Guidelines**:
 - **Non-Autonomous:** CRIBUM is explicitly an auditor-support tool. It never provides direct clinical diagnosis or automated prescription decisions.
 - **Fail-Safe Insecurity Escalation:** When visual confidence falls below safety thresholds or a LASA collision is flagged, the item is tagged with `incerteza: alta` and escalated directly into the human auditor review queue.
-- **Auto-hospedagem e Soberania de Dados:** Arquitetura desenhada para execução local/auto-hospedada em hardware AMD via vLLM/ROCm, sem envio de imagens ou registros de saúde para APIs proprietárias externas. Avaliação conduzida experimentalmente sobre dataset sintético.
-
+- **Auto-hospedagem e Soberania de Dados:** Arquitetura desenhada para execução local/auto-hospedada em hardware AMD via vLLM/ROCm, sem envio de imagens ou registros de saúde para APIs proprietárias externas.
+- **Trilha de Auditoria Persistida:** Registro rastreável de decisões do auditor humano vinculadas ao documento, execução e campo específico (sem falsas alegações de assinatura criptográfica PKI).
 
 ---
 
-## 💻 AMD Technology Stack & Evidence
+## 💻 AMD Technology Stack & Status Real
 
-- **Hardware:** AMD Instinct / Cloud-based AMD GPUs (AMD Developer Cloud).
-- **Execution Stack:** AMD ROCm™ 6.x + `vLLM` ROCm Docker serving container.
-- **Inference Pipeline:** Open Vision-Language Models (e.g., `Qwen/Qwen2-VL-7B-Instruct`) hosted via OpenAI-compatible endpoints with FP16/BF16 tensor cores.
-- **Telemetry:** Built-in latency and VRAM telemetry benchmarks comparing local AMD throughput versus external pay-per-token commercial APIs.
+- **Arquitetura & Adaptador:** Adaptador multimodal para vLLM compatível com aceleradores AMD ROCm™ (Instinct MI300X/MI250/Radeon) via endpoint OpenAI-compatible (`/v1/chat/completions`).
+- **Status de Execução Local:** A inferência física em GPU AMD encontra-se registrada como **NÃO EXECUTADA** no host de desenvolvimento por indisponibilidade de acelerador físico ROCm local. O protocolo foi validado via suíte de testes unitários com servidor fake simulado (`test_amd_protocol.py`). O modo DEMO opera sobre catálogo determinístico de 20 casos sintéticos gabaritados sem qualquer alegação falsa de hardware.
+- **Telemetria:** Medição de latência fim-a-fim e consumo de tokens por documento (telemetria direta de VRAM remota não coletada).
 
 ---
 

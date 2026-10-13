@@ -112,15 +112,11 @@ class LeitorAgent:
     def processar_guia(
         self,
         image_path: str,
-        allow_mock_fallback: bool = True,
+        allow_mock_fallback: bool = False,
     ) -> Tuple[HeaderData, List[PrescriptionItem], Dict[str, Any]]:
         """
-        Executa a extração completa da guia médica.
-
-        Retorna:
-            - HeaderData: dados estruturados do cabeçalho
-            - List[PrescriptionItem]: lista de itens com as 3 hipóteses e boxes
-            - Dict[str, Any]: métricas de telemetria da GPU AMD (latência ms, tokens, etc.)
+        Executa a extração da guia médica via endpoint vLLM.
+        Por padrão, allow_mock_fallback é False para não mascarar falhas de infraestrutura.
         """
         if not os.path.exists(image_path):
             raise FileNotFoundError(f"Arquivo de imagem não encontrado: {image_path}")
@@ -159,7 +155,7 @@ class LeitorAgent:
             "documento_sha256": file_sha256,
             "modelo": self.model_name,
             "endpoint": endpoint,
-            "backend_hardware": "AMD ROCm GPU",
+            "backend_hardware": "vLLM Remote Endpoint (Inspecione host remoto para GPU)",
         }
 
         try:

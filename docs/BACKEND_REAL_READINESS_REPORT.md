@@ -7,6 +7,11 @@
 
 ---
 
+> [!NOTE]
+> **Relatório Histórico (Etapa P0 / branch `audit/p0-verification`):** Registra o estado da auditoria inicial de prontidão. Para o status atual consolidado de integridade, isolamento de visualização e testes de concorrência, consulte [`docs/REDESIGN_INTEGRITY_REPORT.md`](file:///C:/Users/andre/.gemini/antigravity/scratch/cribum/docs/REDESIGN_INTEGRITY_REPORT.md).
+
+---
+
 ## 1. Resumo Executivo
 
 Nesta etapa, consolidamos o fechamento técnico do **CRIBUM** (sistema pericial de auditoria de guias e prescrições médicas) com foco em confiabilidade probatória, isolamento de dados por execução, testes automatizados de ponta a ponta e transparência total sobre a infraestrutura de hardware.
