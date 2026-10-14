@@ -1,5 +1,5 @@
 {
-  "1c814e9e3bf5098b6c285e8c19fc3c93482cfe7ae959e28607d719d3ff1191e5": {
+  "555bba5b9b0ea4d017efce2b9041e3ff426f1b060e7f5f1bd45c94c388c74c3b": {
     "name": "CLÍNICA CARDIOLÓGICA MODELO — RECEITUÁRIO",
     "document_id": "CASE-AMB-001",
     "fields": [
@@ -93,10 +93,10 @@
         "document_id": "CASE-AMB-001",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -105,7 +105,7 @@
       }
     ]
   },
-  "ed729f6a31058041de6e42155ad920cd79fbb02599aefa261dbd1b6e543e6c47": {
+  "4ee52ab6fe2f3c47de6a604b588346d1bb0cf581ba5c69ee8403e6642812a614": {
     "name": "CLÍNICA CARDIOLÓGICA MODELO — RECEITUÁRIO",
     "document_id": "CASE-AMB-001",
     "fields": [
@@ -199,10 +199,10 @@
         "document_id": "CASE-AMB-001",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -305,10 +305,10 @@
         "document_id": "CASE-AMB-001",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -317,7 +317,7 @@
       }
     ]
   },
-  "689fe52338bdcffc6c36d09a0dc90554da6cdedb3cb656da54a76afa5aca2303": {
+  "11c663090015aceecf8036ca303a3e37172e4612a299be881e6276ea5b179097": {
     "name": "INSTITUTO DE SAÚDE MENTAL DEMO",
     "document_id": "CASE-AMB-002",
     "fields": [
@@ -411,10 +411,10 @@
         "document_id": "CASE-AMB-002",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -423,7 +423,7 @@
       }
     ]
   },
-  "52f9b38d1cdebb0acd17ed661aaed3b9d4d1ed6593d3dcde17312ad1cae7560e": {
+  "d55c5493b7940967a548196669977e465d5032358265f7e8cba3e8abef200272": {
     "name": "INSTITUTO DE SAÚDE MENTAL DEMO",
     "document_id": "CASE-AMB-002",
     "fields": [
@@ -517,10 +517,10 @@
         "document_id": "CASE-AMB-002",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -623,10 +623,10 @@
         "document_id": "CASE-AMB-002",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -635,7 +635,7 @@
       }
     ]
   },
-  "bd6256d24008050548314dac75a27b6f17bf3c2c59f87d88fad735fce24a36df": {
+  "907055a4ebd802451304b4b2945616d6d76c2e3f3bf12ef3e4b9dffdb836da5d": {
     "name": "HOSPITAL REGIONAL DE ENSINO DEMO",
     "document_id": "CASE-AMB-003",
     "fields": [
@@ -729,10 +729,10 @@
         "document_id": "CASE-AMB-003",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -741,7 +741,7 @@
       }
     ]
   },
-  "e0c1936f3936ef2b665da2317baa86065a3a07c050caa1812d0544103d4859d0": {
+  "f5668af90f77a50c8e8f4fb98319acc35c78a443f2cdb6819cc55ec3562c744b": {
     "name": "HOSPITAL REGIONAL DE ENSINO DEMO",
     "document_id": "CASE-AMB-003",
     "fields": [
@@ -835,10 +835,10 @@
         "document_id": "CASE-AMB-003",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -941,10 +941,10 @@
         "document_id": "CASE-AMB-003",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -953,7 +953,7 @@
       }
     ]
   },
-  "42d3eb34c36ab6d25757b2b756f3eee1b315545cd5070b50be75dc30328da85d": {
+  "d30a7a1c3b29d23dd0ec1374ebd5fb2a3e3699f63b857a39331496eaaed25315": {
     "name": "CENTRO CLÍNICO INTEGRADO DEMO",
     "document_id": "CASE-AMB-004",
     "fields": [
@@ -1047,10 +1047,10 @@
         "document_id": "CASE-AMB-004",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -1059,7 +1059,7 @@
       }
     ]
   },
-  "2ab81f86fc7288509ce0ab2fec899a1994ed9b7c75d0a0e9f33690e5b3d96600": {
+  "2f9cc83655ac39c3f4315a66589b79719921820045498e5268161b526beade6f": {
     "name": "CENTRO CLÍNICO INTEGRADO DEMO",
     "document_id": "CASE-AMB-004",
     "fields": [
@@ -1153,10 +1153,10 @@
         "document_id": "CASE-AMB-004",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -1259,10 +1259,10 @@
         "document_id": "CASE-AMB-004",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -1271,7 +1271,7 @@
       }
     ]
   },
-  "499fa688f22303dbd82cb3416af1cd8ddc7858ec1ec98e6d3dba3a7a417c5192": {
+  "b71f8fbd1957768e2071a6ee3692d0783f13b3d2cd0ad0a57000e7f8572f2abd": {
     "name": "CLÍNICA DA DOR E CUIDADOS ESPECIAIS DEMO",
     "document_id": "CASE-AMB-005",
     "fields": [
@@ -1365,10 +1365,10 @@
         "document_id": "CASE-AMB-005",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -1377,7 +1377,7 @@
       }
     ]
   },
-  "91d0811aa98e075384c39fbc1c234c220c8ba45c06daf91b4f04129caca85e51": {
+  "58d5d4f6aed2e3caf11d51aa9e2df56e75646568b5e4acb28d5a5d814e24aa84": {
     "name": "CLÍNICA DA DOR E CUIDADOS ESPECIAIS DEMO",
     "document_id": "CASE-AMB-005",
     "fields": [
@@ -1471,10 +1471,10 @@
         "document_id": "CASE-AMB-005",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -1577,10 +1577,10 @@
         "document_id": "CASE-AMB-005",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -1589,7 +1589,7 @@
       }
     ]
   },
-  "6a4d08b5346d8c1916c6bbd3f6c0cd20869175002c1a83fbc7a05917c92e10ca": {
+  "ba6faa8b0956e899314c9be10bd60c700833d5413b83b651031e0cd3f5d7c9ea": {
     "name": "CONSULTÓRIO PARTICULAR DEMO",
     "document_id": "CASE-INC-006",
     "fields": [
@@ -1597,11 +1597,11 @@
         "id": "field-med-CASE-INC-006",
         "run_id": "run-CASE-INC-006",
         "field_type": "medication",
-        "raw_text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
-        "normalized_value": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+        "raw_text": "Amoxicilina + Clavulanato 875mg",
+        "normalized_value": "Amoxicilina + Clavulanato 875mg",
         "hypotheses": [
           {
-            "text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+            "text": "Amoxicilina + Clavulanato 875mg",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -1633,11 +1633,11 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Tomar 1 comprimido de 12 em 12 horas por 7 dias."
+        "excerpt": "Amoxicilina + Clavulanato 875mg"
       }
     ]
   },
-  "da33ff72188afd4a001db813ec4f59aebbd381764239b10ee39d9ccc01c977b6": {
+  "cc9344f44c96b76ba738b9d1c5e054ac60c9e4bea6f702d694fd32c5b393b4cc": {
     "name": "CONSULTÓRIO PARTICULAR DEMO",
     "document_id": "CASE-INC-006",
     "fields": [
@@ -1645,11 +1645,11 @@
         "id": "field-med-CASE-INC-006",
         "run_id": "run-CASE-INC-006",
         "field_type": "medication",
-        "raw_text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
-        "normalized_value": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+        "raw_text": "Amoxicilina + Clavulanato 875mg",
+        "normalized_value": "Amoxicilina + Clavulanato 875mg",
         "hypotheses": [
           {
-            "text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+            "text": "Amoxicilina + Clavulanato 875mg",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -1681,7 +1681,7 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Tomar 1 comprimido de 12 em 12 horas por 7 dias."
+        "excerpt": "Amoxicilina + Clavulanato 875mg"
       }
     ]
   },
@@ -1693,11 +1693,11 @@
         "id": "field-med-CASE-INC-006",
         "run_id": "run-CASE-INC-006",
         "field_type": "medication",
-        "raw_text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
-        "normalized_value": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+        "raw_text": "Amoxicilina + Clavulanato 875mg",
+        "normalized_value": "Amoxicilina + Clavulanato 875mg",
         "hypotheses": [
           {
-            "text": "Tomar 1 comprimido de 12 em 12 horas por 7 dias.",
+            "text": "Amoxicilina + Clavulanato 875mg",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -1729,11 +1729,11 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Tomar 1 comprimido de 12 em 12 horas por 7 dias."
+        "excerpt": "Amoxicilina + Clavulanato 875mg"
       }
     ]
   },
-  "31e710f7a68edbc7df2864a99b14e43516e4e14ad523899075d40fd89279a5f9": {
+  "3486063fbd8a1926a2926164b0798a76bbe12e7af228a37201648c5b11937eec": {
     "name": "POLICLÍNICA CENTRAL DEMO",
     "document_id": "CASE-INC-007",
     "fields": [
@@ -1741,11 +1741,11 @@
         "id": "field-med-CASE-INC-007",
         "run_id": "run-CASE-INC-007",
         "field_type": "medication",
-        "raw_text": "Tomar se febre acima de 38°C.",
-        "normalized_value": "Tomar se febre acima de 38°C.",
+        "raw_text": "Paracetamol 500 (sem unidade mg ou ml)",
+        "normalized_value": "Paracetamol 500 (sem unidade mg ou ml)",
         "hypotheses": [
           {
-            "text": "Tomar se febre acima de 38°C.",
+            "text": "Paracetamol 500 (sem unidade mg ou ml)",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -1802,17 +1802,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Tomar se febre acima de 38°C."
+        "excerpt": "Paracetamol 500 (sem unidade mg ou ml)"
       },
       {
         "id": "ev-crm-CASE-INC-007",
         "document_id": "CASE-INC-007",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -1821,7 +1821,7 @@
       }
     ]
   },
-  "9043b4a50baaacc4a9073a6a01cccc992ad9293bc4a915eba8b0e749a00451ca": {
+  "21cec38e233c07160e304d7e19762a6693122250b40ce08030655f32284d4cfd": {
     "name": "POLICLÍNICA CENTRAL DEMO",
     "document_id": "CASE-INC-007",
     "fields": [
@@ -1829,11 +1829,11 @@
         "id": "field-med-CASE-INC-007",
         "run_id": "run-CASE-INC-007",
         "field_type": "medication",
-        "raw_text": "Tomar se febre acima de 38°C.",
-        "normalized_value": "Tomar se febre acima de 38°C.",
+        "raw_text": "Paracetamol 500 (sem unidade mg ou ml)",
+        "normalized_value": "Paracetamol 500 (sem unidade mg ou ml)",
         "hypotheses": [
           {
-            "text": "Tomar se febre acima de 38°C.",
+            "text": "Paracetamol 500 (sem unidade mg ou ml)",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -1890,17 +1890,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Tomar se febre acima de 38°C."
+        "excerpt": "Paracetamol 500 (sem unidade mg ou ml)"
       },
       {
         "id": "ev-crm-CASE-INC-007",
         "document_id": "CASE-INC-007",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -1917,11 +1917,11 @@
         "id": "field-med-CASE-INC-007",
         "run_id": "run-CASE-INC-007",
         "field_type": "medication",
-        "raw_text": "Tomar se febre acima de 38°C.",
-        "normalized_value": "Tomar se febre acima de 38°C.",
+        "raw_text": "Paracetamol 500 (sem unidade mg ou ml)",
+        "normalized_value": "Paracetamol 500 (sem unidade mg ou ml)",
         "hypotheses": [
           {
-            "text": "Tomar se febre acima de 38°C.",
+            "text": "Paracetamol 500 (sem unidade mg ou ml)",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -1978,17 +1978,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Tomar se febre acima de 38°C."
+        "excerpt": "Paracetamol 500 (sem unidade mg ou ml)"
       },
       {
         "id": "ev-crm-CASE-INC-007",
         "document_id": "CASE-INC-007",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -1997,7 +1997,7 @@
       }
     ]
   },
-  "0119db6b93499085e3c0bccc9d1edaf21d95dfbeda03e6a8727362cce013cf4d": {
+  "43695e34a4029bde9e525b170076574da3834d8422f4d9ced0cf6c350f571d4f": {
     "name": "HOSPITAL GERAL DE RETAGUARDA DEMO",
     "document_id": "CASE-INC-008",
     "fields": [
@@ -2005,11 +2005,11 @@
         "id": "field-med-CASE-INC-008",
         "run_id": "run-CASE-INC-008",
         "field_type": "medication",
-        "raw_text": "Tomar 1 cápsula de 6 em 6 horas.",
-        "normalized_value": "Tomar 1 cápsula de 6 em 6 horas.",
+        "raw_text": "Cefalexina 500mg",
+        "normalized_value": "Cefalexina 500mg",
         "hypotheses": [
           {
-            "text": "Tomar 1 cápsula de 6 em 6 horas.",
+            "text": "Cefalexina 500mg",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -2041,11 +2041,11 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Tomar 1 cápsula de 6 em 6 horas."
+        "excerpt": "Cefalexina 500mg"
       }
     ]
   },
-  "0fb06bfbdadff021ad288423cf33f53eaf6044acaad1c526eaedc23f5f9ea8a4": {
+  "f63f0674a3f92bf2530867820e2def4b47c4fcd8fb0f8b0c0596df59670207b1": {
     "name": "HOSPITAL GERAL DE RETAGUARDA DEMO",
     "document_id": "CASE-INC-008",
     "fields": [
@@ -2053,11 +2053,11 @@
         "id": "field-med-CASE-INC-008",
         "run_id": "run-CASE-INC-008",
         "field_type": "medication",
-        "raw_text": "Tomar 1 cápsula de 6 em 6 horas.",
-        "normalized_value": "Tomar 1 cápsula de 6 em 6 horas.",
+        "raw_text": "Cefalexina 500mg",
+        "normalized_value": "Cefalexina 500mg",
         "hypotheses": [
           {
-            "text": "Tomar 1 cápsula de 6 em 6 horas.",
+            "text": "Cefalexina 500mg",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -2089,7 +2089,7 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Tomar 1 cápsula de 6 em 6 horas."
+        "excerpt": "Cefalexina 500mg"
       }
     ]
   },
@@ -2101,11 +2101,11 @@
         "id": "field-med-CASE-INC-008",
         "run_id": "run-CASE-INC-008",
         "field_type": "medication",
-        "raw_text": "Tomar 1 cápsula de 6 em 6 horas.",
-        "normalized_value": "Tomar 1 cápsula de 6 em 6 horas.",
+        "raw_text": "Cefalexina 500mg",
+        "normalized_value": "Cefalexina 500mg",
         "hypotheses": [
           {
-            "text": "Tomar 1 cápsula de 6 em 6 horas.",
+            "text": "Cefalexina 500mg",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -2137,11 +2137,11 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Tomar 1 cápsula de 6 em 6 horas."
+        "excerpt": "Cefalexina 500mg"
       }
     ]
   },
-  "73b70d47a43afba9945815c8f18877b4b23de47a9c7f7d67ea9a69cce5d0db0b": {
+  "837e3d65e578ae51e9d772baa065f9bf1fcf615545461f4effd46a22bbc11da9": {
     "name": "CLÍNICA CIRÚRGICA DEMO",
     "document_id": "CASE-INC-009",
     "fields": [
@@ -2217,10 +2217,10 @@
         "document_id": "CASE-INC-009",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -2229,7 +2229,7 @@
       }
     ]
   },
-  "f8ad26802a04e5b533495e237c68e37ce33e54707ee7d124d968cd3d0109d871": {
+  "f0da656b210e4c38430e1a8b09ca4bc59a1abb10f708e0b1ce82ee75122141e8": {
     "name": "CLÍNICA CIRÚRGICA DEMO",
     "document_id": "CASE-INC-009",
     "fields": [
@@ -2305,10 +2305,10 @@
         "document_id": "CASE-INC-009",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -2393,10 +2393,10 @@
         "document_id": "CASE-INC-009",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -2405,7 +2405,7 @@
       }
     ]
   },
-  "8b68d96aac78e2c278a2315b70b7f3d2b13aa578f61ba3e90f02a54491542c3c": {
+  "e7d2aa01a6090106ac2a9b104a14bd0d0b43ae33404f4c48992b5615e3dd03e3": {
     "name": "AMBULATÓRIO DE ESPECIALIDADES DEMO",
     "document_id": "CASE-INC-010",
     "fields": [
@@ -2413,11 +2413,11 @@
         "id": "field-med-CASE-INC-010",
         "run_id": "run-CASE-INC-010",
         "field_type": "medication",
-        "raw_text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
-        "normalized_value": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+        "raw_text": "Insulina NPH 100 UI",
+        "normalized_value": "Insulina NPH 100 UI",
         "hypotheses": [
           {
-            "text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+            "text": "Insulina NPH 100 UI",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -2474,17 +2474,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'"
+        "excerpt": "Insulina NPH 100 UI"
       },
       {
         "id": "ev-crm-CASE-INC-010",
         "document_id": "CASE-INC-010",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -2493,7 +2493,7 @@
       }
     ]
   },
-  "64c9f402d6daa50205fcfd0bcf506f4b1a4e5becede8e274cda4daad555f8961": {
+  "34eef26610ab1beb9a5df2670614e3ac15f04b11dec3ea63cfef768d8e2e3fd0": {
     "name": "AMBULATÓRIO DE ESPECIALIDADES DEMO",
     "document_id": "CASE-INC-010",
     "fields": [
@@ -2501,11 +2501,11 @@
         "id": "field-med-CASE-INC-010",
         "run_id": "run-CASE-INC-010",
         "field_type": "medication",
-        "raw_text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
-        "normalized_value": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+        "raw_text": "Insulina NPH 100 UI",
+        "normalized_value": "Insulina NPH 100 UI",
         "hypotheses": [
           {
-            "text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+            "text": "Insulina NPH 100 UI",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -2562,17 +2562,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'"
+        "excerpt": "Insulina NPH 100 UI"
       },
       {
         "id": "ev-crm-CASE-INC-010",
         "document_id": "CASE-INC-010",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -2589,11 +2589,11 @@
         "id": "field-med-CASE-INC-010",
         "run_id": "run-CASE-INC-010",
         "field_type": "medication",
-        "raw_text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
-        "normalized_value": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+        "raw_text": "Insulina NPH 100 UI",
+        "normalized_value": "Insulina NPH 100 UI",
         "hypotheses": [
           {
-            "text": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'",
+            "text": "Insulina NPH 100 UI",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -2650,17 +2650,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Posologia contraditória: 'Tomar 30 comprimidos via oral ao deitar'"
+        "excerpt": "Insulina NPH 100 UI"
       },
       {
         "id": "ev-crm-CASE-INC-010",
         "document_id": "CASE-INC-010",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -2669,7 +2669,7 @@
       }
     ]
   },
-  "7228e59b1c92b7d0e423b6394ff78830a651735f235c5e4561ef059441bd2d23": {
+  "3110dcb28766c06cc386311978296c7c0d8399876309c82ec3f31abda309f7d4": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-011",
     "fields": [
@@ -2677,11 +2677,11 @@
         "id": "field-med-CASE-DUP-011",
         "run_id": "run-CASE-DUP-011",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-001",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-001",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-001",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -2738,17 +2738,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-001"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-011",
         "document_id": "CASE-DUP-011",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -2757,7 +2757,7 @@
       }
     ]
   },
-  "06144e2cc456d85c29ebcb48c1af7a3f16ab21e2e5ceb7afa4e2a1dd4ad870cd": {
+  "7be770e03ff5a6cd0959bd6cb2af1a51949906e60554f5c61244eea801acaa05": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-011",
     "fields": [
@@ -2765,11 +2765,11 @@
         "id": "field-med-CASE-DUP-011",
         "run_id": "run-CASE-DUP-011",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-001",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-001",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-001",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -2826,17 +2826,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-001"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-011",
         "document_id": "CASE-DUP-011",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -2853,11 +2853,11 @@
         "id": "field-med-CASE-DUP-011",
         "run_id": "run-CASE-DUP-011",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-001",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-001",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-001",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -2914,17 +2914,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-001"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-011",
         "document_id": "CASE-DUP-011",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -2933,7 +2933,7 @@
       }
     ]
   },
-  "662b548b93ef289683f417767fff936dd74c6a25c8443d7970ffb3c49dcaabd9": {
+  "d03d4480141f735b20abd8dd916b23dcf82e0036be5d5e32cf0a5f98f64803a9": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-012",
     "fields": [
@@ -2941,11 +2941,11 @@
         "id": "field-med-CASE-DUP-012",
         "run_id": "run-CASE-DUP-012",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-002",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-002",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-002",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3002,17 +3002,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-002"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-012",
         "document_id": "CASE-DUP-012",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3021,7 +3021,7 @@
       }
     ]
   },
-  "275457611fb90e202030bb2be6706e47c0e5244b5f2fe94c52fa301d6ca1ed30": {
+  "f1b8ff9a0585e920cb7bb778ae663b21c86382eaa9a13b61919801ccb44caa6d": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-012",
     "fields": [
@@ -3029,11 +3029,11 @@
         "id": "field-med-CASE-DUP-012",
         "run_id": "run-CASE-DUP-012",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-002",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-002",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-002",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3090,17 +3090,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-002"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-012",
         "document_id": "CASE-DUP-012",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3117,11 +3117,11 @@
         "id": "field-med-CASE-DUP-012",
         "run_id": "run-CASE-DUP-012",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-002",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-002",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-002",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3178,17 +3178,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-002"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-012",
         "document_id": "CASE-DUP-012",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3197,7 +3197,7 @@
       }
     ]
   },
-  "56aee47916dae99bd55e55b5fae6c9b293916c4ac64ddbf4f3f450cce304b8fc": {
+  "382aade3eb98b9f0a94925223373760199aa97261fe1167d367bfdf355cc0984": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-013",
     "fields": [
@@ -3205,11 +3205,11 @@
         "id": "field-med-CASE-DUP-013",
         "run_id": "run-CASE-DUP-013",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-003",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-003",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-003",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3266,17 +3266,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-003"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-013",
         "document_id": "CASE-DUP-013",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3285,7 +3285,7 @@
       }
     ]
   },
-  "cbcbdb5bdcf4f30bb795e913910e8f2303102ae9423f9d980c0fad1931062c2e": {
+  "3e885cdc13f95d1e088827d749b3fea2e767ef38cbb9f8ba9f3f95fdb070f9e7": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-013",
     "fields": [
@@ -3293,11 +3293,11 @@
         "id": "field-med-CASE-DUP-013",
         "run_id": "run-CASE-DUP-013",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-003",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-003",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-003",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3354,17 +3354,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-003"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-013",
         "document_id": "CASE-DUP-013",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3381,11 +3381,11 @@
         "id": "field-med-CASE-DUP-013",
         "run_id": "run-CASE-DUP-013",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-003",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-003",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-003",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3442,17 +3442,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-003"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-013",
         "document_id": "CASE-DUP-013",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3461,7 +3461,7 @@
       }
     ]
   },
-  "e7ef50c4781b6ecc9df3cf899c3805cac3da2b5376c17f41dc34ccd0d72f18ce": {
+  "d2f2520dc11c7584aab40a5cbee472518b15add471cc1582be865d8105e5cb0a": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-014",
     "fields": [
@@ -3469,11 +3469,11 @@
         "id": "field-med-CASE-DUP-014",
         "run_id": "run-CASE-DUP-014",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-004",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-004",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-004",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3530,17 +3530,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-004"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-014",
         "document_id": "CASE-DUP-014",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3549,7 +3549,7 @@
       }
     ]
   },
-  "745babf7c4dd760ea9966f115485a3542cf22285e55fc8301730a110d49e646f": {
+  "552f40ff2cb4a23c6f500b5703d57355948d4dd36141162419114887dc0da837": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-014",
     "fields": [
@@ -3557,11 +3557,11 @@
         "id": "field-med-CASE-DUP-014",
         "run_id": "run-CASE-DUP-014",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-004",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-004",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-004",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3618,17 +3618,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-004"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-014",
         "document_id": "CASE-DUP-014",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3645,11 +3645,11 @@
         "id": "field-med-CASE-DUP-014",
         "run_id": "run-CASE-DUP-014",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-004",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-004",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-004",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3706,17 +3706,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-004"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-014",
         "document_id": "CASE-DUP-014",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3725,7 +3725,7 @@
       }
     ]
   },
-  "02755606bdf5c62943ba1022ea0fb346678ad09a40fae7403c8ea50ae547deb7": {
+  "e0c456f1aad323e27ba2932ed8e97d639371045d346262eecdc4c155fc7760d3": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-015",
     "fields": [
@@ -3733,11 +3733,11 @@
         "id": "field-med-CASE-DUP-015",
         "run_id": "run-CASE-DUP-015",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-005",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-005",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-005",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3794,17 +3794,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-005"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-015",
         "document_id": "CASE-DUP-015",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3813,7 +3813,7 @@
       }
     ]
   },
-  "99b8924b89c0786f8771cb7ca5e17e6b8919d0367d367e4ad8f56f7c0dd72142": {
+  "cad9df24938322a3a589aebc956efeeebc5f5eedce620a2fc4523300049e9347": {
     "name": "HOSPITAL SANTA LUZIA DEMO — REENVIO",
     "document_id": "CASE-DUP-015",
     "fields": [
@@ -3821,11 +3821,11 @@
         "id": "field-med-CASE-DUP-015",
         "run_id": "run-CASE-DUP-015",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-005",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-005",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-005",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3882,17 +3882,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-005"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-015",
         "document_id": "CASE-DUP-015",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3909,11 +3909,11 @@
         "id": "field-med-CASE-DUP-015",
         "run_id": "run-CASE-DUP-015",
         "field_type": "medication",
-        "raw_text": "Lote de auditoria: LOTE-REPETICAO-005",
-        "normalized_value": "Lote de auditoria: LOTE-REPETICAO-005",
+        "raw_text": "Ressonância Magnética de Crânio com Contraste",
+        "normalized_value": "Ressonância Magnética de Crânio com Contraste",
         "hypotheses": [
           {
-            "text": "Lote de auditoria: LOTE-REPETICAO-005",
+            "text": "Ressonância Magnética de Crânio com Contraste",
             "rank": 1,
             "score": 0.98,
             "score_kind": "HEURISTIC_MODEL",
@@ -3970,17 +3970,17 @@
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
         "source": "FIXTURE",
-        "excerpt": "Lote de auditoria: LOTE-REPETICAO-005"
+        "excerpt": "Ressonância Magnética de Crânio com Contraste"
       },
       {
         "id": "ev-crm-CASE-DUP-015",
         "document_id": "CASE-DUP-015",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -3989,7 +3989,7 @@
       }
     ]
   },
-  "ee3af6a05d4a6e2a803d086e784965dd66ee4c7c4f0b428f346b298bb3082a2a": {
+  "032a5359e71d74c430a948a5bf72e54b00a10c6169d765ab840b21abfbaf1397": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-016",
     "fields": [
@@ -4065,10 +4065,10 @@
         "document_id": "CASE-CTR-016",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4077,7 +4077,7 @@
       }
     ]
   },
-  "b85ddab8cf957b18983c0ca226d50b00fb730cb33614a07bd9c9423550b613a1": {
+  "63cc930c6220f72a2674b2d15ebbf56b67d5efe6da9116a2b8cc94aa5254d96f": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-016",
     "fields": [
@@ -4153,10 +4153,10 @@
         "document_id": "CASE-CTR-016",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4241,10 +4241,10 @@
         "document_id": "CASE-CTR-016",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4253,7 +4253,7 @@
       }
     ]
   },
-  "ae787d926c1a327c2835a2f574e4464be8a1a0b91e8dba12705d6254fa615611": {
+  "810b5e4ed702b00b77a899868c9380f05da19d3197cd64e041947bf13549fafb": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-017",
     "fields": [
@@ -4329,10 +4329,10 @@
         "document_id": "CASE-CTR-017",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4341,7 +4341,7 @@
       }
     ]
   },
-  "45f24202ead636587cb843f6d420670c65c4101746bca8e4214db33ba77cfb87": {
+  "952338270aa34b92a931d6151d5142ee75f2dfffa10ea76c88f483a76dfd7d8e": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-017",
     "fields": [
@@ -4417,10 +4417,10 @@
         "document_id": "CASE-CTR-017",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4505,10 +4505,10 @@
         "document_id": "CASE-CTR-017",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4517,7 +4517,7 @@
       }
     ]
   },
-  "ddaf15d59313ec404b30b387692eb534e746fd16e5fac506e870f883e2a55f5f": {
+  "cba92c4ea58132c5e876cea8e8b4e6bd954788c87902c860445377ce434f2e3e": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-018",
     "fields": [
@@ -4593,10 +4593,10 @@
         "document_id": "CASE-CTR-018",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4605,7 +4605,7 @@
       }
     ]
   },
-  "b2bd0e121ae7584d04068a2a33ea0f4354ba0a5c4f5001993e232387a9c0062a": {
+  "3497c3060aafcee3a02ee804ef98993b5a2c25149d2a7f0e805788387d9bb147": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-018",
     "fields": [
@@ -4681,10 +4681,10 @@
         "document_id": "CASE-CTR-018",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4769,10 +4769,10 @@
         "document_id": "CASE-CTR-018",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4781,7 +4781,7 @@
       }
     ]
   },
-  "21343c5e1d3720d904c51222587273b60761cf2f567ff62d8c859ee23c74c45d": {
+  "069cbbe66ba6fd674c032277eb5b03c320fa78935221c0ce5f1f6ccc1a1dd36d": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-019",
     "fields": [
@@ -4857,10 +4857,10 @@
         "document_id": "CASE-CTR-019",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -4869,7 +4869,7 @@
       }
     ]
   },
-  "690af9d6c5c448c0fe5061aa689072a29a71809ac70d222be96587c7cc2bfe88": {
+  "cca5ec6343552f57c8a96d5dad62fde95785e6ea8301a93c957fd72d7545d4c7": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-019",
     "fields": [
@@ -4945,10 +4945,10 @@
         "document_id": "CASE-CTR-019",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -5033,10 +5033,10 @@
         "document_id": "CASE-CTR-019",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -5045,7 +5045,7 @@
       }
     ]
   },
-  "0385363ed661d8796451a7f6cb0c17d7b278e7b5601da6c8a00fbc5e1d59ac94": {
+  "76073ad8b2d0aa55a8175ac2e3ef5716dd87041419f17c2eca84b40380028afb": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-020",
     "fields": [
@@ -5121,10 +5121,10 @@
         "document_id": "CASE-CTR-020",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -5133,7 +5133,7 @@
       }
     ]
   },
-  "39fe82913b7ce11c8e0b62f2ae0777e486e0c4a576ca699427e8f5a091b51222": {
+  "07add813cd724c50f322635e260787b8e88fbc4963ff03b6025c95ee19527204": {
     "name": "CLÍNICA GERAL DA FAMÍLIA DEMO",
     "document_id": "CASE-CTR-020",
     "fields": [
@@ -5209,10 +5209,10 @@
         "document_id": "CASE-CTR-020",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",
@@ -5297,10 +5297,10 @@
         "document_id": "CASE-CTR-020",
         "page": 1,
         "bbox": {
-          "x_min": 0.08,
-          "y_min": 0.16,
-          "x_max": 0.45,
-          "y_max": 0.2
+          "x_min": 0.6125,
+          "y_min": 0.7333,
+          "x_max": 0.9125,
+          "y_max": 0.8381
         },
         "coordinate_system": "NORMALIZED_0_1",
         "localization_status": "MANUAL_FIXTURE",

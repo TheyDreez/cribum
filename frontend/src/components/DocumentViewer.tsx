@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ZoomIn, ZoomOut, MoveHorizontal, Maximize2, RotateCcw, Sliders } from 'lucide-react';
-import { Evidence, Finding } from '../types';
+import { Evidence, Finding, ExtractedField } from '../types';
 
 export type ForensicOpticalPreset = 'NONE' | 'HIGH_CONTRAST' | 'INVERT' | 'INK_ENHANCE';
 
@@ -8,13 +8,16 @@ interface DocumentViewerProps {
   documentId: string;
   evidences: Evidence[];
   selectedFinding: Finding | null;
-  onSelectEvidence?: (evidenceId: string) => void;
+  onSelectEvidence?: (evidenceId: string | null) => void;
+  fields?: ExtractedField[];
 }
 
 export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   documentId,
   evidences,
   selectedFinding,
+  onSelectEvidence,
+  fields = [],
 }) => {
   const [zoom, setZoom] = useState(1.0);
   const [viewMode, setViewMode] = useState<'custom' | 'fit-width' | 'fit-page'>('fit-width');
@@ -56,8 +59,8 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   const availableWidth = Math.max(100, viewportSize.width - 32);
   const availableHeight = Math.max(100, viewportSize.height - 32);
 
-  const fitWidthScale = availableWidth / naturalWidth;
-  const fitHeightScale = availableHeight / naturalHeight;
+  const fitWidthScale = Math.min(1.05, availableWidth / naturalWidth);
+  const fitHeightScale = Math.min(1.05, availableHeight / naturalHeight);
   const fitPageScale = Math.min(fitWidthScale, fitHeightScale);
 
   let effectiveScale = zoom;
@@ -377,7 +380,7 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
-        className={`flex-1 overflow-auto bg-slate-200/50 p-4 select-none ${
+        className={`flex-1 overflow-auto bg-[#cbd5e1] p-6 select-none shadow-inner ${
           isPanning ? 'cursor-grabbing' : effectiveScale > 1.0 ? 'cursor-grab' : 'cursor-default'
         }`}
       >
@@ -387,7 +390,7 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
               width: renderedWidth,
               height: renderedHeight,
             }}
-            className="relative shadow-md border border-slate-300 rounded bg-white overflow-hidden shrink-0"
+            className="relative shadow-2xl border border-slate-300 rounded-sm bg-white overflow-hidden shrink-0"
           >
             {/* Imagem Original da Guia com dimensões naturais capturadas no onLoad */}
             <img
@@ -424,6 +427,25 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
                   return null;
                 }
 
+                const x = box.x_min * naturalWidth;
+                const y = box.y_min * naturalHeight;
+                const width = (box.x_max - box.x_min) * naturalWidth;
+                const height = (box.y_max - box.y_min) * naturalHeight;
+
+                const linkedField = fields.find((f) =>
+                  f.evidence_ids?.some(
+                    (id) => evidence.id === id || evidence.id.startsWith(id) || id.startsWith(evidence.id)
+                  )
+                );
+                const isAmbiguous =
+                  linkedField?.uncertainty_status === 'AMBIGUOUS' ||
+                  linkedField?.uncertainty_status === 'INDETERMINATE' ||
+                  Boolean(
+                    selectedFinding &&
+                      (selectedFinding.category === 'AMBIGUITY_LASA' ||
+                        selectedFinding.category === 'LASA_SIMILARITY')
+                  );
+
                 const hasExplicitMatch = activeEvidenceIds.some(
                   (id) => evidence.id === id || evidence.id.startsWith(id) || id.startsWith(evidence.id)
                 );
@@ -433,58 +455,68 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
                   )
                 );
 
-                const highlighted = hasAnyExplicitMatch
+                const isSelected = hasAnyExplicitMatch
                   ? hasExplicitMatch
                   : Boolean(selectedFinding && index === 0);
 
-                const x = box.x_min * naturalWidth;
-                const y = box.y_min * naturalHeight;
-                const width = (box.x_max - box.x_min) * naturalWidth;
-                const height = (box.y_max - box.y_min) * naturalHeight;
+                const strokeColor = isAmbiguous || isSelected ? '#b45309' : '#047857';
+                const fillColor = isAmbiguous
+                  ? isSelected
+                    ? 'rgba(245, 158, 11, 0.16)'
+                    : 'rgba(245, 158, 11, 0.07)'
+                  : isSelected
+                  ? 'rgba(4, 120, 87, 0.12)'
+                  : 'rgba(4, 120, 87, 0.04)';
 
-                const labelWidth = Math.min(190, naturalWidth);
-                const labelHeight = 22;
-                const labelX = Math.max(0, Math.min(x, naturalWidth - labelWidth));
-                const labelY = Math.max(0, y - labelHeight);
+                const badgeText = isAmbiguous ? 'INCERTEZA PERICIAL (LASA)' : 'EVIDÊNCIA ANCORADA';
+                const badgeWidth = isAmbiguous ? 158 : 128;
+                const badgeX = Math.max(x, Math.min(x + width - badgeWidth, naturalWidth - badgeWidth - 4));
+                const badgeY = Math.max(4, y - 19);
 
                 return (
-                  <g key={evidence.id} className="transition-opacity duration-200">
-                    {/* Retângulo de demarcação */}
+                  <g
+                    key={evidence.id}
+                    data-testid={`bbox-group-${evidence.id}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelectEvidence?.(evidence.id);
+                    }}
+                    className="transition-opacity duration-200 pointer-events-auto cursor-pointer"
+                  >
+                    {/* Retângulo principal fino e elegante */}
                     <rect
                       x={x}
                       y={y}
                       width={width}
                       height={height}
-                      fill={highlighted ? 'rgba(245, 158, 11, 0.22)' : 'rgba(59, 130, 246, 0.08)'}
-                      stroke={highlighted ? '#b45309' : '#3b82f6'}
-                      strokeWidth={highlighted ? 3.5 : 1.5}
-                      rx={3}
+                      fill={fillColor}
+                      stroke={strokeColor}
+                      strokeWidth={isSelected ? 2.5 : 1.5}
+                      strokeDasharray={isAmbiguous || isSelected ? 'none' : '4 2'}
+                      rx={4}
                       className="transition-all"
                     />
 
-                    {/* Header da Evidence Box */}
-                    {highlighted && (
-                      <g>
-                        <rect
-                          x={labelX}
-                          y={labelY}
-                          width={labelWidth}
-                          height={labelHeight}
-                          fill="#b45309"
-                          rx={3}
-                        />
-                        <text
-                          x={labelX + 8}
-                          y={labelY + 15}
-                          fill="#ffffff"
-                          fontSize="11"
-                          fontWeight="bold"
-                          fontFamily="monospace"
-                        >
-                          INCERTEZA PERICIAL
-                        </text>
-                      </g>
-                    )}
+                    {/* Etiqueta compacta alinhada à direita (NUNCA cobre o título "PRESCRIÇÃO:" à esquerda) */}
+                    <rect
+                      x={badgeX}
+                      y={badgeY}
+                      width={badgeWidth}
+                      height={17}
+                      fill={strokeColor}
+                      rx={3}
+                    />
+                    <text
+                      x={badgeX + 7}
+                      y={badgeY + 12}
+                      fill="#ffffff"
+                      fontSize="9.5"
+                      fontFamily="ui-monospace, SFMono-Regular, Consolas, monospace"
+                      fontWeight="700"
+                      letterSpacing="0.04em"
+                    >
+                      {badgeText}
+                    </text>
                   </g>
                 );
               })}

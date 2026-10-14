@@ -35,6 +35,33 @@ function extractApiError(payload: unknown, fallback: string): string {
   return fallback;
 }
 
+/**
+ * Utilitário de fetch resiliente a portas efêmeras bloqueadas/excluídas pelo Windows/Hyper-V (WSAEACCES / ERR_NETWORK_ACCESS_DENIED)
+ */
+async function fetchWithRetry(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+  maxAttempts = 4,
+): Promise<Response> {
+  let lastErr: unknown = null;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const res = await fetch(input, init);
+      return res;
+    } catch (err) {
+      lastErr = err;
+      if (init?.signal?.aborted || (err as any)?.name === 'AbortError') {
+        throw err;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 80 * (attempt + 1)));
+      if (init?.signal?.aborted) {
+        throw err;
+      }
+    }
+  }
+  throw lastErr || new Error('Falha de rede ao conectar ao servidor.');
+}
+
 export const App: React.FC = () => {
   const [config, setConfig] = useState<AppConfig | null>(null);
   const [activeTab, setActiveTab] = useState<'auditoria' | 'rede'>('auditoria');
@@ -65,7 +92,7 @@ export const App: React.FC = () => {
 
   // 1. Carrega configuração inicial do sistema
   useEffect(() => {
-    fetch('/api/config')
+    fetchWithRetry('/api/config')
       .then((r) => r.json())
       .then((cfg: AppConfig) => setConfig(cfg))
       .catch((err) => console.error('Falha ao carregar config:', err));
@@ -74,13 +101,7 @@ export const App: React.FC = () => {
   // 2. Carrega lista de documentos sem sobrescrever seleção ativa
   const refreshDocuments = async () => {
     try {
-      let response: Response;
-      try {
-        response = await fetch('/api/documents');
-      } catch {
-        await new Promise((res) => setTimeout(res, 80));
-        response = await fetch('/api/documents');
-      }
+      const response = await fetchWithRetry('/api/documents');
       if (!response.ok) return;
 
       const docs: unknown = await response.json();
@@ -119,21 +140,11 @@ export const App: React.FC = () => {
 
     async function loadDetail() {
       try {
-        let response: Response;
-        try {
-          response = await fetch(
-            `/api/documents/${encodeURIComponent(requestedDocId)}`,
-            { signal: controller.signal },
-          );
-        } catch (fetchErr) {
-          if (controller.signal.aborted || (fetchErr as any)?.name === 'AbortError') return;
-          await new Promise((res) => setTimeout(res, 60));
-          if (controller.signal.aborted) return;
-          response = await fetch(
-            `/api/documents/${encodeURIComponent(requestedDocId)}`,
-            { signal: controller.signal },
-          );
-        }
+        const response = await fetchWithRetry(
+          `/api/documents/${encodeURIComponent(requestedDocId)}`,
+          { signal: controller.signal },
+          5,
+        );
 
         if (!response.ok) {
           throw new Error(`Falha ao carregar documento: HTTP ${response.status}`);
@@ -176,11 +187,21 @@ export const App: React.FC = () => {
     return () => controller.abort();
   }, [selectedDocId]);
 
+  // Seleção de documento com recuperação de erro caso o item já estivesse selecionado
+  const handleSelectDoc = (id: string) => {
+    if (selectedDocId === id && (detailError || !docDetail)) {
+      setSelectedDocId(null);
+      setTimeout(() => setSelectedDocId(id), 10);
+    } else {
+      setSelectedDocId(id);
+    }
+  };
+
   // Ação: Seed dos 20 casos sintéticos
   const handleSeedDemo = async () => {
     setLoadingSeed(true);
     try {
-      const res = await fetch('/api/admin/seed-demo', { method: 'POST' });
+      const res = await fetchWithRetry('/api/admin/seed-demo', { method: 'POST' }, 4);
       if (res.ok) {
         await refreshDocuments();
       }
@@ -198,14 +219,22 @@ export const App: React.FC = () => {
     formData.append('file', file);
 
     try {
-      const res = await fetch('/api/documents', {
-        method: 'POST',
-        body: formData,
-      });
+      const res = await fetchWithRetry(
+        '/api/documents',
+        {
+          method: 'POST',
+          body: formData,
+        },
+        4,
+      );
 
       if (res.ok) {
         const newDoc: DocumentItem = await res.json();
-        await fetch(`/api/documents/${newDoc.id}/runs`, { method: 'POST' });
+        await fetchWithRetry(
+          `/api/documents/${newDoc.id}/runs`,
+          { method: 'POST' },
+          4,
+        );
         await refreshDocuments();
         setSelectedDocId(newDoc.id);
       } else {
@@ -231,7 +260,7 @@ export const App: React.FC = () => {
     setReviewError(null);
 
     try {
-      const response = await fetch(
+      const response = await fetchWithRetry(
         `/api/documents/${encodeURIComponent(targetDocId)}/reviews`,
         {
           method: 'POST',
@@ -241,6 +270,7 @@ export const App: React.FC = () => {
             actor_id: 'auditor-andre-01',
           }),
         },
+        4,
       );
 
       if (!response.ok) {
@@ -252,8 +282,10 @@ export const App: React.FC = () => {
 
       // A revisão já foi gravada no backend
       try {
-        const detailResponse = await fetch(
+        const detailResponse = await fetchWithRetry(
           `/api/documents/${encodeURIComponent(targetDocId)}`,
+          undefined,
+          4,
         );
 
         if (!detailResponse.ok) {
@@ -382,7 +414,7 @@ export const App: React.FC = () => {
               <DocumentQueue
                 documents={documents}
                 selectedDocId={selectedDocId}
-                onSelectDoc={setSelectedDocId}
+                onSelectDoc={handleSelectDoc}
                 onUpload={handleUpload}
                 uploading={uploading}
               />
@@ -403,6 +435,7 @@ export const App: React.FC = () => {
                   documentId={activeDetail.document.id}
                   evidences={activeDetail.evidences}
                   selectedFinding={selectedFinding}
+                  fields={activeDetail.fields}
                 />
 
                 <div
