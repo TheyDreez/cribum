@@ -57,11 +57,3 @@ VLLM_API_BASE=http://<IP_DO_SERVIDOR_AMD>:8000/v1
 * **Resultado esperado:** O backend passa a processar as imagens via vLLM real na GPU AMD com medição de latência física.
 * **Como validar:** Executar `.\.venv\Scripts\python -m pytest backend/tests/test_amd_protocol.py` e disparar requisição pericial real com `curl -X POST "http://127.0.0.1:8000/api/documents/CASE-CTR-020/runs?mode_override=REAL"`.
 * **Como desfazer:** No servidor remoto, executar `docker stop cribum-vllm-rocm && docker rm cribum-vllm-rocm` para pausar custos.
-
----
-
-## Ação 3: Aceitar Convite no GitHub (Lucas Muniz)
-
-* **Onde executar:** Navegador web do colaborador Lucas Muniz.
-* **Pré-requisito:** Conta GitHub logada (`lucaramuniz`).
-* **Link direto:** Acessar [https://github.com/TheyDreez/cribum/invitations](https://github.com/TheyDreez/cribum/invitations) e clicar em *Accept invitation*.
