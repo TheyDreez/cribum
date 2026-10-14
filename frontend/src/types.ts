@@ -151,3 +151,10 @@ export interface GraphResponse {
   anomalies: NetworkAnomaly[];
   total_claims: number;
 }
+
+export type DocumentSummary = DocumentItem;
+export type EvidenceItem = Evidence;
+export type FindingItem = Finding;
+export type ReviewDecisionItem = ReviewDecision;
+export type ReviewDecisionCreatePayload = ReviewSubmission;
+

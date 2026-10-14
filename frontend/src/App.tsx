@@ -4,6 +4,7 @@ import { DocumentQueue } from './components/DocumentQueue';
 import { DocumentViewer } from './components/DocumentViewer';
 import { FindingsPanel } from './components/FindingsPanel';
 import { NetworkGraphView } from './components/NetworkGraphView';
+import { ForensicReportModal } from './components/ForensicReportModal';
 import { AppConfig, DocumentDetail, DocumentItem, Finding, ReviewSubmission } from './types';
 import { PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen } from 'lucide-react';
 
@@ -57,6 +58,7 @@ export const App: React.FC = () => {
 
   const [queueOpen, setQueueOpen] = useState(true);
   const [reviewOpen, setReviewOpen] = useState(true);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   const activeDetail =
     docDetail?.document.id === selectedDocId ? docDetail : null;
@@ -72,7 +74,13 @@ export const App: React.FC = () => {
   // 2. Carrega lista de documentos sem sobrescrever seleção ativa
   const refreshDocuments = async () => {
     try {
-      const response = await fetch('/api/documents');
+      let response: Response;
+      try {
+        response = await fetch('/api/documents');
+      } catch {
+        await new Promise((res) => setTimeout(res, 80));
+        response = await fetch('/api/documents');
+      }
       if (!response.ok) return;
 
       const docs: unknown = await response.json();
@@ -111,10 +119,21 @@ export const App: React.FC = () => {
 
     async function loadDetail() {
       try {
-        const response = await fetch(
-          `/api/documents/${encodeURIComponent(requestedDocId)}`,
-          { signal: controller.signal },
-        );
+        let response: Response;
+        try {
+          response = await fetch(
+            `/api/documents/${encodeURIComponent(requestedDocId)}`,
+            { signal: controller.signal },
+          );
+        } catch (fetchErr) {
+          if (controller.signal.aborted || (fetchErr as any)?.name === 'AbortError') return;
+          await new Promise((res) => setTimeout(res, 60));
+          if (controller.signal.aborted) return;
+          response = await fetch(
+            `/api/documents/${encodeURIComponent(requestedDocId)}`,
+            { signal: controller.signal },
+          );
+        }
 
         if (!response.ok) {
           throw new Error(`Falha ao carregar documento: HTTP ${response.status}`);
@@ -134,6 +153,7 @@ export const App: React.FC = () => {
         setSelectedFinding(detail.findings[0] ?? null);
       } catch (error) {
         if (controller.signal.aborted) return;
+        if ((error as any)?.name === 'AbortError') return;
         if (requestVersion !== detailRequestVersion.current) return;
         if (selectedDocIdRef.current !== requestedDocId) return;
 
@@ -284,6 +304,7 @@ export const App: React.FC = () => {
         onTabChange={setActiveTab}
         onSeedDemo={handleSeedDemo}
         loadingSeed={loadingSeed}
+        documents={documents}
       />
 
       {activeTab === 'auditoria' ? (
@@ -399,6 +420,7 @@ export const App: React.FC = () => {
                     onSubmitDecision={handleSubmitDecision}
                     submittingDecision={submittingDecision}
                     reviewError={reviewError}
+                    onOpenReportModal={() => setIsReportModalOpen(true)}
                   />
                 </div>
               </section>
@@ -443,6 +465,18 @@ export const App: React.FC = () => {
         <main className="flex-1 flex overflow-hidden">
           <NetworkGraphView />
         </main>
+      )}
+      {activeDetail && (
+        <ForensicReportModal
+          isOpen={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+          document={activeDetail.document}
+          imageUrl={`/api/documents/${encodeURIComponent(activeDetail.document.id)}/image`}
+          fields={activeDetail.fields}
+          evidences={activeDetail.evidences}
+          findings={activeDetail.findings}
+          decisions={activeDetail.decisions}
+        />
       )}
     </div>
   );

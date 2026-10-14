@@ -9,7 +9,12 @@ test.describe.serial('CRIBUM E2E Browser Test Suite — Operational Scenarios & 
     page.on('pageerror', (err) => console.log('BROWSER PAGE ERROR:', err.message));
     page.on('requestfailed', (req) => console.log('FAILED REQUEST:', req.url(), req.failure()?.errorText));
 
-    await page.goto('/');
+    try {
+      await page.goto('/');
+    } catch {
+      await page.waitForTimeout(500);
+      await page.goto('/');
+    }
     await expect(page.locator('text=Fila de Auditoria')).toBeVisible({ timeout: 20000 });
     await expect(page.locator('aside div.overflow-y-auto button').first()).toBeVisible({ timeout: 20000 });
   });
@@ -136,7 +141,12 @@ test.describe.serial('CRIBUM E2E Browser Test Suite — Operational Scenarios & 
     await expect(workspace.getByText(testReason).first()).toBeVisible({ timeout: 5000 });
     await expect(workspace.locator(`text=Valor: ${val}`).first()).toBeVisible();
 
-    await page.reload();
+    try {
+      await page.reload();
+    } catch {
+      await page.waitForTimeout(250);
+      await page.goto('/');
+    }
     await expect(page.locator('text=Fila de Auditoria')).toBeVisible({ timeout: 15000 });
 
     const caso01Reloaded = page.locator('aside button', { hasText: 'Caso 01' }).first();
@@ -178,7 +188,13 @@ test.describe.serial('CRIBUM E2E Browser Test Suite — Operational Scenarios & 
 
     // Intercepta requisições ao documento A para atrasar artificialmente
     await page.route(`**/api/documents/${docA}`, async (route) => {
-      const response = await route.fetch();
+      let response;
+      try {
+        response = await route.fetch();
+      } catch {
+        await new Promise((res) => setTimeout(res, 80));
+        response = await route.fetch();
+      }
       notifyAStarted?.();
       await aGate;
 

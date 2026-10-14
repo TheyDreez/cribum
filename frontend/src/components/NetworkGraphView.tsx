@@ -8,19 +8,28 @@ export const NetworkGraphView: React.FC = () => {
   const [selectedAnomalyId, setSelectedAnomalyId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/graph')
-      .then((r) => r.json())
-      .then((json: GraphResponse) => {
+    async function loadGraph() {
+      try {
+        let response: Response;
+        try {
+          response = await fetch('/api/graph');
+        } catch {
+          await new Promise((res) => setTimeout(res, 80));
+          response = await fetch('/api/graph');
+        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const json: GraphResponse = await response.json();
         setData(json);
-        setLoading(false);
         if (json.anomalies && json.anomalies.length > 0) {
           setSelectedAnomalyId(json.anomalies[0].id || json.anomalies[0].rule_id);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error('Falha ao buscar dados do grafo:', err);
+      } finally {
         setLoading(false);
-      });
+      }
+    }
+    void loadGraph();
   }, []);
 
   if (loading) {

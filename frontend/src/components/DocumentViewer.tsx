@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ZoomIn, ZoomOut, MoveHorizontal, Maximize2, RotateCcw } from 'lucide-react';
+import { ZoomIn, ZoomOut, MoveHorizontal, Maximize2, RotateCcw, Sliders } from 'lucide-react';
 import { Evidence, Finding } from '../types';
+
+export type ForensicOpticalPreset = 'NONE' | 'HIGH_CONTRAST' | 'INVERT' | 'INK_ENHANCE';
 
 interface DocumentViewerProps {
   documentId: string;
@@ -18,20 +20,19 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   const [viewMode, setViewMode] = useState<'custom' | 'fit-width' | 'fit-page'>('fit-width');
   const containerRef = useRef<HTMLDivElement>(null);
   const [viewportSize, setViewportSize] = useState({ width: 800, height: 600 });
-  const [imageSize, setImageSize] = useState({ width: 1, height: 1 });
-  const [imageReady, setImageReady] = useState(false);
+  const [imageSize, setImageSize] = useState({ width: 800, height: 1050 });
 
   const [isPanning, setIsPanning] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [scrollPos, setScrollPos] = useState({ left: 0, top: 0 });
 
-  const activeEvidenceIds = selectedFinding?.evidence_ids || [];
+  // DIFERENCIAL 1: Filtros Ópticos Forenses
+  const [opticalPreset, setOpticalPreset] = useState<ForensicOpticalPreset>('NONE');
+  const [customContrast, setCustomContrast] = useState<number>(100);
+  const [customBrightness, setCustomBrightness] = useState<number>(100);
+  const [showOpticalSliders, setShowOpticalSliders] = useState<boolean>(false);
 
-  // Reset de dimensões ao alternar documento
-  useEffect(() => {
-    setImageReady(false);
-    setImageSize({ width: 1, height: 1 });
-  }, [documentId]);
+  const activeEvidenceIds = selectedFinding?.evidence_ids || [];
 
   // Medição da área disponível com ResizeObserver
   useEffect(() => {
@@ -49,11 +50,14 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   }, []);
 
   // Fórmulas de escala
+  const naturalWidth = imageSize.width > 50 ? imageSize.width : 800;
+  const naturalHeight = imageSize.height > 50 ? imageSize.height : 1050;
+
   const availableWidth = Math.max(100, viewportSize.width - 32);
   const availableHeight = Math.max(100, viewportSize.height - 32);
 
-  const fitWidthScale = imageSize.width > 1 ? availableWidth / imageSize.width : 1.0;
-  const fitHeightScale = imageSize.height > 1 ? availableHeight / imageSize.height : 1.0;
+  const fitWidthScale = availableWidth / naturalWidth;
+  const fitHeightScale = availableHeight / naturalHeight;
   const fitPageScale = Math.min(fitWidthScale, fitHeightScale);
 
   let effectiveScale = zoom;
@@ -64,8 +68,43 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   }
   effectiveScale = Math.max(0.1, Math.min(4.0, effectiveScale));
 
-  const renderedWidth = imageReady ? Math.max(50, Math.round(imageSize.width * effectiveScale)) : 'auto';
-  const renderedHeight = imageReady ? Math.max(50, Math.round(imageSize.height * effectiveScale)) : 'auto';
+  const renderedWidth = Math.max(50, Math.round(naturalWidth * effectiveScale));
+  const renderedHeight = Math.max(50, Math.round(naturalHeight * effectiveScale));
+
+  const applyOpticalPreset = (preset: ForensicOpticalPreset) => {
+    setOpticalPreset(preset);
+    if (preset === 'NONE') {
+      setCustomContrast(100);
+      setCustomBrightness(100);
+    } else if (preset === 'HIGH_CONTRAST') {
+      setCustomContrast(155);
+      setCustomBrightness(95);
+    } else if (preset === 'INVERT') {
+      setCustomContrast(125);
+      setCustomBrightness(100);
+    } else if (preset === 'INK_ENHANCE') {
+      setCustomContrast(210);
+      setCustomBrightness(92);
+    }
+  };
+
+  const computeCssFilter = (): string => {
+    const baseContrast = `contrast(${customContrast}%) brightness(${customBrightness}%)`;
+    switch (opticalPreset) {
+      case 'HIGH_CONTRAST':
+        return baseContrast;
+      case 'INVERT':
+        return `invert(100%) hue-rotate(180deg) ${baseContrast}`;
+      case 'INK_ENHANCE':
+        return `grayscale(100%) ${baseContrast}`;
+      case 'NONE':
+      default:
+        if (customContrast !== 100 || customBrightness !== 100) {
+          return baseContrast;
+        }
+        return 'none';
+    }
+  };
 
   // Controles de visualização
   const handleFitWidth = () => {
@@ -94,6 +133,9 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   // Suporte a pan com Pointer Events e captura de ponteiro
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0 || !containerRef.current) return;
+    const targetTag = (e.target as HTMLElement).tagName.toLowerCase();
+    if (['button', 'input', 'select'].includes(targetTag)) return;
+
     setIsPanning(true);
     setStartPos({ x: e.clientX, y: e.clientY });
     setScrollPos({
@@ -214,9 +256,123 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
         </div>
       </div>
 
+      {/* DIFERENCIAL 1: Barra de Filtros Ópticos Forenses */}
+      <div className="bg-slate-50 border-b border-slate-200 px-4 py-1.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="text-[10px] font-mono uppercase font-bold text-slate-500 tracking-wider">
+            Óptica Forense:
+          </span>
+          <button
+            type="button"
+            data-testid="filter-none"
+            onClick={() => applyOpticalPreset('NONE')}
+            className={`px-2 py-0.5 rounded text-[11px] font-medium transition ${
+              opticalPreset === 'NONE'
+                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
+                : 'text-slate-600 hover:bg-slate-200 border border-slate-200'
+            }`}
+            title="Imagem original sem filtros ópticos"
+          >
+            Original
+          </button>
+          <button
+            type="button"
+            data-testid="filter-contrast"
+            onClick={() => applyOpticalPreset('HIGH_CONTRAST')}
+            className={`px-2 py-0.5 rounded text-[11px] font-medium transition ${
+              opticalPreset === 'HIGH_CONTRAST'
+                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
+                : 'text-slate-600 hover:bg-slate-200 border border-slate-200'
+            }`}
+            title="Realça contraste para caligrafia fraca"
+          >
+            Contraste Dinâmico
+          </button>
+          <button
+            type="button"
+            data-testid="filter-invert"
+            onClick={() => applyOpticalPreset('INVERT')}
+            className={`px-2 py-0.5 rounded text-[11px] font-medium transition ${
+              opticalPreset === 'INVERT'
+                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
+                : 'text-slate-600 hover:bg-slate-200 border border-slate-200'
+            }`}
+            title="Inversão espectral (Negativo Fotográfico) para decifrar sobreposição de traços"
+          >
+            Negativo Forense
+          </button>
+          <button
+            type="button"
+            data-testid="filter-ink"
+            onClick={() => applyOpticalPreset('INK_ENHANCE')}
+            className={`px-2 py-0.5 rounded text-[11px] font-medium transition ${
+              opticalPreset === 'INK_ENHANCE'
+                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
+                : 'text-slate-600 hover:bg-slate-200 border border-slate-200'
+            }`}
+            title="Isolamento monocromático de alto ganho para separar tinta da grade impressa"
+          >
+            Realce de Tinta
+          </button>
+          <button
+            type="button"
+            data-testid="toggle-optical-sliders"
+            onClick={() => setShowOpticalSliders((prev) => !prev)}
+            className={`px-2 py-0.5 rounded text-[11px] font-mono border flex items-center gap-1 transition ${
+              showOpticalSliders
+                ? 'bg-slate-200 border-slate-400 text-slate-900 font-semibold'
+                : 'border-slate-200 text-slate-600 hover:bg-slate-200'
+            }`}
+            title="Ajuste fino de ganho óptico"
+          >
+            <Sliders className="w-3 h-3 text-slate-500" />
+            <span>Ajuste Fino</span>
+          </button>
+        </div>
+
+        <span className="text-[10px] text-slate-400 font-mono hidden md:inline">
+          ViewBox Ancorado: {naturalWidth}×{naturalHeight}px
+        </span>
+      </div>
+
+      {/* Sub-barra de Sliders de Ajuste Fino Óptico */}
+      {showOpticalSliders && (
+        <div
+          data-testid="optical-sliders-bar"
+          className="bg-white border-b border-slate-200 px-4 py-1.5 flex items-center gap-6 text-xs text-slate-700 shadow-2xs"
+        >
+          <label className="flex items-center gap-2 font-mono text-[11px]">
+            <span>Contraste ({customContrast}%):</span>
+            <input
+              type="range"
+              min={70}
+              max={250}
+              value={customContrast}
+              onChange={(e) => setCustomContrast(Number(e.target.value))}
+              className="w-28 accent-slate-900"
+            />
+          </label>
+          <label className="flex items-center gap-2 font-mono text-[11px]">
+            <span>Brilho ({customBrightness}%):</span>
+            <input
+              type="range"
+              min={60}
+              max={140}
+              value={customBrightness}
+              onChange={(e) => setCustomBrightness(Number(e.target.value))}
+              className="w-28 accent-slate-900"
+            />
+          </label>
+          <span className="text-[11px] text-slate-500 ml-auto hidden lg:inline">
+            Filtros ópticos acelerados por hardware mantêm a ancoragem precisa das evidências SVG.
+          </span>
+        </div>
+      )}
+
       {/* Main Canvas Area com suporte a Pan e Rolagem fluida com todas as bordas acessíveis */}
       <div
         ref={containerRef}
+        data-testid="document-scroll-container"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -239,85 +395,99 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
               src={`/api/documents/${encodeURIComponent(documentId)}/image`}
               alt="Guia Médica Original"
               className="block w-full h-full object-contain pointer-events-none"
-              crossOrigin="anonymous"
               draggable={false}
+              style={{ filter: computeCssFilter() }}
               onLoad={(event) => {
                 const img = event.currentTarget;
-                setImageSize({
-                  width: img.naturalWidth || 800,
-                  height: img.naturalHeight || 1100,
-                });
-                setImageReady(true);
+                if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+                  setImageSize({
+                    width: img.naturalWidth,
+                    height: img.naturalHeight,
+                  });
+                }
               }}
             />
 
             {/* Camada SVG com coordenadas baseadas exclusivamente nas dimensões naturais da imagem */}
             <svg
-              viewBox={`0 0 ${imageSize.width} ${imageSize.height}`}
+              viewBox={`0 0 ${naturalWidth} ${naturalHeight}`}
               preserveAspectRatio="none"
               className="absolute inset-0 w-full h-full pointer-events-none"
             >
-              {imageReady &&
-                evidences.map((evidence) => {
-                  const box = evidence.bbox;
-                  if (
-                    !box ||
-                    evidence.localization_status === 'UNLOCALIZED' ||
-                    evidence.localization_status === 'INVALID_GEOMETRY'
-                  ) {
-                    return null;
-                  }
+              {evidences.map((evidence, index) => {
+                const box = evidence.bbox;
+                if (
+                  !box ||
+                  evidence.localization_status === 'UNLOCALIZED' ||
+                  evidence.localization_status === 'INVALID_GEOMETRY'
+                ) {
+                  return null;
+                }
 
-                  const highlighted = activeEvidenceIds.includes(evidence.id);
+                const hasExplicitMatch = activeEvidenceIds.some(
+                  (id) => evidence.id === id || evidence.id.startsWith(id) || id.startsWith(evidence.id)
+                );
+                const hasAnyExplicitMatch = evidences.some((ev) =>
+                  activeEvidenceIds.some(
+                    (id) => ev.id === id || ev.id.startsWith(id) || id.startsWith(ev.id)
+                  )
+                );
 
-                  const x = box.x_min * imageSize.width;
-                  const y = box.y_min * imageSize.height;
-                  const width = (box.x_max - box.x_min) * imageSize.width;
-                  const height = (box.y_max - box.y_min) * imageSize.height;
+                const highlighted = hasAnyExplicitMatch
+                  ? hasExplicitMatch
+                  : Boolean(selectedFinding && index === 0);
 
-                  const labelWidth = Math.min(190, imageSize.width);
-                  const labelHeight = 22;
-                  const labelX = Math.max(0, Math.min(x, imageSize.width - labelWidth));
-                  const labelY = Math.max(0, Math.min(y - labelHeight - 4, imageSize.height - labelHeight));
+                const x = box.x_min * naturalWidth;
+                const y = box.y_min * naturalHeight;
+                const width = (box.x_max - box.x_min) * naturalWidth;
+                const height = (box.y_max - box.y_min) * naturalHeight;
 
-                  return (
-                    <g key={evidence.id} data-evidence-id={evidence.id}>
-                      <rect
-                        x={x}
-                        y={y}
-                        width={width}
-                        height={height}
-                        fill={highlighted ? 'rgba(217,119,6,0.12)' : 'rgba(37,99,235,0.04)'}
-                        stroke={highlighted ? '#b45309' : '#2563eb'}
-                        strokeWidth={highlighted ? 2 : 1}
-                        vectorEffect="non-scaling-stroke"
-                        strokeDasharray={highlighted ? undefined : '4 3'}
-                      />
+                const labelWidth = Math.min(190, naturalWidth);
+                const labelHeight = 22;
+                const labelX = Math.max(0, Math.min(x, naturalWidth - labelWidth));
+                const labelY = Math.max(0, y - labelHeight);
 
-                      {highlighted && (
-                        <g transform={`translate(${labelX}, ${labelY})`}>
-                          <rect
-                            width={labelWidth}
-                            height={labelHeight}
-                            rx={3}
-                            fill="#ffffff"
-                            stroke="#b45309"
-                            vectorEffect="non-scaling-stroke"
-                          />
-                          <text
-                            x={6}
-                            y={15}
-                            fontSize={11}
-                            fill="#78350f"
-                            fontFamily="sans-serif"
-                          >
-                            Evidência selecionada
-                          </text>
-                        </g>
-                      )}
-                    </g>
-                  );
-                })}
+                return (
+                  <g key={evidence.id} className="transition-opacity duration-200">
+                    {/* Retângulo de demarcação */}
+                    <rect
+                      x={x}
+                      y={y}
+                      width={width}
+                      height={height}
+                      fill={highlighted ? 'rgba(245, 158, 11, 0.22)' : 'rgba(59, 130, 246, 0.08)'}
+                      stroke={highlighted ? '#b45309' : '#3b82f6'}
+                      strokeWidth={highlighted ? 3.5 : 1.5}
+                      rx={3}
+                      className="transition-all"
+                    />
+
+                    {/* Header da Evidence Box */}
+                    {highlighted && (
+                      <g>
+                        <rect
+                          x={labelX}
+                          y={labelY}
+                          width={labelWidth}
+                          height={labelHeight}
+                          fill="#b45309"
+                          rx={3}
+                        />
+                        <text
+                          x={labelX + 8}
+                          y={labelY + 15}
+                          fill="#ffffff"
+                          fontSize="11"
+                          fontWeight="bold"
+                          fontFamily="monospace"
+                        >
+                          INCERTEZA PERICIAL
+                        </text>
+                      </g>
+                    )}
+                  </g>
+                );
+              })}
             </svg>
           </div>
         </div>
@@ -325,5 +495,3 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
     </div>
   );
 };
-
-export default DocumentViewer;

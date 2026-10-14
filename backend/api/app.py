@@ -62,9 +62,15 @@ app = FastAPI(
 )
 
 # CORS Allowlist
+RAW_CORS_ORIGINS = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173",
+)
+ALLOWED_ORIGINS = [origin.strip() for origin in RAW_CORS_ORIGINS.split(",") if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Desenvolvimento local
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -700,7 +706,8 @@ def submit_human_review(
         field_id_to_save = field_record.id
         previous_value_to_save = decision_in.previous_value or field_record.raw_text
     else:
-        # Ações em nível de guia não herdam hipóteses nem confirmed_value
+        # Ações em nível de guia não herdam hipóteses nem confirmed_value,
+        # mas validam estritamente a pertinência documental caso field_id seja informado.
         if decision_in.field_id:
             field_record = (
                 db.query(ExtractedFieldModel)
@@ -712,11 +719,22 @@ def submit_human_review(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"Campo extraído (field_id '{decision_in.field_id}') não encontrado.",
                 )
+            field_run = (
+                db.query(ProcessingRunModel)
+                .filter(ProcessingRunModel.id == field_record.run_id)
+                .first()
+            )
+            if not field_run or field_run.document_id != doc.id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"O campo '{field_record.id}' não pertence a nenhuma execução do documento '{doc.id}'.",
+                )
             if target_run_id and field_record.run_id != target_run_id:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=f"O campo '{field_record.id}' pertence à execução '{field_record.run_id}', não à execução '{target_run_id}'.",
                 )
+            target_run_id = target_run_id or field_record.run_id
             field_id_to_save = field_record.id
         confirmed_value_to_save = None
         previous_value_to_save = None
