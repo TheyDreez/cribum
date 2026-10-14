@@ -397,9 +397,19 @@ def get_document_image(doc_id: str, db: Session = Depends(get_db)):
 
     try:
         path = get_image_path(doc.storage_key)
-        return FileResponse(path, media_type=doc.media_type)
+        return FileResponse(
+            path,
+            media_type=doc.media_type,
+            headers={
+                "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+                "Pragma": "no-cache",
+            },
+        )
     except FileNotFoundError:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Arquivo físico de imagem não encontrado no storage.")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Arquivo físico de imagem não encontrado no storage.",
+        )
 
 
 @app.post("/api/documents/{doc_id}/runs", response_model=ProcessingRunContract)
@@ -810,7 +820,10 @@ def get_graph():
 
 @app.post("/api/admin/seed-demo")
 def seed_demo_cases(db: Session = Depends(get_db)):
-    """Precarrega os 20 casos sintéticos diretamente no banco de dados para teste imediato de interface."""
+    """
+    Regera e atualiza in-place os 20 casos sintéticos no banco de dados e no storage,
+    recarregando as fixtures em memória e limpando qualquer execução com status FAILED.
+    """
     env = os.getenv("ENVIRONMENT", "development").lower()
     if env == "production":
         raise HTTPException(
@@ -818,12 +831,18 @@ def seed_demo_cases(db: Session = Depends(get_db)):
             detail="Operação administrativa de seed bloqueada em ambiente de produção.",
         )
 
-    cases_dir = "backend/data/synthetic/cases"
+    # 1. Garante que as imagens sintéticas e o fixtures.json estão atualizados no disco
+    from backend.data.synthetic.generate_dataset import build_synthetic_20_cases
+    build_synthetic_20_cases()
 
-    if not os.path.exists(cases_dir):
+    # 2. Recarrega o dicionário de fixtures em memória RAM
+    demo_provider._fixtures = demo_provider._load_fixtures()
+
+    cases_dir = "backend/data/synthetic/cases"
+    manifest_path = "backend/data/synthetic/manifest.json"
+    if not os.path.exists(cases_dir) or not os.path.exists(manifest_path):
         raise HTTPException(status_code=400, detail="Casos sintéticos ainda não gerados.")
 
-    manifest_path = "backend/data/synthetic/manifest.json"
     import json
     with open(manifest_path, "r", encoding="utf-8") as f:
         manifest = json.load(f)
@@ -842,8 +861,25 @@ def seed_demo_cases(db: Session = Depends(get_db)):
             bytes_data, img_file, "image/jpeg"
         )
 
-        existing = db.query(DocumentModel).filter(DocumentModel.content_hash == content_hash).first()
-        if not existing:
+        # Busca tanto por ID do caso quanto por hash para atualizar in-place sem erro de UNIQUE constraint
+        existing = (
+            db.query(DocumentModel)
+            .filter((DocumentModel.id == c["id"]) | (DocumentModel.content_hash == content_hash))
+            .first()
+        )
+
+        if existing:
+            existing.filename_original = img_file
+            existing.storage_key = storage_key
+            existing.content_hash = content_hash
+            existing.media_type = m_type
+            existing.width = w
+            existing.height = h
+            existing.synthetic = True
+            db.commit()
+            run_document_processing(existing.id, mode_override="DEMO", db=db)
+            loaded += 1
+        else:
             doc = DocumentModel(
                 id=c["id"],
                 filename_original=img_file,
@@ -856,9 +892,7 @@ def seed_demo_cases(db: Session = Depends(get_db)):
             )
             db.add(doc)
             db.commit()
-
-            # Executa o processamento em modo DEMO para já popular os alertas
             run_document_processing(doc.id, mode_override="DEMO", db=db)
             loaded += 1
 
-    return {"message": f"Preenchidos {loaded} casos no banco de dados com sucesso."}
+    return {"message": f"Preenchidos e atualizados {loaded} casos no banco de dados com sucesso."}

@@ -1,7 +1,6 @@
 {
   "seed": 42,
   "total_document_cases": 20,
-  "total_network_claims": 200,
   "cases": [
     {
       "id": "CASE-AMB-001",

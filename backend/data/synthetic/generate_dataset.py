@@ -3,7 +3,7 @@ import io
 import json
 import os
 import random
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 from PIL import Image, ImageDraw, ImageFont
 
 # Seed fixa para total reprodutibilidade científica do benchmark
@@ -20,13 +20,25 @@ for d in [CASES_DIR, GROUND_TRUTH_DIR, NETWORK_DIR]:
 
 
 def load_font(candidates: List[str], size: int) -> ImageFont.FreeTypeFont:
-    """Carrega fonte TrueType do sistema (Windows/Linux/macOS) com suporte completo a acentuação UTF-8."""
+    """
+    Busca fontes TrueType no sistema (Windows/Linux/macOS) e também no pacote matplotlib
+    (já instalado no requirements.txt) para garantir 100% de suporte a UTF-8 e acentuação.
+    """
     font_dirs = [
         "C:/Windows/Fonts",
+        "/mnt/c/Windows/Fonts",
         "/usr/share/fonts/truetype/dejavu",
         "/usr/share/fonts/truetype/liberation",
         "/System/Library/Fonts",
     ]
+    try:
+        import matplotlib
+        mpl_fonts = os.path.join(matplotlib.get_data_path(), "fonts", "ttf")
+        if os.path.exists(mpl_fonts):
+            font_dirs.append(mpl_fonts)
+    except Exception:
+        pass
+
     for candidate in candidates:
         if os.path.exists(candidate):
             try:
@@ -40,6 +52,7 @@ def load_font(candidates: List[str], size: int) -> ImageFont.FreeTypeFont:
                     return ImageFont.truetype(full_path, size)
                 except Exception:
                     pass
+
     return ImageFont.load_default()
 
 
@@ -52,136 +65,134 @@ def create_synthetic_image(
     ambiguous: bool = False,
     banner: str = "SYNTHETIC / DEMO DATASET",
 ) -> str:
-    """Renderiza um receituário médico / guia pericial de alta nitidez (800x1050) sem glifos quebrados."""
+    """Renderiza uma guia médica / receituário clínico de alta definição (800x1050) sem glifos corrompidos."""
     width, height = 800, 1050
-    # Fundo de papel clínico levemente off-white
     image = Image.new("RGB", (width, height), color=(252, 252, 250))
     draw = ImageDraw.Draw(image)
 
-    # Fontes TrueType com suporte completo a UTF-8
-    font_banner = load_font(["consolab.ttf", "consola.ttf", "DejaVuSansMono-Bold.ttf", "arialbd.ttf"], 12)
-    font_clinic = load_font(["segoeuib.ttf", "arialbd.ttf", "DejaVuSans-Bold.ttf"], 19)
-    font_sub = load_font(["segoeui.ttf", "arial.ttf", "DejaVuSans.ttf"], 12)
+    # Fontes TrueType com fallback garantido via DejaVu (matplotlib) ou Windows Fonts
+    font_banner = load_font(["consolab.ttf", "consola.ttf", "DejaVuSansMono-Bold.ttf", "DejaVuSans-Bold.ttf"], 11)
+    font_clinic = load_font(["segoeuib.ttf", "arialbd.ttf", "DejaVuSans-Bold.ttf"], 18)
+    font_sub = load_font(["segoeui.ttf", "arial.ttf", "DejaVuSans.ttf"], 11)
     font_label = load_font(["segoeuib.ttf", "arialbd.ttf", "DejaVuSans-Bold.ttf"], 12)
-    font_body = load_font(["segoeui.ttf", "arial.ttf", "DejaVuSans.ttf"], 15)
-    font_mono = load_font(["consola.ttf", "DejaVuSansMono.ttf", "cour.ttf"], 13)
-    # Fonte cursiva/manuscrita para o item prescrito
+    font_body = load_font(["segoeui.ttf", "arial.ttf", "DejaVuSans.ttf"], 14)
+    font_mono = load_font(["consola.ttf", "DejaVuSansMono.ttf", "DejaVuSans.ttf"], 13)
     font_handwriting = load_font(
-        ["segoesc.ttf", "Inkfree.ttf", "georgiai.ttf", "timesi.ttf", "DejaVuSerif-Italic.ttf"],
-        21 if ambiguous else 19,
+        ["segoesc.ttf", "georgiai.ttf", "timesi.ttf", "DejaVuSerif-Italic.ttf", "DejaVuSans-Oblique.ttf"],
+        20 if ambiguous else 18,
     )
 
-    # 1. Tarja superior de governança (Dataset Sintético)
+    # 1. Tarja institucional superior (Dataset Sintético)
     draw.rectangle([0, 0, width, 34], fill=(15, 23, 42))
     draw.text(
         (24, 10),
-        f"DOCUMENTO SINTÉTICO PARA AUDITORIA ({banner}) - NÃO CONTÉM DADOS DE PACIENTES REAIS",
+        f"DOCUMENTO SINTÉTICO PARA AUDITORIA ({banner}) — NÃO CONTÉM DADOS DE PACIENTES REAIS",
         fill=(226, 232, 240),
         font=font_banner,
     )
 
-    # 2. Moldura externa do documento médico
+    # 2. Moldura dupla de formulário médico oficial
     draw.rectangle([36, 52, width - 36, height - 48], outline=(148, 163, 184), width=2)
     draw.rectangle([42, 58, width - 42, height - 54], outline=(226, 232, 240), width=1)
 
-    # 3. Cabeçalho Institucional da Clínica / Hospital
-    draw.rectangle([42, 58, width - 42, 142], fill=(248, 250, 252))
+    # 3. Cabeçalho da Instituição de Saúde
+    draw.rectangle([42, 58, width - 42, 142], fill=(241, 245, 249))
     draw.line([(42, 142), (width - 42, 142)], fill=(203, 213, 225), width=2)
 
-    # Emblema Médico (Cruz Clínica)
-    draw.rectangle([62, 76, 106, 120], fill=(15, 23, 42), outline=(30, 41, 59))
+    # Símbolo da Cruz Clínica
+    draw.rectangle([62, 76, 106, 120], fill=(15, 23, 42))
     draw.rectangle([79, 84, 89, 112], fill=(255, 255, 255))
     draw.rectangle([70, 93, 98, 103], fill=(255, 255, 255))
 
     draw.text((122, 75), title, fill=(15, 23, 42), font=font_clinic)
     draw.text(
-        (122, 102),
-        "SISTEMA INTEGRADO DE AUDITORIA DE CONTAS MÉDICAS E FARMACOVIGILÂNCIA — PADRÃO TISS",
-        fill=(100, 116, 139),
+        (122, 103),
+        "GUIA DE AUDITORIA E PRESCRIÇÃO ASSISTENCIAL — CONFORMIDADE TISS / FARMACOVIGILÂNCIA",
+        fill=(71, 85, 105),
         font=font_sub,
     )
 
-    # 4. Quadro de Identificação do Paciente e Prescritor (y = 155 a 225)
-    draw.rectangle([58, 156, width - 58, 228], fill=(255, 255, 255), outline=(203, 213, 225), width=1)
-    draw.line([(58, 192), (width - 58, 192)], fill=(226, 232, 240), width=1)
+    # 4. Grade Cadastral: Paciente, Data, CRM e CID-10
+    draw.rectangle([58, 154, width - 58, 222], fill=(255, 255, 255), outline=(203, 213, 225), width=1)
+    draw.line([(58, 188), (width - 58, 188)], fill=(226, 232, 240), width=1)
 
     header_line = lines[0] if lines else ""
-    diag_line = next((l for l in lines[1:] if "Diagnóstico" in l or "CID" in l), "Diagnóstico: Não informado na guia")
+    diag_line = next(
+        (l for l in lines[1:] if "Diagnóstico" in l or "CID" in l),
+        "Diagnóstico Clínico: Não declarado no cabeçalho da guia",
+    )
 
-    draw.text((72, 166), header_line, fill=(15, 23, 42), font=font_mono)
-    draw.text((72, 201), diag_line, fill=(51, 65, 85), font=font_body)
+    draw.text((72, 164), header_line, fill=(15, 23, 42), font=font_mono)
+    draw.text((72, 197), diag_line, fill=(30, 41, 59), font=font_body)
 
-    # 5. Cabeçalho da Prescrição (℞)
+    # 5. Seção de Prescrição (Rx) e Box Ancorado nas Coordenadas Exatas
     box_ymin, box_xmin, box_ymax, box_xmax = box_coords
     section_label = next(
         (l for l in lines if "PRESCRI" in l.upper() or "PROCEDIMENTO" in l.upper()),
         "PRESCRIÇÃO MÉDICA:",
     )
-    draw.text((62, box_ymin - 36), f"Rx  {section_label}", fill=(15, 23, 42), font=font_label)
+    draw.text((75, box_ymin - 24), f"Rx   {section_label}", fill=(15, 23, 42), font=font_label)
 
-    # 6. Caixa de Evidência Caligráfica / Item Prescrito (Exatamente nas coordenadas do Ground Truth)
     draw.rectangle(
         [box_xmin, box_ymin, box_xmax, box_ymax],
         fill=(254, 252, 232) if ambiguous else (248, 250, 252),
-        outline=(203, 213, 225),
-        width=1,
+        outline=(148, 163, 184),
+        width=2,
     )
-    # Linhas pautadas sutis de receituário dentro do box
-    draw.line([(box_xmin + 12, box_ymax - 10), (box_xmax - 12, box_ymax - 10)], fill=(203, 213, 225), width=1)
+    draw.line([(box_xmin + 14, box_ymax - 9), (box_xmax - 14, box_ymax - 9)], fill=(203, 213, 225), width=1)
 
     box_text = next((l.replace("[BOX]", "").strip() for l in lines if l.startswith("[BOX]")), "")
     draw.text(
         (box_xmin + 18, box_ymin + 12),
         box_text,
-        fill=(17, 24, 39),
+        fill=(15, 23, 42),
         font=font_handwriting,
     )
 
-    # 7. Posologia e Observações Clínicas Abaixo do Box
-    y_cursor = box_ymax + 28
+    # 6. Posologia e Orientações Médicas
+    y_cursor = box_ymax + 26
     box_idx = next((i for i, l in enumerate(lines) if l.startswith("[BOX]")), 3)
     for line in lines[box_idx + 1 :]:
         if line.startswith("---"):
             draw.line([(62, y_cursor), (width - 62, y_cursor)], fill=(226, 232, 240), width=1)
-            y_cursor += 22
+            y_cursor += 20
         else:
-            draw.text((68, y_cursor), f"•  {line}", fill=(30, 41, 59), font=font_body)
-            y_cursor += 32
+            draw.text((75, y_cursor), f"•  {line}", fill=(30, 41, 59), font=font_body)
+            y_cursor += 30
 
-    # 8. Área de Carimbo Médico e Assinatura (y = 760 a 890)
-    stamp_rect = [width - 330, 770, width - 70, 880]
+    # 7. Quadro de Carimbo Médico e Protocolo Pericial (y = 770 a 880)
+    stamp_rect = [490, 770, 730, 880]
     if crm:
-        draw.rectangle(stamp_rect, outline=(71, 85, 105), width=2)
-        draw.text((width - 310, 785), "CONSELHO REGIONAL DE MEDICINA", fill=(51, 65, 85), font=font_banner)
-        draw.text((width - 310, 808), f"CRM: {crm}", fill=(15, 23, 42), font=font_clinic)
-        draw.text((width - 310, 838), "Assinatura / Carimbo Profissional", fill=(100, 116, 139), font=font_sub)
+        draw.rectangle(stamp_rect, fill=(248, 250, 252), outline=(51, 65, 85), width=2)
+        draw.text((508, 785), "CONSELHO REGIONAL DE MEDICINA", fill=(71, 85, 105), font=font_banner)
+        draw.text((508, 808), f"CRM {crm}", fill=(15, 23, 42), font=font_clinic)
+        draw.text((508, 840), "Carimbo e Rubrica do Prescritor", fill=(100, 116, 139), font=font_sub)
     else:
         draw.rectangle(stamp_rect, fill=(254, 242, 242), outline=(220, 38, 38), width=2)
-        draw.text((width - 310, 795), "CARIMBO AUSENTE / ILEGÍVEL", fill=(185, 28, 28), font=font_label)
-        draw.text((width - 310, 822), "Sem identificação válida de CRM", fill=(153, 27, 27), font=font_sub)
+        draw.text((508, 795), "CARIMBO AUSENTE / ILEGÍVEL", fill=(185, 28, 28), font=font_label)
+        draw.text((508, 822), "Sem identificação válida de CRM", fill=(153, 27, 27), font=font_sub)
 
-    # Quadro de Autenticação Digital / Cadeia de Custódia à esquerda do carimbo
-    draw.rectangle([62, 770, 430, 880], fill=(248, 250, 252), outline=(226, 232, 240), width=1)
-    draw.text((78, 785), "PROTOCOLO DE AUDITORIA PERICIAL", fill=(71, 85, 105), font=font_label)
-    draw.text((78, 810), f"Arquivo: {filename}", fill=(51, 65, 85), font=font_mono)
-    draw.text((78, 832), "Verificação: CRIBUM-FORENSIC-SUITE-V1", fill=(100, 116, 139), font=font_mono)
+    draw.rectangle([62, 770, 460, 880], fill=(248, 250, 252), outline=(203, 213, 225), width=1)
+    draw.text((78, 785), "METADADOS DE CUSTÓDIA DOCUMENTAL", fill=(51, 65, 85), font=font_label)
+    draw.text((78, 810), f"Arquivo: {filename}", fill=(30, 41, 59), font=font_mono)
+    draw.text((78, 834), "Padrão: CRIBUM FORENSIC WORKSTATION", fill=(100, 116, 139), font=font_mono)
 
-    # 9. Rodapé Técnico com Código de Barras Simulado
+    # 8. Rodapé com Código de Barras Simulado
     draw.line([(58, height - 115), (width - 58, height - 115)], fill=(203, 213, 225), width=1)
-    for bx in range(62, 280, 4):
+    for bx in range(62, 270, 4):
         bar_w = 2 if (bx % 8 == 0) else 1
-        draw.rectangle([bx, height - 102, bx + bar_w, height - 72], fill=(30, 41, 59))
+        draw.rectangle([bx, height - 100, bx + bar_w, height - 70], fill=(15, 23, 42))
 
     draw.text(
-        (300, height - 96),
+        (290, height - 96),
         "Hash de Verificação: [CRIBUM-SYNTHETIC-HASH-REPRODUCIBLE]",
-        fill=(100, 116, 139),
+        fill=(71, 85, 105),
         font=font_mono,
     )
     draw.text(
-        (300, height - 78),
-        "Governança: Revisão Humana Obrigatória (Human-in-the-Loop)",
-        fill=(148, 163, 184),
+        (290, height - 76),
+        "Governança: Decisão assistida com revisão humana obrigatória (HITL)",
+        fill=(100, 116, 139),
         font=font_sub,
     )
 
@@ -322,7 +333,7 @@ def build_synthetic_20_cases():
             "ambiguous": False,
             "expected_findings": ["DOC-002-MISSING-CRM"],
             "category": "DOCUMENT_INCONSISTENCY",
-            "box": [240, 75, 290, 725],
+            "box": [260, 75, 310, 725],
         },
         {
             "id": "CASE-INC-007",
@@ -340,7 +351,7 @@ def build_synthetic_20_cases():
             "ambiguous": False,
             "expected_findings": [],
             "category": "DOCUMENT_INCONSISTENCY",
-            "box": [240, 75, 290, 725],
+            "box": [260, 75, 310, 725],
         },
         {
             "id": "CASE-INC-008",
@@ -358,7 +369,7 @@ def build_synthetic_20_cases():
             "ambiguous": False,
             "expected_findings": ["DOC-002-MISSING-CRM"],
             "category": "DOCUMENT_INCONSISTENCY",
-            "box": [240, 75, 290, 725],
+            "box": [260, 75, 310, 725],
         },
         {
             "id": "CASE-INC-009",
@@ -395,7 +406,7 @@ def build_synthetic_20_cases():
             "ambiguous": False,
             "expected_findings": [],
             "category": "DOCUMENT_INCONSISTENCY",
-            "box": [240, 75, 290, 725],
+            "box": [260, 75, 310, 725],
         },
     ]
 
@@ -416,7 +427,7 @@ def build_synthetic_20_cases():
             "ambiguous": False,
             "expected_findings": [],
             "category": "DUPLICATE_CLAIM",
-            "box": [240, 75, 290, 725],
+            "box": [260, 75, 310, 725],
         }
         for i in range(11, 16)
     ]
@@ -449,7 +460,7 @@ def build_synthetic_20_cases():
     todos_casos = grupo_1 + grupo_2 + grupo_3 + grupo_4
 
     for caso in todos_casos:
-        raw_b = caso.get("box", [250, 75, 300, 725])
+        raw_b = caso.get("box", [260, 75, 310, 725])
         img_path = create_synthetic_image(
             filename=caso["filename"],
             title=caso["title"],
@@ -467,10 +478,9 @@ def build_synthetic_20_cases():
         }
 
         ev_id = f"ev-item-{caso['id']}"
-        # Extrai exatamente a linha marcada com [BOX] (corrige bug onde lines[4] pegava a posologia)
         extracted_box_line = next(
             (l.replace("[BOX]", "").strip() for l in caso["lines"] if l.startswith("[BOX]")),
-            caso["lines"][4].replace("[BOX]", "").strip(),
+            "",
         )
 
         if caso["ambiguous"]:
@@ -610,11 +620,25 @@ def build_synthetic_20_cases():
     with open(fixtures_file, "w", encoding="utf-8") as f:
         json.dump(fixtures_dict, f, indent=2, ensure_ascii=False)
 
+    manifest_file = os.path.join(BASE_DIR, "manifest.json")
+    with open(manifest_file, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "seed": RANDOM_SEED,
+                "total_document_cases": len(cases_manifest),
+                "cases": cases_manifest,
+            },
+            f,
+            indent=2,
+            ensure_ascii=False,
+        )
+
     return cases_manifest
 
 
 def build_synthetic_200_network_claims():
     """Gera o dataset de 200 guias médicas para teste de grafo do agente Investigador."""
+    random.seed(RANDOM_SEED)
     clinicas = [
         {"id": "CLINICA-DEMO-001", "nome": "Hospital Santa Cruz", "cidade": "Sorocaba"},
         {"id": "CLINICA-DEMO-002", "nome": "Centro Médico Campinas", "cidade": "Campinas"},
@@ -637,9 +661,6 @@ def build_synthetic_200_network_claims():
     ]
 
     claims = []
-
-    # Injeta intencionalmente anomalias de rede para validação de fraude:
-    # Esquema 1: Médico PROF-DEMO-007 atende em Sorocaba e Santos (distância 180km) no mesmo dia (2026-10-14)
     data_esquema = "2026-10-14"
     for k in range(1, 4):
         claims.append(
@@ -670,7 +691,6 @@ def build_synthetic_200_network_claims():
             }
         )
 
-    # Restante das 200 guias: distribuição legítima e variada
     datas = [f"2026-10-{d:02d}" for d in range(1, 15)]
     while len(claims) < 200:
         c_info = random.choice(clinicas)

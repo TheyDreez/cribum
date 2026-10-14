@@ -15,9 +15,9 @@
   "expected_findings": [],
   "category": "DUPLICATE_CLAIM",
   "box": [
-    240,
+    260,
     75,
-    290,
+    310,
     725
   ]
 }
