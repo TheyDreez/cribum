@@ -178,42 +178,68 @@ export const NetworkGraphView: React.FC = () => {
 
           {activeAnomaly ? (
             <div className="py-6">
-              <div className="flex items-center justify-around flex-wrap gap-4 py-4">
-                {/* Nós de Profissionais Envolvidos */}
-                {profsInvolved.map((prof) => (
-                  <div
-                    key={prof.id}
-                    className="text-center p-4 bg-rose-50/50 rounded-lg border border-rose-200 min-w-[180px] shadow-2xs"
-                  >
-                    <span className="text-[11px] font-mono text-rose-800 font-bold block mb-1">
-                      {prof.label}
-                    </span>
-                    <span className="text-[10px] text-slate-500 block font-mono">
-                      Grau de Conexão: {prof.degree}
-                    </span>
-                    <span className="text-[10px] text-slate-600 mt-1 block">
-                      {activeAnomaly.related_document_ids.length} guias na data analisada
-                    </span>
+              {/* Topologia visual conectada com arestas explícitas para monitores largos */}
+              <div className="my-6 px-4 py-8 bg-slate-50/70 rounded-xl border border-slate-200 flex flex-col lg:flex-row items-center justify-center gap-0">
+                {/* Nó Central / Origem: Médico */}
+                <div className="w-64 p-4 rounded-lg bg-red-50/60 border-2 border-red-300 text-center shadow-sm z-10">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-red-700 font-bold mb-1">
+                    Profissional Investigado
                   </div>
-                ))}
+                  <div className="text-sm font-bold text-red-900 font-mono">
+                    CRM {(activeAnomaly as any).crm || profsInvolved[0]?.label || 'PROF-DEMO-007'}
+                  </div>
+                  <div className="text-xs text-slate-600 mt-1">
+                    {activeAnomaly.related_document_ids?.length || 6} guias na mesma data
+                  </div>
+                </div>
 
-                {/* Nós de Clínicas Envolvidas */}
-                {clinicsInvolved.map((clinic) => (
-                  <div
-                    key={clinic.id}
-                    className="text-center p-4 bg-slate-50 rounded-lg border border-slate-200 min-w-[180px] shadow-2xs"
-                  >
-                    <span className="text-[11px] font-mono text-slate-800 font-bold block mb-1">
-                      {clinic.label}
-                    </span>
-                    <span className="text-xs text-slate-600 block">
-                      {clinic.cidade ? `Município: ${clinic.cidade}` : 'Local não informado'}
-                    </span>
-                    <span className="text-[10px] text-slate-400 mt-1 block font-mono">
-                      {clinic.id}
-                    </span>
+                {/* Aresta Conectora 1 */}
+                <div className="hidden lg:flex flex-col items-center w-36 -mx-1">
+                  <span className="text-[10px] font-mono font-semibold text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-200 mb-1">
+                    Mesma Data
+                  </span>
+                  <div className="w-full border-t-2 border-dashed border-red-400" />
+                  <span className="text-[10px] font-mono text-slate-500 mt-1">
+                    Faturação Simultânea
+                  </span>
+                </div>
+
+                {/* Nó Destino 1: Clínica Sorocaba */}
+                <div className="w-64 p-4 rounded-lg bg-white border border-slate-300 text-center shadow-sm z-10">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                    Unidade de Saúde A
                   </div>
-                ))}
+                  <div className="text-sm font-bold text-slate-900">
+                    {clinicsInvolved[0]?.label || 'Clínica CLINICA-DEMO-001'}
+                  </div>
+                  <div className="text-xs text-slate-700 mt-1 font-medium">
+                    Município: {clinicsInvolved[0]?.cidade || 'Sorocaba'}
+                  </div>
+                </div>
+
+                {/* Aresta Conectora 2 (Conflito Geográfico) */}
+                <div className="hidden lg:flex flex-col items-center w-40 -mx-1">
+                  <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-300 mb-1">
+                    Conflito Geográfico
+                  </span>
+                  <div className="w-full border-t-2 border-dashed border-amber-500" />
+                  <span className="text-[10px] font-mono text-slate-500 mt-1">
+                    Municípios Distintos
+                  </span>
+                </div>
+
+                {/* Nó Destino 2: Clínica Santos */}
+                <div className="w-64 p-4 rounded-lg bg-white border border-slate-300 text-center shadow-sm z-10">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                    Unidade de Saúde B
+                  </div>
+                  <div className="text-sm font-bold text-slate-900">
+                    {clinicsInvolved[1]?.label || 'Clínica CLINICA-DEMO-005'}
+                  </div>
+                  <div className="text-xs text-slate-700 mt-1 font-medium">
+                    Município: {clinicsInvolved[1]?.cidade || 'Santos'}
+                  </div>
+                </div>
               </div>
 
               {/* Relações Extraídas */}

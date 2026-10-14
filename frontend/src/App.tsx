@@ -44,9 +44,15 @@ async function fetchWithRetry(
   maxAttempts = 4,
 ): Promise<Response> {
   let lastErr: unknown = null;
+  const isGet = !init?.method || init.method.toUpperCase() === 'GET';
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
       const res = await fetch(input, init);
+      // Retenta requisições GET caso o proxy local devolva 5xx transitório
+      if (isGet && res.status >= 500 && attempt < maxAttempts - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
+        continue;
+      }
       return res;
     } catch (err) {
       lastErr = err;
@@ -93,8 +99,10 @@ export const App: React.FC = () => {
   // 1. Carrega configuração inicial do sistema
   useEffect(() => {
     fetchWithRetry('/api/config')
-      .then((r) => r.json())
-      .then((cfg: AppConfig) => setConfig(cfg))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((cfg: AppConfig | null) => {
+        if (cfg) setConfig(cfg);
+      })
       .catch((err) => console.error('Falha ao carregar config:', err));
   }, []);
 

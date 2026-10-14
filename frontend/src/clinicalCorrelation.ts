@@ -20,7 +20,7 @@ export interface DrugClinicalProfile {
 export const DOCUMENT_CID_CONTEXT: Record<string, ClinicalDiagnosisContext> = {
   'CASE-AMB-001': {
     cid: 'I10',
-    description: 'Hipertensão Essencial (Primária)',
+    description: 'Hipertensão Essencial Primária',
     expectedClasses: ['Anti-hipertensivo (BRA)', 'Diurético Tiazídico'],
   },
   'CASE-AMB-002': {

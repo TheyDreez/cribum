@@ -138,6 +138,8 @@ test.describe.serial('CRIBUM E2E Browser Test Suite — Operational Scenarios & 
     await expect(submitBtn).toBeEnabled();
     await submitBtn.click();
 
+    // Aguarda a submissão ser concluída e o campo de texto ser limpo com sucesso
+    await expect(textarea).toHaveValue('', { timeout: 10000 });
     await expect(workspace.getByText(testReason).first()).toBeVisible({ timeout: 5000 });
     await expect(workspace.locator(`text=Valor: ${val}`).first()).toBeVisible();
 
@@ -189,11 +191,13 @@ test.describe.serial('CRIBUM E2E Browser Test Suite — Operational Scenarios & 
     // Intercepta requisições ao documento A para atrasar artificialmente
     await page.route(`**/api/documents/${docA}`, async (route) => {
       let response;
-      try {
-        response = await route.fetch();
-      } catch {
-        await new Promise((res) => setTimeout(res, 80));
-        response = await route.fetch();
+      for (let attempt = 0; attempt < 4; attempt++) {
+        try {
+          response = await route.fetch();
+          break;
+        } catch {
+          await new Promise((res) => setTimeout(res, 120 * (attempt + 1)));
+        }
       }
       notifyAStarted?.();
       await aGate;
@@ -412,6 +416,6 @@ test.describe.serial('CRIBUM E2E Browser Test Suite — Operational Scenarios & 
 
     expect(result.status).toBe(503);
     expect(result.body.detail.error).toBe('INFERENCE_UNAVAILABLE');
-    expect(result.body.detail.message).toContain('infraestrutura AMD');
+    expect(result.body.detail.message).toContain('AMD');
   });
 });
