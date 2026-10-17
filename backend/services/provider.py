@@ -275,6 +275,29 @@ class RealROCmProvider(BaseInferenceProvider):
                 "requires_review": (uncertainty != "CERTAIN"),
             })
 
+        # Extração do CID-10 do cabeçalho para alimentar a Correlação Clínica no modo REAL
+        if cabecalho.get("diagnostico_cid"):
+            raw_cid = str(cabecalho.get("diagnostico_cid")).strip().upper()
+            fields.append({
+                "field_type": "cid",
+                "raw_text": raw_cid,
+                "normalized_value": raw_cid,
+                "hypotheses": [
+                    {
+                        "text": raw_cid,
+                        "rank": 1,
+                        "score": None,
+                        "score_kind": "HEURISTIC_MODEL",
+                        "supporting_evidence_ids": [],
+                    }
+                ],
+                "uncertainty_status": "CERTAIN",
+                "confidence_kind": "HEURISTIC_MODEL",
+                "score": None,
+                "evidence_ids": [],
+                "requires_review": False,
+            })
+
         # Itens da receita
         for idx, item in enumerate(parsed.get("itens", []), 1):
             raw_box = item.get("box")

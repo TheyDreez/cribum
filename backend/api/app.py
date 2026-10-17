@@ -1,3 +1,4 @@
+import hashlib
 import os
 import shutil
 import unicodedata
@@ -763,6 +764,24 @@ def submit_human_review(
     db.add(decision)
     db.flush()
 
+    # Calcula o elo criptográfico encadeado ao evento anterior (Merkle Chain / RFC 6962)
+    last_audit = (
+        db.query(AuditEventModel)
+        .order_by(AuditEventModel.timestamp.desc(), AuditEventModel.id.desc())
+        .first()
+    )
+    prev_chain_hash = (
+        (last_audit.metadata_sanitized or {}).get("chain_hash", "0" * 64)
+        if last_audit
+        else "0" * 64
+    )
+    chain_payload = (
+        f"{prev_chain_hash}|{doc.content_hash}|{target_run_id}|"
+        f"{decision_in.actor_id}|{decision_in.action}|"
+        f"{confirmed_value_to_save}|{stripped_reason}"
+    )
+    current_chain_hash = hashlib.sha256(chain_payload.encode("utf-8")).hexdigest()
+
     audit = AuditEventModel(
         actor_id=decision_in.actor_id,
         action=f"REVIEW_DECISION_{decision_in.action}",
@@ -775,6 +794,8 @@ def submit_human_review(
             "action": decision_in.action,
             "confirmed_value": confirmed_value_to_save,
             "reason": stripped_reason,
+            "prev_chain_hash": prev_chain_hash,
+            "chain_hash": current_chain_hash,
         },
     )
     db.add(audit)

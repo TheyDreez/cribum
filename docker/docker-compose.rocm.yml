@@ -2,23 +2,32 @@ version: '3.8'
 
 services:
   vllm-rocm:
-    image: rocm/vllm:latest
+    image: rocm/vllm:rocm6.2_mi300_ubuntu20.04_py3.9_vllm_0.6.4
     container_name: cribum-vllm-rocm
     network_mode: host
     ipc: host
+    shm_size: '32gb'
     devices:
-      - /dev/kfd
-      - /dev/dri
+      - /dev/kfd:/dev/kfd
+      - /dev/dri:/dev/dri
     group_add:
       - video
-    volumes:
-      - ~/.cache/huggingface:/root/.cache/huggingface
     environment:
+      - HIP_VISIBLE_DEVICES=0
       - HUGGINGFACE_HUB_CACHE=/root/.cache/huggingface
       - ROCM_PATH=/opt/rocm
+      - VLLM_USE_TRITON_FLASH_ATTN=1
+      - SAFETENSORS_FAST_GPU=1
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
     command: >
       python3 -m vllm.entrypoints.openai.api_server
       --model Qwen/Qwen2-VL-7B-Instruct
-      --trust-remote-code
       --port 8000
+      --dtype bfloat16
+      --max-model-len 8192
+      --mm-encoder-tp-mode data
+      --enable-prefix-caching
+      --gpu-memory-utilization 0.90
+      --trust-remote-code
     restart: unless-stopped
