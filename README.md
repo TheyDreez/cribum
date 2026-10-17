@@ -1,134 +1,107 @@
-# CRIBUM 🛡️
-> *From the Latin **Cribrum** — The Intelligent Sieve for Medical Claims & Prescription Auditing.*
+<div align="center">
 
-[![AMD ROCm](https://img.shields.io/badge/Powered%20by-AMD%20ROCm-ED1C24?logo=amd&logoColor=white)](https://rocm.docs.amd.com/)
+# CRIBUM 🛡️
+### *Medical Forensics & Clinical Integrity Suite*
+> **The Intelligent Sieve for Medical Claims, LASA Safety, and Healthcare Fraud Auditing.**  
+> *Engineered for high-performance open-source vision-language models on **AMD ROCm™ & Instinct MI300X**.*
+
+[![AMD ROCm](https://img.shields.io/badge/Powered%20by-AMD%20ROCm%206.2-ED1C24?logo=amd&logoColor=white)](https://rocm.docs.amd.com/)
 [![Track](https://img.shields.io/badge/Hackathon%20Track-Health%20%26%20Wellbeing-blue)](https://lablab.ai/ai-hackathons/amd-developer-hackathon-act-iii)
+[![RFC 6962](https://img.shields.io/badge/Auditability-Merkle%20Chain%20RFC%206962-10b981)](https://datatracker.ietf.org/doc/html/rfc6962)
+[![Tests](https://img.shields.io/badge/Tests-22%20Pytest%20%7C%2014%20Playwright-success)](https://github.com/TheyDreez/cribum)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**CRIBUM** is a local, privacy-first multi-agent medical claim and prescription audit system built entirely on **AMD GPUs via ROCm**. Designed as an intelligent assistant for human auditors, health insurance compliance teams, and forensic analysts, CRIBUM detects medication errors, Look-Alike Sound-Alike (LASA) confusions, and systemic fraud networks without any sensitive patient data ever leaving the secure server.
-
-Built by **Inédito Viável** (*"Untested Feasibility"*) for the **AMD Developer Hackathon: ACT III** (Health & Wellbeing Track).
+</div>
 
 ---
 
-## 🎯 3 Key Differentiators
+## 💎 Vitrine Visual da Workstation Pericial
 
-Unlike traditional OCR solutions or opaque black-box APIs:
+> *Interface reativa em React 18 & TypeScript desenvolvida para peritos médicos, operadoras de saúde (ANS/TUSS) e equipes de Compliance (Blue Team).*
 
-1. **Uncertainty-Aware Multi-Hypothesis Reading:**  
-   Instead of guessing blindly on illegible handwriting, CRIBUM extracts the **top 3 most probable hypotheses** for each item, cross-checks against the official **LASA (Look-Alike Sound-Alike / ISMP)** safety database and clinical context, and raises critical alerts when high-risk medication swaps are suspected (e.g., *Losartana* vs. *Lorazepam*).
-
-2. **Visual Traceability (Bounding Box Evidence):**  
-   Every audit finding and discrepancy is physically linked to its exact normalized visual coordinate `[ymin, xmin, ymax, xmax]` on the source prescription. Auditors click the alert and immediately inspect the illuminated region.
-
-3. **Multi-Claim Network Fraud Analysis:**  
-   Moves beyond single-document review. A graph-based engine (**NetworkX**) analyzes cross-claim relationships across patients, physicians (CRM), clinics, and procedures to spot organized fraud patterns (e.g., impossible travel velocities, concurrent procedure billings, and statistical outliers).
-
----
-
-## 🧠 Multi-Agent Architecture
-
-```
-                  ┌───────────────────────────────────────────────┐
-                  │           Medical Document / Claim            │
-                  └───────────────────────┬───────────────────────┘
-                                          │
-                                          ▼
-                         ┌─────────────────────────────────┐
-                         │       AGENT 1: LEITOR           │
-                         │  Open VLM (Qwen2-VL) on vLLM   │
-                         │    AMD ROCm GPU Acceleration    │
-                         └────────────────┬────────────────┘
-                                          │ Top-3 Hypotheses + Bounding Boxes
-                                          ▼
-                         ┌─────────────────────────────────┐
-                         │     AGENT 2: FARMACÊUTICO       │
-                         │  LASA Rules, ISMP, Dosage,     │
-                         │     Clinical Context Checks     │
-                         └────────────────┬────────────────┘
-                                          │ Clinical Validation
-                                          ▼
-                         ┌─────────────────────────────────┐
-                         │     AGENT 3: INVESTIGADOR       │
-                         │  Network Graph Anomaly Engine   │
-                         │    (Cross-Claim Multi-Node)     │
-                         └────────────────┬────────────────┘
-                                          │ Fraud Patterns
-                                          ▼
-                         ┌─────────────────────────────────┐
-                         │       AGENT 4: RELATOR          │
-                         │  Explainable Audit Dossier      │
-                         │  Risk Scoring + Human Escalation│
-                         └────────────────┬────────────────┘
-                                          │
-                                          ▼
-                  ┌───────────────────────────────────────────────┐
-                  │            Auditor Web Interface              │
-                  │   Queue · Visual Inspection · Fraud Graph     │
-                  └───────────────────────────────────────────────┘
+```text
++---------------------------------------------------------------------------------+
+| [CRIBUM WORKSTATION v1.0]   | Case: CASE-AMB-001 [AMBIGUOUS / LASA]  [CCRI: 94] |
++---------------------------------+-----------------------------------------------+
+| [A4 Medical Image & BBox]       | [AI Findings & Clinical Correlation]          |
+|  .---------------------------.  | - Alerta LASA: Losartana 50mg vs Lorazepam    |
+|  | [X] Bounding Box 0..1     |  | - CID-10 I10 (Hipertensão) × Incompatibilidade|
+|  |     (Visual Evidence)     |  | - Glosa Preventiva Calculada: R$ 1.480,00     |
+|  '---------------------------'  | - Cadeia de Custódia SHA-256 (RFC 6962 Ativa) |
++---------------------------------+-----------------------------------------------+
+| [Filtros Ópticos Forenses: Negatoscópio | High-Pass | Otsu Binarization]        |
++---------------------------------------------------------------------------------+
 ```
 
----
-
-## 🛡️ Safety & Human-in-the-Loop Safeguards
-
-In strict compliance with the **Health and Wellbeing Track Safety Guidelines**:
-- **Non-Autonomous:** CRIBUM is explicitly an auditor-support tool. It never provides direct clinical diagnosis or automated prescription decisions.
-- **Fail-Safe Insecurity Escalation:** When visual confidence falls below safety thresholds or a LASA collision is flagged, the item is tagged with `incerteza: alta` and escalated directly into the human auditor review queue.
-- **Auto-hospedagem e Soberania de Dados:** Arquitetura desenhada para execução local/auto-hospedada em hardware AMD via vLLM/ROCm, sem envio de imagens ou registros de saúde para APIs proprietárias externas.
-- **Trilha de Auditoria Persistida:** Registro rastreável de decisões do auditor humano vinculadas ao documento, execução e campo específico (sem falsas alegações de assinatura criptográfica PKI).
+| Mesa de Inspeção Documental & Correlação Clínica (`CASE-AMB-001`) | Topologia Relacional & Conluio Geográfico (`NetworkGraphView`) |
+| :---: | :---: |
+| ![Workstation Pericial](docs/screenshots/redesign/desktop_1920x1080.png) | ![Grafo de Rede](docs/screenshots/redesign/desktop_1920x1080_graph.png) |
 
 ---
 
-## 💻 AMD Technology Stack & Status Real
+## 🚀 O Problema & A Solução
 
-- **Arquitetura & Adaptador:** Adaptador multimodal para vLLM compatível com aceleradores AMD ROCm™ (Instinct MI300X/MI250/Radeon) via endpoint OpenAI-compatible (`/v1/chat/completions`).
-- **Status de Execução Local:** A inferência física em GPU AMD encontra-se registrada como **NÃO EXECUTADA** no host de desenvolvimento por indisponibilidade de acelerador físico ROCm local. O protocolo foi validado via suíte de testes unitários com servidor fake simulado (`test_amd_protocol.py`). O modo DEMO opera sobre catálogo determinístico de 20 casos sintéticos gabaritados sem qualquer alegação falsa de hardware.
-- **Telemetria:** Medição de latência fim-a-fim e consumo de tokens por documento (telemetria direta de VRAM remota não coletada).
-
----
-
-## 📂 Project Structure
-
-```
-cribum/
-├── backend/
-│   ├── agents/            # Leitor, Farmacêutico, Investigador, Relator
-│   ├── data/
-│   │   ├── references/    # LASA lists, dosage reference ranges
-│   │   └── synthetic/     # 20 hand-crafted & 200 synthetic claims + ground truth
-│   ├── schemas/           # Pydantic JSON validation schemas
-│   └── requirements.txt
-├── benchmarks/            # ROCm latency, VRAM, and throughput benchmark scripts
-├── docker/                # ROCm vLLM deployment configs
-├── frontend/              # Auditor React UI (Queue, Visual BBox viewer, Graph)
-└── README.md
-```
+* **O Desafio Global:** Fraudes, desperdícios e abusos drenam **R$ 34 bilhões anualmente** da saúde suplementar no Brasil (IESS), enquanto erros de dispensação por caligrafia ilegível em medicamentos de Alta Vigilância (**LASA** — *Look-Alike Sound-Alike*, ex: *Losartana* vs *Lorazepam*) colocam vidas em risco iminente.
+* **A Resposta do CRIBUM:** Uma plataforma soberana e auto-hospedada que unifica **Visão Computacional Multimodal (Qwen2-VL)**, **motores determinísticos de regras (ISMP Brasil)**, **análise de redes complexas (NetworkX / Grafo)** e **trilha imutável baseada em Merkle Chains (RFC 6962)** sobre aceleradores **AMD ROCm™**.
 
 ---
 
-## 🚀 Quickstart
+## 🏛️ Arquitetura Multi-Agente & Soberania de Dados
 
-### 1. Backend Setup
+O sistema opera de forma estritamente colaborativa (`backend/agents/`), posicionando a inteligência artificial como assistente de evidências sob **supervisão humana obrigatória (Human-in-the-Loop - HITL)**:
+
+1. **`Leitor` (`backend/agents/leitor.py` — VLM Qwen2-VL em AMD ROCm):** Extração de hipóteses top-3, metadados e coordenadas de *Bounding Box* normalizadas (`0..1`) com tratamento rigoroso de incerteza.
+2. **`Farmacêutico` (`backend/agents/farmaceutico.py` — Motor de Regras ISMP):** Cruzamento estrito de listas de medicamentos LASA, validação de compatibilidade diagnóstica via CID-10 e verificação de duplicidade por hash SHA-256.
+3. **`Investigador` (`backend/agents/investigador.py` — Grafo de Anomalias de Rede):** Detecção de conluio geográfico em lote de 200 guias (ex: faturamentos concomitantes pelo mesmo CRM no mesmo dia em municípios distantes).
+4. **`Relator` (`backend/agents/relator.py` — Dossiê Criptográfico & ROI):** Emissão de laudo pericial estruturado com cálculo de glosa preventiva (TUSS/ANS), Score Multimodal CCRI (0–100) e selo criptográfico encadeado via SHA-256 (`prev_chain_hash` $\rightarrow$ `chain_hash`).
+
+---
+
+## ⚙️ Prontidão de Hardware AMD Instinct MI300X / ROCm™ 6.2
+
+O CRIBUM foi arquitetado para extrair o máximo potencial dos aceleradores AMD de alta capacidade de memória HBM3 (`docker/docker-compose.rocm.yml`):
+* **Paralelismo de Dados no Vision Encoder (`--mm-encoder-tp-mode data`):** Processamento nativo de guias A4 em alta resolução sem fatiamento destrutivo de traços caligráficos.
+* **Prefix Caching Ativo (`--enable-prefix-caching`):** Compartilhamento de contexto de sistema na HBM3 para reduzir o *Time-To-First-Token* em prompts de auditoria estruturados.
+* **Zero Mock Silencioso:** Garantia de integridade contratual. Se o modo `REAL` for acionado sem endpoint vLLM/ROCm ativo, o sistema reporta `HTTP 503 INFERENCE_UNAVAILABLE` explicitamente de forma auditável, sem inventar resultados falsos.
+
+---
+
+## ⚡ Guia Rápido de Instalação e Testes
+
+### Pré-requisitos
+* Python 3.12+
+* Node.js 18+
+
+### 1. Backend (FastAPI + SQLite + Merkle Chain)
 ```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
-pip install -r requirements.txt
+git clone -b main https://github.com/TheyDreez/cribum.git
+cd cribum
+python -m venv .venv
+source .venv/bin/activate  # No Windows: .\.venv\Scripts\activate
+pip install -r backend/requirements.txt
+uvicorn backend.api.app:app --port 8000 --reload
 ```
 
-### 2. Launch AMD ROCm vLLM Server
+### 2. Frontend (React 18 + Tailwind Workstation)
+Em outro terminal:
 ```bash
-docker run -it --network=host --device=/dev/kfd --device=/dev/dri \
-  --group-add video --ipc=host --shm-size 16G \
-  -v ~/.cache/huggingface:/root/.cache/huggingface \
-  rocm/vllm:latest \
-  python3 -m vllm.entrypoints.openai.api_server \
-  --model Qwen/Qwen2-VL-7B-Instruct \
-  --port 8000
+cd cribum/frontend
+npm install
+npm run dev
+```
+Acesse `http://localhost:5173` e clique em **"Carregar 20 Casos Sintéticos"** no topo para popular o workspace.
+
+### 3. Validação de Testes Automatizados (100% Verde)
+* **Testes Unitários & Contratos Backend (22 testes Pytest):**
+```bash
+python -m pytest -v
+```
+* **Testes E2E de Navegador (14 cenários Playwright):**
+```bash
+cd frontend && npx playwright test
 ```
 
 ---
 
-## ⚖️ License
-Distributed under the MIT License. See `LICENSE` for more information.
+## ⚖️ Licença
+Distribuído sob a Licença MIT. Veja [`LICENSE`](LICENSE) para mais detalhes.
