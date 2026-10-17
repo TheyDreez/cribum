@@ -20,7 +20,7 @@ print(f"Total files to pack: {len(target_files)}")
 
 header = "# CRIBUM / AUDITRX - MASTER CONSOLIDATED CODEBASE\n\n"
 header += f"**Total de Arquivos:** {len(target_files)}  \n"
-header += "**Branch:** `fix/redesign-integrity`  \n"
+header += "**Branch:** `main`  \n"
 header += "**Repositorio:** `scratch/cribum`  \n\n"
 header += "## Indice Geral de Arquivos\n\n"
 for tf in target_files:
