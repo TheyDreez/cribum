@@ -172,12 +172,16 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
       {/* Top Toolbar */}
       <div className="h-11 px-4 border-b border-slate-200 bg-white flex items-center justify-between z-10 shrink-0 shadow-2xs">
         <div className="flex-1 min-w-0 flex items-center gap-2 text-xs text-slate-700 mr-4">
+          <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-900 text-white shrink-0">
+            VIEW-02
+          </span>
           <span className="shrink-0 font-semibold text-slate-800">Visualizador Pericial:</span>
           {selectedFinding ? (
             <span
-              className="px-2.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 text-xs truncate font-medium max-w-[500px]"
+              className="px-2.5 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200 text-xs truncate font-medium max-w-[500px] flex items-center gap-1.5"
               title={selectedFinding.title}
             >
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-600 shrink-0" />
               Alerta Ativo: {selectedFinding.title}
             </span>
           ) : (

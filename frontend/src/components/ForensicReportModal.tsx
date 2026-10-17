@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { Lock, CheckCircle2, TrendingDown, Cpu } from 'lucide-react';
 import {
   DocumentItem,
   Evidence,
@@ -132,15 +131,15 @@ export const ForensicReportModal: React.FC<ForensicReportModalProps> = ({
       aria-modal="true"
       aria-label="Laudo Pericial Oficial de Auditoria"
     >
-      <div className="bg-white border border-slate-300 rounded-lg shadow-xl max-w-4xl w-full max-h-[92vh] overflow-y-auto p-8 text-slate-900 print:max-w-none print:max-h-none print:shadow-none print:border-none print:p-4">
+      <div className="bg-white border border-slate-300 rounded-md shadow-xl max-w-4xl w-full max-h-[92vh] overflow-y-auto p-8 text-slate-900 print:max-w-none print:max-h-none print:shadow-none print:border-none print:p-4">
         {/* Barra de Ações do Modal (Oculta na Impressão) */}
         <div className="flex items-center justify-between pb-4 mb-6 border-b border-slate-200 print:hidden">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 bg-slate-900 text-white font-mono text-xs font-bold rounded">
+          <div className="flex items-center gap-2.5">
+            <span className="px-2.5 py-1 bg-[#0f172a] text-white font-mono text-xs font-bold rounded-xs tracking-wider">
               LAUDO PERICIAL OFICIAL
             </span>
             <span className="text-xs text-slate-500">
-              Parecer pericial estruturado pronto para arquivamento ou exportação PDF.
+              Dossiê técnico estruturado para instrução regulatória (TISS/ANS) ou arquivamento PDF.
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -148,7 +147,7 @@ export const ForensicReportModal: React.FC<ForensicReportModalProps> = ({
               type="button"
               data-testid="print-report-btn"
               onClick={handlePrint}
-              className="px-3.5 py-1.5 bg-[#0f172a] hover:bg-[#1e293b] text-white text-xs font-semibold rounded-md transition-colors shadow-xs"
+              className="px-3.5 py-1.5 bg-[#0f172a] hover:bg-slate-800 text-white text-xs font-semibold rounded transition-colors shadow-2xs"
             >
               Imprimir / Salvar PDF
             </button>
@@ -156,7 +155,7 @@ export const ForensicReportModal: React.FC<ForensicReportModalProps> = ({
               type="button"
               data-testid="close-report-btn"
               onClick={onClose}
-              className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-md border border-slate-300 transition-colors"
+              className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded border border-slate-300 transition-colors"
             >
               Fechar
             </button>
@@ -166,14 +165,17 @@ export const ForensicReportModal: React.FC<ForensicReportModalProps> = ({
         {/* Cabeçalho Institucional do Laudo */}
         <div className="border-b-2 border-slate-900 pb-4 mb-6 flex items-start justify-between gap-4">
           <div>
+            <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-slate-500 mb-0.5">
+              CRIBUM WORKSTATION // AUDITORIA DOCUMENTAL &amp; FARMACOVIGILÂNCIA
+            </div>
             <h2 className="text-lg font-bold tracking-wide uppercase text-slate-900">
-              CRIBUM — PARECER TÉCNICO DE AUDITORIA DOCUMENTAL MÉDICA
+              PARECER TÉCNICO DE AUDITORIA DOCUMENTAL MÉDICA
             </h2>
             <p className="text-xs text-slate-600 font-medium">
               Relatório Rastreável de Revisão Humana Supervisionada (Human-in-the-Loop)
             </p>
           </div>
-          <div className="text-right font-mono text-xs text-slate-700">
+          <div className="text-right font-mono text-xs text-slate-700 bg-slate-50 px-3 py-2 rounded border border-slate-200">
             <div>ID DO DOCUMENTO: <strong>{document.id}</strong></div>
             <div>STATUS ATUAL: <strong>{document.review_status}</strong></div>
             <div>MODO DE EXECUÇÃO: <strong>{document.last_execution_mode || 'DEMO'}</strong></div>
@@ -205,59 +207,64 @@ export const ForensicReportModal: React.FC<ForensicReportModalProps> = ({
             </div>
           </div>
 
-          {/* Selo de Árvore de Custódia Imutável (RFC 6962 / Merkle Root) */}
-          <div className="flex items-center justify-between bg-emerald-50/90 border border-emerald-200 rounded px-3 py-2 mt-3">
-            <div className="space-y-0.5 min-w-0 pr-2">
-              <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-900">
-                <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                <span>Cadeia de Custódia Criptográfica Verificada (RFC 6962)</span>
+          {/* Selo Institucional de Árvore de Custódia Imutável (RFC 6962 / Merkle Root) */}
+          <div className="flex items-center justify-between bg-white border border-emerald-300 rounded px-3.5 py-2.5 mt-3 shadow-2xs">
+            <div className="flex items-center gap-3 min-w-0 pr-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="2" stroke="#047857" strokeWidth="1.5" />
+                <rect x="5" y="5" width="14" height="14" rx="1" stroke="#047857" strokeWidth="1" strokeDasharray="2 2" />
+                <path d="M8.5 12.2L10.8 14.5L15.5 9.5" stroke="#047857" strokeWidth="1.8" strokeLinecap="square" />
+              </svg>
+              <div className="space-y-0.5 min-w-0">
+                <div className="text-[11px] font-bold text-emerald-950 uppercase tracking-wide font-mono">
+                  Cadeia de Custódia Criptográfica Verificada (RFC 6962)
+                </div>
+                <p className="text-[10px] font-mono text-slate-600 truncate">
+                  Merkle Root: <span className="text-slate-900 font-semibold">{merkleData.merkleRoot}</span>
+                </p>
               </div>
-              <p className="text-[10px] font-mono text-emerald-800 truncate">
-                Merkle Root: {merkleData.merkleRoot}
-              </p>
             </div>
             <button
               type="button"
               onClick={() => setChainVerified(true)}
-              className="shrink-0 inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded bg-emerald-700 text-white hover:bg-emerald-600 transition-colors"
+              className="shrink-0 inline-flex items-center gap-1.5 text-[10px] font-mono font-bold px-2.5 py-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-300 hover:bg-emerald-100 transition-colors"
             >
-              <CheckCircle2 className="w-3 h-3" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
               {chainVerified
-                ? `Íntegro (${merkleData.blocks.length} elos)`
-                : 'Auditar Árvore'}
+                ? `ÍNTEGRO (${merkleData.blocks.length} ELOS)`
+                : 'AUDITAR ÁRVORE'}
             </button>
           </div>
         </div>
 
-        {/* Quadro de Impacto Econômico TUSS / ANS */}
-        <div className="mb-6 border border-slate-200 rounded p-4 bg-slate-900 text-white space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-              <TrendingDown className="w-4 h-4" />
-              Impacto Financeiro & Enquadramento Regulatório (TISS / ANS)
+        {/* Quadro Contábil de Enquadramento Regulatório & Glosa Técnica (TISS / ANS) */}
+        <div className="mb-6 border border-slate-300 rounded p-4 bg-white space-y-2.5">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800">
+              Quadro Auxiliar — Impacto Financeiro &amp; Enquadramento Regulatório (TISS / ANS)
             </span>
-            <span className="text-[10px] font-mono text-slate-300 flex items-center gap-1">
-              <Cpu className="w-3 h-3 text-red-400" /> Motor AMD ROCm
+            <span className="text-[10px] font-mono text-slate-500 uppercase">
+              Padrão TUSS · ROCm Pipeline
             </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs pt-1">
-            <div className="bg-slate-800 p-2.5 rounded border border-slate-700">
-              <span className="text-[10px] text-slate-400 block uppercase">Código TUSS Ref.</span>
-              <span className="font-mono font-semibold text-slate-100 text-[11px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs pt-0.5">
+            <div className="bg-slate-50 p-2.5 rounded border border-slate-200">
+              <span className="text-[10px] font-mono text-slate-500 block uppercase">Código TUSS Ref.</span>
+              <span className="font-mono font-semibold text-slate-900 text-[11px]">
                 {financialSummary.tuss}
               </span>
             </div>
-            <div className="bg-slate-800 p-2.5 rounded border border-slate-700">
-              <span className="text-[10px] text-slate-400 block uppercase">Valor Faturado</span>
-              <span className="font-mono font-bold text-slate-100">
+            <div className="bg-slate-50 p-2.5 rounded border border-slate-200">
+              <span className="text-[10px] font-mono text-slate-500 block uppercase">Valor Faturado</span>
+              <span className="font-mono font-bold text-slate-900">
                 {financialSummary.billed}
               </span>
             </div>
-            <div className="bg-emerald-950/80 p-2.5 rounded border border-emerald-700/60">
-              <span className="text-[10px] text-emerald-300 block uppercase">
+            <div className="bg-emerald-50/70 p-2.5 rounded border border-emerald-200">
+              <span className="text-[10px] font-mono text-emerald-800 block uppercase">
                 Glosa / Economia Prevenida
               </span>
-              <span className="font-mono font-bold text-emerald-400 text-[11px]">
+              <span className="font-mono font-bold text-emerald-950 text-[11px]">
                 {financialSummary.glosaPrevented}
               </span>
             </div>
@@ -431,7 +438,7 @@ export const ForensicReportModal: React.FC<ForensicReportModalProps> = ({
             </p>
           )}
           <div className="mt-4 pt-2 border-t border-slate-300 text-[10px] text-slate-500 font-mono">
-            Nota de Conformidade: Registro persistido em trilha de auditoria SQLite vinculada ao Documento, Run e Campo. Não substitui assinatura digital criptográfica ICP-Brasil/PKI.
+            Nota de Conformidade: Registro persistido em trilha de auditoria SQLite encadeada (RFC 6962 Merkle Chain) vinculada ao Documento, Run e Campo. Não substitui assinatura digital criptográfica ICP-Brasil/PKI.
           </div>
         </div>
       </div>
