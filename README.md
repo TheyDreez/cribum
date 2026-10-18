@@ -5,11 +5,11 @@
 > **The Intelligent Sieve for Medical Claims, LASA Safety, and Healthcare Fraud Auditing.**  
 > *Engineered for high-performance open-source vision-language models on **AMD ROCm™ & Instinct MI300X**.*
 
-[![AMD ROCm](https://img.shields.io/badge/Powered%20by-AMD%20ROCm%206.2-ED1C24?logo=amd&logoColor=white)](https://rocm.docs.amd.com/)
-[![Track](https://img.shields.io/badge/Hackathon%20Track-Health%20%26%20Wellbeing-blue)](https://lablab.ai/ai-hackathons/amd-developer-hackathon-act-iii)
+[![AMD ROCm](https://img.shields.io/badge/Engineered%20for-AMD%20ROCm%20%26%20Instinct-ED1C24?logo=amd&logoColor=white)](https://rocm.docs.amd.com/)
+[![Domain](https://img.shields.io/badge/Domain-Clinical%20AI%20%26%20Forensics-blue)](https://github.com/TheyDreez/cribum)
 [![RFC 6962](https://img.shields.io/badge/Auditability-Merkle%20Chain%20RFC%206962-10b981)](https://datatracker.ietf.org/doc/html/rfc6962)
 [![Tests](https://img.shields.io/badge/Tests-22%20Pytest%20%7C%2014%20Playwright-success)](https://github.com/TheyDreez/cribum)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-Proprietary%20%7C%20Source--Available-red.svg)](LICENSE)
 
 </div>
 
