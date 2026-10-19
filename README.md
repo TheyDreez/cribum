@@ -1,24 +1,47 @@
 <div align="center">
 
 # CRIBUM 🛡️
-### *Medical Forensics & Clinical Integrity Suite*
-> **The Intelligent Sieve for Medical Claims, LASA Safety, and Healthcare Fraud Auditing.**  
-> *Engineered for high-performance open-source vision-language models on **AMD ROCm™ & Instinct MI300X**.*
+### *IA Multiagente para Segurança de Medicação (LASA), Tecnologia Assistiva & Auditoria em Saúde*
+> **O crivo inteligente para prevenção de erros médicos em receitas, segurança farmacológica LASA e auditoria de conformidade no SUS e na Saúde Suplementar (ANS).**  
+> *Arquitetura multiagente Privacy-First (LGPD) com Visão Computacional Multimodal (**Qwen2-VL**), Grafos Relacionais (**NetworkX**) e Cadeia de Custódia **Merkle Tree (RFC 6962)**.*
 
-[![AMD ROCm](https://img.shields.io/badge/Engineered%20for-AMD%20ROCm%20%26%20Instinct-ED1C24?logo=amd&logoColor=white)](https://rocm.docs.amd.com/)
-[![Domain](https://img.shields.io/badge/Domain-Clinical%20AI%20%26%20Forensics-blue)](https://github.com/TheyDreez/cribum)
+[![Campus Mobile](https://img.shields.io/badge/Campus%20Mobile-Sa%C3%BAde%20%26%20Tecnologias%20Assistivas-8b5cf6)](https://github.com/TheyDreez/cribum)
+[![Domain](https://img.shields.io/badge/Domain-Clinical%20AI%20%26%20LASA%20Safety-blue)](https://github.com/TheyDreez/cribum)
 [![RFC 6962](https://img.shields.io/badge/Auditability-Merkle%20Chain%20RFC%206962-10b981)](https://datatracker.ietf.org/doc/html/rfc6962)
 [![Tests](https://img.shields.io/badge/Tests-22%20Pytest%20%7C%2014%20Playwright-success)](https://github.com/TheyDreez/cribum)
+[![AMD ROCm](https://img.shields.io/badge/Local%20GPU%20Ready-AMD%20ROCm%20%26%20vLLM-ED1C24?logo=amd&logoColor=white)](docs/AMD_SETUP.md)
 [![License](https://img.shields.io/badge/License-Proprietary%20%7C%20Source--Available-red.svg)](LICENSE)
-[![Video Demo PT-BR](https://img.shields.io/badge/%E2%96%B6%EF%B8%8F%20Assistir%20Demo%20(PT--BR)-Campus%20Mobile-8b5cf6)](https://github.com/TheyDreez/cribum/raw/main/docs/Cribum_Campus_Mobile_Demo.mp4)
 
 </div>
 
 ---
 
-## 💎 Vitrine Visual da Workstation Pericial
+## 🎬 Demonstração Oficial em Vídeo (Português - PT-BR)
 
-> *Interface reativa em React 18 & TypeScript desenvolvida para peritos médicos, operadoras de saúde (ANS/TUSS) e equipes de Compliance (Blue Team).*
+> **Submissão Oficial — Programa Campus Mobile (Categoria: Saúde e Tecnologias Assistivas)**  
+> Assista à demonstração completa de 1 minuto mostrando o fluxo em tempo real dos **4 agentes autônomos de IA**, desde a leitura de receituários com caligrafia ambígua até o bloqueio de trocas fatais de medicamentos **LASA** (*Losartana* vs. *Lorazepam*), emissão de laudo criptográfico **Merkle Tree (RFC 6962)** e detecção de anomalias em grafos:
+
+👉 **[▶️ Assistir / Baixar Vídeo Oficial de Demonstração (`docs/Cribum_Campus_Mobile_Demo.mp4`)](https://github.com/TheyDreez/cribum/raw/main/docs/Cribum_Campus_Mobile_Demo.mp4)**
+
+---
+
+## 🎯 Propósito e Impacto em Duas Pontas: Do Bolso do Cidadão à Gestão de Saúde
+
+Erros de medicação por grafia ou som semelhantes (**LASA** — *Look-Alike, Sound-Alike*) causam milhares de internações e óbitos evitáveis no Brasil, enquanto fraudes e glosas drenam **R$ 34 bilhões anualmente** do SUS e da saúde suplementar (IESS). O **CRIBUM** conecta duas pontas complementares através do mesmo motor multiagente:
+
+### 1. 📱 Tecnologia Assistiva Mobile na Ponta (B2C / Impacto Social Direto)
+* **Para quem:** Pacientes (especialmente **idosos, polimedicados e pessoas com baixa visão**), cuidadores familiares, enfermeiros e farmacêuticos na triagem de balcão.
+* **Como atua:** Pelo celular, o usuário fotografa a receita médica e valida a prescrição em segundos. O sistema identifica caligrafias médicas ambíguas, alerta sobre riscos fatais de confusão entre medicamentos LASA catalogados pela **ANVISA / ISMP Brasil** (evitando, por exemplo, que um paciente hipertenso tome um ansiolítico/psicotrópico por engano) e aponta incompatibilidades com o diagnóstico (**CID-10**), democratizando a segurança clínica no bolso do cidadão.
+
+### 2. 🏥 Auditoria Pericial e Integridade na Gestão (B2B / B2G — SUS e ANS)
+* **Para quem:** Auditores médicos e de enfermagem do SUS, hospitais, clínicas, secretarias públicas de saúde e operadoras suplementares (ANS).
+* **Como atua:** Processa filas de guias médicas (padrão **TUSS/ANS**), calcula automaticamente o risco clínico composto (**CCRI**) e a glosa preventiva evitada, cruza **multigrafos relacionais** para impedir fraudes e conluios (como faturamentos simultâneos em municípios distantes) e sela cada decisão humana em uma cadeia criptográfica imutável.
+
+---
+
+## 💎 Vitrine Visual da Plataforma
+
+> *Interface responsiva em React 18 & TypeScript projetada tanto para inspeção clínica e assistiva quanto para auditoria pericial e visualização de redes complexas.*
 
 ```text
 +---------------------------------------------------------------------------------+
@@ -30,79 +53,92 @@
 |  |     (Visual Evidence)     |  | - Glosa Preventiva Calculada: R$ 1.480,00     |
 |  '---------------------------'  | - Cadeia de Custódia SHA-256 (RFC 6962 Ativa) |
 +---------------------------------+-----------------------------------------------+
-| [Filtros Ópticos Forenses: Negatoscópio | High-Pass | Otsu Binarization]        |
+| [Filtros Ópticos Forenses: Negatoscópio | Contraste Dinâmico | Realce de Tinta] |
 +---------------------------------------------------------------------------------+
 ```
 
-| Mesa de Inspeção Documental & Correlação Clínica (`CASE-AMB-001`) | Topologia Relacional & Conluio Geográfico (`NetworkGraphView`) |
+| Inspeção de Receituário, Hipóteses VLM & Segurança LASA (`CASE-AMB-001`) | Topologia Relacional & Detecção de Conluio em Grafo (`NetworkGraphView`) |
 | :---: | :---: |
 | ![Workstation Pericial](docs/screenshots/redesign/desktop_1920x1080.png) | ![Grafo de Rede](docs/screenshots/redesign/desktop_1920x1080_graph.png) |
 
 ---
 
-## 🚀 O Problema & A Solução
+## 🤖 Arquitetura dos 4 Agentes Autônomos de IA (`backend/agents/`)
 
-* **O Desafio Global:** Fraudes, desperdícios e abusos drenam **R$ 34 bilhões anualmente** da saúde suplementar no Brasil (IESS), enquanto erros de dispensação por caligrafia ilegível em medicamentos de Alta Vigilância (**LASA** — *Look-Alike Sound-Alike*, ex: *Losartana* vs *Lorazepam*) colocam vidas em risco iminente.
-* **A Resposta do CRIBUM:** Uma plataforma soberana e auto-hospedada que unifica **Visão Computacional Multimodal (Qwen2-VL)**, **motores determinísticos de regras (ISMP Brasil)**, **análise de redes complexas (NetworkX / Grafo)** e **trilha imutável baseada em Merkle Chains (RFC 6962)** sobre aceleradores **AMD ROCm™**.
+Diferente de sistemas baseados em OCR simples — que falham em caligrafias médicas, não compreendem contexto clínico e expõem dados sensíveis em nuvens públicas —, o **CRIBUM** opera com uma arquitetura coordenada de **4 agentes especializados** sob supervisão humana obrigatória (*Human-in-the-Loop*):
 
----
+1. **👁️ Agente de Visão Multimodal (`backend/agents/leitor.py` — `Qwen2-VL`):**
+   * Realiza leitura visual multi-hipótese (`top-3`) ciente de incerteza (`CERTAIN`, `AMBIGUOUS`, `INDETERMINATE`), ancorando cada campo extraído às coordenadas físicas exatas da imagem (*Bounding Boxes* normalizadas `0..1`).
+2. **💊 Agente Farmacológico LASA (`backend/agents/farmaceutico.py`):**
+   * Calcula distância fonética e ortográfica/visual sobre o banco de pares críticos de medicamentos **LASA (ANVISA / ISMP Brasil)**, cruza a indicação terapêutica com o diagnóstico **CID-10**, verifica integridade documental (CRM, unidade, posologia e duplicidade SHA-256) e computa o *Composite Clinical Risk Index* (**CCRI** de 0 a 100).
+3. **🕸️ Agente de Grafos Relacionais (`backend/agents/investigador.py` & `backend/services/graph_engine.py`):**
+   * Modela interações entre prescritores, clínicas, pacientes e procedimentos em multigrafos direcionados (**NetworkX**), identificando anomalias topológicas, faturamentos geograficamente incompatíveis no mesmo dia e redes de conluio.
+4. **🔐 Agente Privacy-First & Custódia Merkle (`backend/agents/relator.py`):**
+   * Garante conformidade com a **LGPD** e consolida o dossiê pericial (padrão TUSS/ANS) com selagem criptográfica encadeada em **Árvore de Merkle (RFC 6962)** (`prev_chain_hash` $\rightarrow$ `chain_hash`), assegurando rastreabilidade e imutabilidade jurídica.
 
-## 🏛️ Arquitetura Multi-Agente & Soberania de Dados
-
-O sistema opera de forma estritamente colaborativa (`backend/agents/`), posicionando a inteligência artificial como assistente de evidências sob **supervisão humana obrigatória (Human-in-the-Loop - HITL)**:
-
-1. **`Leitor` (`backend/agents/leitor.py` — VLM Qwen2-VL em AMD ROCm):** Extração de hipóteses top-3, metadados e coordenadas de *Bounding Box* normalizadas (`0..1`) com tratamento rigoroso de incerteza.
-2. **`Farmacêutico` (`backend/agents/farmaceutico.py` — Motor de Regras ISMP):** Cruzamento estrito de listas de medicamentos LASA, validação de compatibilidade diagnóstica via CID-10 e verificação de duplicidade por hash SHA-256.
-3. **`Investigador` (`backend/agents/investigador.py` — Grafo de Anomalias de Rede):** Detecção de conluio geográfico em lote de 200 guias (ex: faturamentos concomitantes pelo mesmo CRM no mesmo dia em municípios distantes).
-4. **`Relator` (`backend/agents/relator.py` — Dossiê Criptográfico & ROI):** Emissão de laudo pericial estruturado com cálculo de glosa preventiva (TUSS/ANS), Score Multimodal CCRI (0–100) e selo criptográfico encadeado via SHA-256 (`prev_chain_hash` $\rightarrow$ `chain_hash`).
-
----
-
-## ⚙️ Prontidão de Hardware AMD Instinct MI300X / ROCm™ 6.2
-
-O CRIBUM foi arquitetado para extrair o máximo potencial dos aceleradores AMD de alta capacidade de memória HBM3 (`docker/docker-compose.rocm.yml`):
-* **Paralelismo de Dados no Vision Encoder (`--mm-encoder-tp-mode data`):** Processamento nativo de guias A4 em alta resolução sem fatiamento destrutivo de traços caligráficos.
-* **Prefix Caching Ativo (`--enable-prefix-caching`):** Compartilhamento de contexto de sistema na HBM3 para reduzir o *Time-To-First-Token* em prompts de auditoria estruturados.
-* **Zero Mock Silencioso:** Garantia de integridade contratual. Se o modo `REAL` for acionado sem endpoint vLLM/ROCm ativo, o sistema reporta `HTTP 503 INFERENCE_UNAVAILABLE` explicitamente de forma auditável, sem inventar resultados falsos.
+*(Consulte [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) para o detalhamento técnico completo do pipeline e isolamento por execução).*
 
 ---
 
-## ⚡ Guia Rápido de Instalação e Testes
+## 🧪 Validação Científica, Dataset Sintético e Testes Automatizados
+
+O repositório inclui um conjunto completo de dados sintéticos gabaritados (100% livres de dados reais de pacientes) e suítes de testes automatizados de ponta a ponta:
+
+### 1. Dataset Clínico Sintético (`backend/data/synthetic/`)
+* **20 Casos Documentais Estruturados (`cases/` e `ground_truth/`):**
+  * **Pares Críticos LASA (Casos 01 a 05):** *Losartana vs. Lorazepam*, *Fluoxetina vs. Flunarizina*, *Digoxina vs. Dipirona*, *Citalopram vs. Escitalopram* e *Tramadol vs. Trazodona*.
+  * **Inconformidades Regulatórias e Clínicas (Casos 06 a 10):** Ausência de CRM do prescritor, ausência de unidade de medida, CRM incompleto, incompatibilidade grave entre medicamento e CID-10, e posologia contraditória.
+  * **Fraudes por Duplicidade Documental (Casos 11 a 15):** Lotes de guias duplicadas submetidas em diferentes contextos para teste de colisão criptográfica e bloqueio de refaturamento.
+  * **Grupo de Controle Regular (Casos 16 a 20):** Prescrições limpas e legíveis para validação de taxa zero de falsos positivos.
+* **Rede Relacional de 200 Sinistros (`claims_200.json`):**
+  * Grafo sintético com **200 guias médicas** conectando médicos, clínicas, pacientes e procedimentos para validação dos algoritmos de detecção de anomalias em rede.
+
+### 2. Suíte de 36 Testes Automatizados (100% Passando)
+* **22 Testes de Backend (Pytest):** Cobrem contratos de API, motor farmacológico LASA, regras determinísticas, isolamento de persistência SQLite por `run_id`, cadeia criptográfica Merkle e protocolo do provedor VLM (`backend/tests/`).
+* **14 Testes End-to-End de Navegador (Playwright):** Validam toda a jornada visual no Chromium headless, incluindo renderização de *bounding boxes* SVG, seleção de hipóteses, bloqueio de aprovação sem revisão humana (HITL), proteção contra *race conditions* e inspeção de anomalias no grafo (`frontend/tests/e2e.spec.ts`).
+
+---
+
+## ⚡ Guia Rápido de Execução (Padrão Local vs. Aceleração GPU)
+
+> **Nota sobre Execução:** O **CRIBUM** roda imediatamente em **qualquer computador padrão (Windows, Linux ou macOS)** usando Python/FastAPI e React no modo de demonstração determinística (`DEMO`).  
+> Os arquivos [`docker/docker-compose.rocm.yml`](docker/docker-compose.rocm.yml) e [`docs/AMD_SETUP.md`](docs/AMD_SETUP.md) compõem uma **camada adicional de infraestrutura hospitalar on-premise** para inferência multimodal 100% local acelerada por GPU (`vLLM` + `Qwen2-VL`), projetada para garantir soberania de dados e conformidade estrita com a **LGPD** sem envio de receitas médicas reais para APIs comerciais externas.
 
 ### Pré-requisitos
-* Python 3.12+
-* Node.js 18+
+* **Python 3.12+**
+* **Node.js 18+**
 
-### 1. Backend (FastAPI + SQLite + Merkle Chain)
+### 1. Iniciar o Backend (FastAPI + SQLite + Motor Multiagente)
 ```bash
 git clone -b main https://github.com/TheyDreez/cribum.git
 cd cribum
 python -m venv .venv
-source .venv/bin/activate  # No Windows: .\.venv\Scripts\activate
+source .venv/bin/activate  # No Windows (PowerShell): .\.venv\Scripts\activate
 pip install -r backend/requirements.txt
 uvicorn backend.api.app:app --port 8000 --reload
 ```
 
-### 2. Frontend (React 18 + Tailwind Workstation)
+### 2. Iniciar o Frontend (React 18 + TypeScript + Tailwind CSS)
 Em outro terminal:
 ```bash
 cd cribum/frontend
 npm install
 npm run dev
 ```
-Acesse `http://localhost:5173` e clique em **"Carregar 20 Casos Sintéticos"** no topo para popular o workspace.
+Acesse **`http://localhost:5173`** no navegador e clique em **"Carregar 20 Casos Sintéticos"** no canto superior direito para inspecionar todos os cenários clínicos e o grafo relacional.
 
-### 3. Validação de Testes Automatizados (100% Verde)
-* **Testes Unitários & Contratos Backend (22 testes Pytest):**
+### 3. Executar os 36 Testes Automatizados
+* **Backend (22 testes em Pytest):**
 ```bash
 python -m pytest -v
 ```
-* **Testes E2E de Navegador (14 cenários Playwright):**
+* **Frontend End-to-End (14 cenários em Playwright):**
 ```bash
 cd frontend && npx playwright test
 ```
 
 ---
 
-## ⚖️ Licença
-Distribuído sob a Licença MIT. Veja [`LICENSE`](LICENSE) para mais detalhes.
+## ⚖️ Licença e Propriedade Intelectual
+Código disponibilizado na modalidade **Source-Available para Avaliação Técnica e Acadêmica** (*Proprietary & Source-Available Evaluation License*). Todos os direitos patrimoniais e de propriedade intelectual pertencem a **André Rogério da Silva Filho**. Consulte o arquivo [`LICENSE`](LICENSE) para os termos completos.
+
