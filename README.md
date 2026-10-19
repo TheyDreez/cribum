@@ -10,6 +10,7 @@
 [![RFC 6962](https://img.shields.io/badge/Auditability-Merkle%20Chain%20RFC%206962-10b981)](https://datatracker.ietf.org/doc/html/rfc6962)
 [![Tests](https://img.shields.io/badge/Tests-22%20Pytest%20%7C%2014%20Playwright-success)](https://github.com/TheyDreez/cribum)
 [![License](https://img.shields.io/badge/License-Proprietary%20%7C%20Source--Available-red.svg)](LICENSE)
+[![Video Demo PT-BR](https://img.shields.io/badge/%E2%96%B6%EF%B8%8F%20Assistir%20Demo%20(PT--BR)-Campus%20Mobile-8b5cf6)](https://github.com/TheyDreez/cribum/raw/main/docs/Cribum_Campus_Mobile_Demo.mp4)
 
 </div>
 
