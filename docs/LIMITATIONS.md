@@ -1,6 +1,6 @@
 # Limitações Conhecidas e Escopo do Sistema (CRIBUM)
 
-Para garantir máxima transparência técnica, científica e regulatória perante avaliadores e auditores do **Campus Mobile, do Instituto Claro**, este documento descreve o escopo formal do protótipo **CRIBUM (AuditRx)**, bem como suas limitações operacionais conhecidas.
+Para garantir máxima transparência técnica e regulatória perante avaliadores e auditores do **Campus Mobile, do Instituto Claro**, este documento descreve o escopo formal do protótipo **CRIBUM (AuditRx)**, bem como suas limitações operacionais conhecidas.
 
 ---
 
@@ -12,7 +12,7 @@ Para garantir máxima transparência técnica, científica e regulatória perant
 ---
 
 ## 2. Modos de Leitura: Deterministic Fixture Engine vs. VLM Live
-* **Modo Padrão (Offline / Demonstração):** Opera com o `Deterministic Fixture Engine`, que carrega extrações estruturadas e auditadas correspondentes aos 20 casos do catálogo sintético (`backend/data/synthetic/`). Isso assegura **100% de reprodutibilidade científica** para avaliadores, sem custos de API externa, sem latência imprevisível e sem dependência de GPU física local.
+* **Modo Padrão (Offline / Demonstração):** Opera com o `Deterministic Fixture Engine`, que carrega extrações estruturadas e auditadas correspondentes aos 20 casos do catálogo sintético (`backend/data/synthetic/`). Isso assegura uma **execução reprodutível e determinística** para avaliadores, sem custos de API externa, sem latência imprevisível e sem dependência de GPU física local.
 * **Modo VLM Live (Produção / GPU On-Premise):** Projetado para conectar-se a servidores locais de inferência multimodal (`vLLM` com `Qwen2-VL-7B-Instruct`) ou endpoints compatíveis. A acurácia em receitas médicas manuscritas reais varia conforme a qualidade da digitalização, iluminação e estilo caligráfico.
 
 ---

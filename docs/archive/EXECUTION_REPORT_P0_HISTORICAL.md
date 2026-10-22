@@ -1,4 +1,6 @@
-# RELATÓRIO DE EXECUÇÃO DO MVP (CRIBUM / AUDITRX)
+# RELATÓRIO DE EXECUÇÃO DO MVP (CRIBUM / AUDITRX) — HISTÓRICO P0
+
+> **Nota de Arquivo Histórico:** Este documento preserva o registro da entrega inicial do marco P0 do hackathon (outubro/2026, com a suíte inicial de 7 testes do backend). A suíte atualizada do projeto conta com **37 testes no backend (Pytest)** e **14 no frontend (Playwright)**. Para as métricas e limitações atuais, consulte [`docs/EVALUATION.md`](../EVALUATION.md) e [`docs/LIMITATIONS.md`](../LIMITATIONS.md).
 
 **Equipe:** Inédito Viável (cadastrado como "Inedito Viavel")  
 **Data:** 12 de Outubro de 2026  

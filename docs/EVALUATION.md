@@ -1,4 +1,4 @@
-# RELATÓRIO DE AVALIAÇÃO EXPERIMENTAL E BENCHMARK
+# RELATÓRIO DE AVALIAÇÃO EM FIXTURES SINTÉTICAS
 
 **Ambiente de Teste:** Execução experimental determinística (`eval/run_eval.py`).  
 **Conjunto de Dados:** 20 casos sintéticos gabaritados + 200 guias em rede.  
@@ -6,14 +6,26 @@
 
 ---
 
-## 1. Resultados Quantitativos Apurados
+## 1. Resultados Quantitativos Apurados (Fixtures Sintéticas)
 
-| Métrica | Valor Obtido | Significado Prático |
+O script `eval/run_eval.py` afere a consistência determinística do motor de regras frente às fixtures do catálogo sintético.
+
+Dos 20 casos sintéticos gerados:
+* **11 cenários possuem validação determinística ativa no script**:
+  * **5/5 Casos Críticos LASA** (`CASE-AMB-001` a `005`): 100% interceptados com alerta de segurança farmacológica (Top-1 e Top-3).
+  * **5/5 Casos de Controle Limpo** (`CASE-CTR-016` a `020`): 100% validados com zero falso positivo (especificidade 100%).
+  * **1/1 Anomalia de Rede no Grafo** (`claims_200.json`): cluster de faturamento concomitante em municípios distantes (Sorocaba e Santos) isolado pelo NetworkX.
+* **9 cenários adicionais (Casos 06 a 15)**: Casos de inconformidades estruturais (CRM ausente/incompleto, dose sem unidade) e duplicidades de lote. Esses casos integram o catálogo sintético para testes de robustez de schema e inspeção visual, possuindo `expected_findings: []` no gabarito formal (não disparam alertas farmacológicos LASA no motor determinístico).
+
+Em resumo, os resultados aferidos pelo script cobrem com rigor:
+**5/5 LASA, 5/5 controles limpos e 1/1 anomalia de grafo em fixtures sintéticas**.
+
+| Métrica | Resultado nas Fixtures | Escopo do Teste |
 | :--- | :--- | :--- |
-| **Casos Documentais Avaliados** | 20 casos | 100% de cobertura do dataset de validação |
-| **Recall de Detecção de Troca LASA** | **100% (5/5)** | Todos os 5 cenários com risco de troca medicamentosa crítica (ex.: Losartana x Lorazepam) foram interceptados com alerta de segurança |
-| **Especificidade em Controles Limpos** | **100% (5/5)** | Nenhum caso do grupo de controle negativo gerou falso alerta indevido de ambiguidade |
-| **Detecção de Anomalias no Grafo** | **100% (1/1)** | O cluster de faturamento concomitante em cidades distantes (180 km) foi isolado pelo NetworkX |
+| **Interceptação de Conflito LASA** | **5/5 (100%)** | Casos ambíguos com risco de troca crítica (ex.: Losartana x Lorazepam) |
+| **Especificidade em Controles Limpos** | **5/5 (100%)** | Prescrições de controle sem falsos alertas indevidos de ambiguidade |
+| **Detecção de Anomalia de Rede** | **1/1 (100%)** | Detecção topológica de faturamento simultâneo no grafo de 200 guias |
+| **Catálogo Sintético Total** | **20 casos** | 11 com regras ativas no eval + 9 de carga e inspeção visual |
 
 ---
 

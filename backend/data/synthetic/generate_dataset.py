@@ -6,7 +6,7 @@ import random
 from typing import Any, Dict, List, Optional
 from PIL import Image, ImageDraw, ImageFont
 
-# Seed fixa para total reprodutibilidade científica do benchmark
+# Seed fixa para total reprodutibilidade do benchmark
 RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 

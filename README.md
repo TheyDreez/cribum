@@ -80,22 +80,23 @@ Diferente de sistemas baseados em OCR simples — que falham em caligrafias méd
 
 ---
 
-## 🧪 Validação Científica, Dataset Sintético e Testes Automatizados
+## 🧪 Validação em Fixtures Sintéticas e Testes Automatizados
 
-O repositório inclui um conjunto completo de dados sintéticos gabaritados (100% livres de dados reais de pacientes) e suítes de testes automatizados de ponta a ponta:
+O repositório inclui um conjunto de dados sintéticos gabaritados (100% livres de dados reais de pacientes) e suítes de testes automatizados:
 
 ### 1. Dataset Clínico Sintético (`backend/data/synthetic/`)
 * **20 Casos Documentais Estruturados (`cases/` e `ground_truth/`):**
   * **Pares Críticos LASA (Casos 01 a 05):** *Losartana vs. Lorazepam*, *Fluoxetina vs. Flunarizina*, *Digoxina vs. Dipirona*, *Citalopram vs. Escitalopram* e *Tramadol vs. Trazodona*.
-  * **Inconformidades Regulatórias e Clínicas (Casos 06 a 10):** Ausência de CRM do prescritor, ausência de unidade de medida, CRM incompleto, incompatibilidade grave entre medicamento e CID-10, e posologia contraditória.
+  * **Inconformidades Regulatórias e Clínicas (Casos 06 a 10):** Ausência de CRM do prescritor, ausência de unidade de medida, CRM incompleto, incompatibilidade entre medicamento e CID-10, e posologia contraditória (para inspeção visual e testes de robustez de schema).
   * **Fraudes por Duplicidade Documental (Casos 11 a 15):** Lotes de guias duplicadas submetidas em diferentes contextos para teste de colisão criptográfica e bloqueio de refaturamento.
-  * **Grupo de Controle Regular (Casos 16 a 20):** Prescrições limpas e legíveis para validação de taxa zero de falsos positivos.
+  * **Grupo de Controle Regular (Casos 16 a 20):** Prescrições limpas e legíveis para validação de ausência de falsos positivos.
 * **Rede Relacional de 200 Sinistros (`claims_200.json`):**
   * Grafo sintético com **200 guias médicas** conectando médicos, clínicas, pacientes e procedimentos para validação dos algoritmos de detecção de anomalias em rede.
 
-### 2. Suíte de 51 Testes Automatizados (100% Passando)
-* **37 Testes de Backend (Pytest):** Cobrem contratos de API, motor farmacológico LASA, regras determinísticas, normalização Unicode NFKD, casos de borda, isolamento de persistência SQLite por `run_id`, integridade da cadeia criptográfica Merkle e protocolo do provedor VLM (`backend/tests/`).
-* **14 Testes End-to-End de Navegador (Playwright):** Validam toda a jornada visual no Chromium headless, incluindo renderização de *bounding boxes* SVG, seleção de hipóteses, bloqueio de aprovação sem revisão humana (HITL), proteção contra *race conditions* e inspeção de anomalias no grafo (`frontend/tests/e2e.spec.ts`).
+### 2. Suíte de Testes Automatizados (37 Pytest Backend + 14 Playwright E2E)
+O projeto conta com uma suíte de 51 testes automatizados (100% passando):
+* **37 Testes de Backend (Pytest):** Executados a partir da raiz (`python -m pytest`), cobrindo contratos de API, motor farmacológico LASA, regras determinísticas, normalização Unicode NFKD, casos de borda, isolamento de persistência SQLite por `run_id`, integridade da cadeia criptográfica Merkle (RFC 6962) e protocolo do provedor VLM (`backend/tests/`).
+* **14 Testes End-to-End de Interface (Playwright):** Validam a jornada visual no Chromium headless (`frontend/tests/e2e.spec.ts`), incluindo renderização de *bounding boxes* SVG, seleção de hipóteses, conferência humana (HITL) e inspeção do grafo de sinistros.
 
 ### 3. Transparência de Modo: Deterministic Fixture vs. VLM Real
 Para permitir que avaliadores e recrutadores testem todo o pipeline forense imediatamente após o `git clone` — **sem exigir chaves pagas de API ou GPU dedicada local** —, o CRIBUM opera em dois modos:
