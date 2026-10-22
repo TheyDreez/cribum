@@ -223,3 +223,181 @@ def parse_gs1_datamatrix(raw_payload: str) -> GS1Medication:
     )
 
 
+# ==============================================================================
+# SECTION 2: STANDALONE RFC 6962 MERKLE TREE (AUDIT LOG & DOUBLE-DISPENSE SHIELD)
+# ==============================================================================
+
+# RFC 6962 Domain Separation Prefixes
+RFC6962_LEAF_PREFIX = b"\x00"
+RFC6962_NODE_PREFIX = b"\x01"
+
+
+def rfc6962_hash_leaf(data: bytes) -> bytes:
+    """Leaf hash: SHA-256(0x00 || data)"""
+    return hashlib.sha256(RFC6962_LEAF_PREFIX + data).digest()
+
+
+def rfc6962_hash_children(left: bytes, right: bytes) -> bytes:
+    """Internal node hash: SHA-256(0x01 || left || right)"""
+    return hashlib.sha256(RFC6962_NODE_PREFIX + left + right).digest()
+
+
+@dataclasses.dataclass(frozen=True)
+class DispensingEvent:
+    """
+    Immutable dispensing event representing the delivery of a medication package
+    under SUS (Componente Especializado / Farmácia de Alto Custo).
+    LGPD compliant: Patient CPF is never stored in plain text, only as a salted HMAC/hash.
+    """
+    event_id: str             # UUID or high-resolution deterministic nonce
+    canonical_drug_id: str    # GTIN:SERIAL
+    patient_hash: str         # HMAC-SHA256(CPF, clinic_salt)
+    prescriber_crm: str       # e.g., 'CRM/SP 123456'
+    dispenser_crf: str        # e.g., 'CRF/SP 654321'
+    cnes_clinic_code: str     # Cadastro Nacional de Estabelecimentos de Saúde
+    timestamp_utc: str        # ISO-8601 UTC timestamp
+
+    def to_canonical_bytes(self) -> bytes:
+        """Deterministic canonical JSON serialization for Merkle leaf hashing."""
+        payload = {
+            "cnes": self.cnes_clinic_code,
+            "crm": self.prescriber_crm,
+            "crf": self.dispenser_crf,
+            "drug_id": self.canonical_drug_id,
+            "event_id": self.event_id,
+            "patient_hash": self.patient_hash,
+            "timestamp": self.timestamp_utc,
+        }
+        return json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+
+
+class DoubleDispenseError(Exception):
+    """Raised when an attempt is made to dispense an already dispensed serial number."""
+    pass
+
+
+class MerkleAuditProofError(ValueError):
+    """Raised when an audit proof fails verification against the Merkle Root."""
+    pass
+
+
+class MerkleTree:
+    """
+    Standalone RFC 6962 Compliant Merkle Tree with complete audit proofs and
+    local double-dispensation cryptographic verification.
+    """
+    def __init__(self):
+        self.leaves: List[bytes] = []             # Raw leaf byte payloads
+        self.leaf_hashes: List[bytes] = []        # rfc6962_hash_leaf(data)
+        self._serial_registry: Dict[str, int] = {} # canonical_drug_id -> leaf_index
+        self._tree_cache: Optional[bytes] = None
+
+    def __len__(self) -> int:
+        return len(self.leaves)
+
+    @property
+    def size(self) -> int:
+        return len(self.leaves)
+
+    def append_dispensing(self, event: DispensingEvent) -> int:
+        """
+        Appends a dispensing event to the tamper-evident log.
+        Prevents double-dispensation fraud locally before cryptographic sealing.
+        """
+        drug_id = event.canonical_drug_id
+        if drug_id in self._serial_registry:
+            prev_idx = self._serial_registry[drug_id]
+            raise DoubleDispenseError(
+                f"DOUBLE DISPENSATION DETECTED: Drug unit '{drug_id}' was already dispensed at leaf index #{prev_idx}."
+            )
+
+        data = event.to_canonical_bytes()
+        leaf_hash = rfc6962_hash_leaf(data)
+        idx = len(self.leaves)
+        self.leaves.append(data)
+        self.leaf_hashes.append(leaf_hash)
+        self._serial_registry[drug_id] = idx
+        self._tree_cache = None  # Invalidate root cache
+        return idx
+
+    def get_root_hash(self) -> str:
+        """Computes and returns the RFC 6962 Merkle Tree Root as hex string."""
+        if not self.leaf_hashes:
+            # Empty tree hash per standard RFC 6962 is SHA-256 of empty string
+            return hashlib.sha256(b"").hexdigest()
+        root_bytes = self._compute_subtree_hash(0, len(self.leaf_hashes))
+        return root_bytes.hex()
+
+    def _compute_subtree_hash(self, start: int, end: int) -> bytes:
+        """
+        RFC 6962 subtree hash recursive computation.
+        If length == 1: return leaf_hash
+        Else: k = largest power of 2 < length
+              return hash(0x01 || subtree(start, start+k) || subtree(start+k, end))
+        """
+        count = end - start
+        if count == 1:
+            return self.leaf_hashes[start]
+        k = 1 << ((count - 1).bit_length() - 1)
+        left = self._compute_subtree_hash(start, start + k)
+        right = self._compute_subtree_hash(start + k, end)
+        return rfc6962_hash_children(left, right)
+
+    def get_audit_proof(self, leaf_index: int) -> List[Tuple[str, str]]:
+        """
+        Generates RFC 6962 Audit Proof for leaf at `leaf_index`.
+        Returns a list of tuples: (hex_hash, direction) where direction is 'L' (left sibling) or 'R' (right sibling).
+        """
+        n = len(self.leaf_hashes)
+        if not (0 <= leaf_index < n):
+            raise IndexError(f"Leaf index {leaf_index} out of range [0, {n-1}]")
+        
+        proof: List[Tuple[str, str]] = []
+        self._build_audit_path(leaf_index, 0, n, proof)
+        return proof
+
+    def _build_audit_path(self, target: int, start: int, end: int, proof: List[Tuple[str, str]]):
+        count = end - start
+        if count == 1:
+            return
+        k = 1 << ((count - 1).bit_length() - 1)
+        split = start + k
+        if target < split:
+            # Target is in left subtree, sibling is right subtree
+            sibling_hash = self._compute_subtree_hash(split, end)
+            proof.append((sibling_hash.hex(), "R"))
+            self._build_audit_path(target, start, split, proof)
+        else:
+            # Target is in right subtree, sibling is left subtree
+            sibling_hash = self._compute_subtree_hash(start, split)
+            proof.append((sibling_hash.hex(), "L"))
+            self._build_audit_path(target, split, end, proof)
+
+    @staticmethod
+    def verify_audit_proof(
+        leaf_data: bytes,
+        leaf_index: int,
+        tree_size: int,
+        expected_root_hex: str,
+        proof: List[Tuple[str, str]]
+    ) -> bool:
+        """
+        RFC 6962 Audit Path Verification.
+        Computes the root from the leaf hash and the proof siblings in reverse order.
+        """
+        if not (0 <= leaf_index < tree_size):
+            return False
+        
+        current = rfc6962_hash_leaf(leaf_data)
+        # Sibling list in _build_audit_path was appended top-down; reverse for bottom-up accumulation
+        for sibling_hex, direction in reversed(proof):
+            sibling_bytes = bytes.fromhex(sibling_hex)
+            if direction == "R":
+                current = rfc6962_hash_children(current, sibling_bytes)
+            elif direction == "L":
+                current = rfc6962_hash_children(sibling_bytes, current)
+            else:
+                return False
+        return current.hex().lower() == expected_root_hex.lower()
+
+
