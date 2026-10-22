@@ -5,11 +5,11 @@
 > **O crivo inteligente para prevenção de erros médicos em receitas, segurança farmacológica LASA e auditoria de conformidade no SUS e na Saúde Suplementar (ANS).**  
 > *Arquitetura multiagente Privacy-First (LGPD) com Visão Computacional Multimodal (**Qwen2-VL**), Grafos Relacionais (**NetworkX**) e Cadeia de Custódia **Merkle Tree (RFC 6962)**.*
 
-[![Campus Mobile](https://img.shields.io/badge/Campus%20Mobile-Sa%C3%BAde%20%26%20Tecnologias%20Assistivas-8b5cf6)](https://github.com/TheyDreez/cribum)
+[![Campus Mobile](https://img.shields.io/badge/Campus%20Mobile-Instituto%20Claro%20%7C%20Sa%C3%BAde-8b5cf6)](https://github.com/TheyDreez/cribum)
 [![Domain](https://img.shields.io/badge/Domain-Clinical%20AI%20%26%20LASA%20Safety-blue)](https://github.com/TheyDreez/cribum)
 [![RFC 6962](https://img.shields.io/badge/Auditability-Merkle%20Chain%20RFC%206962-10b981)](https://datatracker.ietf.org/doc/html/rfc6962)
-[![Tests](https://img.shields.io/badge/Tests-22%20Pytest%20%7C%2014%20Playwright-success)](https://github.com/TheyDreez/cribum)
-[![AMD ROCm](https://img.shields.io/badge/Local%20GPU%20Ready-AMD%20ROCm%20%26%20vLLM-ED1C24?logo=amd&logoColor=white)](docs/AMD_SETUP.md)
+[![Tests](https://img.shields.io/badge/Tests-37%20Pytest%20%7C%2014%20Playwright-success)](https://github.com/TheyDreez/cribum)
+[![Local GPU Ready](https://img.shields.io/badge/Local%20GPU%20Ready-AMD%20ROCm%20%26%20vLLM-ED1C24?logo=amd&logoColor=white)](docs/AMD_SETUP.md)
 [![License](https://img.shields.io/badge/License-Proprietary%20%7C%20Source--Available-red.svg)](LICENSE)
 
 </div>
@@ -18,7 +18,7 @@
 
 ## 🎬 Demonstração Oficial em Vídeo (Português - PT-BR)
 
-> **Submissão Oficial — Programa Campus Mobile (Categoria: Saúde e Tecnologias Assistivas)**  
+> **Submissão — Campus Mobile, do Instituto Claro (Categoria: Saúde e Tecnologias Assistivas)**  
 > Assista à demonstração completa de 1 minuto mostrando o fluxo em tempo real dos **4 agentes autônomos de IA**, desde a leitura de receituários com caligrafia ambígua até o bloqueio de trocas fatais de medicamentos **LASA** (*Losartana* vs. *Lorazepam*), emissão de laudo criptográfico **Merkle Tree (RFC 6962)** e detecção de anomalias em grafos:
 
 👉 **[▶️ Assistir / Baixar Vídeo Oficial de Demonstração (`docs/Cribum_Campus_Mobile_Demo.mp4`)](https://github.com/TheyDreez/cribum/raw/main/docs/Cribum_Campus_Mobile_Demo.mp4)**
@@ -27,7 +27,7 @@
 
 ## 🎯 Propósito e Impacto em Duas Pontas: Do Bolso do Cidadão à Gestão de Saúde
 
-Erros de medicação por grafia ou som semelhantes (**LASA** — *Look-Alike, Sound-Alike*) causam milhares de internações e óbitos evitáveis no Brasil, enquanto fraudes e glosas drenam **R$ 34 bilhões anualmente** do SUS e da saúde suplementar (IESS). O **CRIBUM** conecta duas pontas complementares através do mesmo motor multiagente:
+Erros de medicação por grafia ou som semelhantes (**LASA** — *Look-Alike, Sound-Alike*) causam milhares de internações e óbitos evitáveis no Brasil, enquanto fraudes e glosas drenam **R$ 34 bilhões anualmente** do SUS e da saúde suplementar (conforme estimativas do Instituto de Estudos de Saúde Suplementar — IESS). O **CRIBUM** conecta duas pontas complementares através do mesmo motor multiagente:
 
 ### 1. 📱 Tecnologia Assistiva Mobile na Ponta (B2C / Impacto Social Direto)
 * **Para quem:** Pacientes (especialmente **idosos, polimedicados e pessoas com baixa visão**), cuidadores familiares, enfermeiros e farmacêuticos na triagem de balcão.
@@ -93,13 +93,25 @@ O repositório inclui um conjunto completo de dados sintéticos gabaritados (100
 * **Rede Relacional de 200 Sinistros (`claims_200.json`):**
   * Grafo sintético com **200 guias médicas** conectando médicos, clínicas, pacientes e procedimentos para validação dos algoritmos de detecção de anomalias em rede.
 
-### 2. Suíte de 36 Testes Automatizados (100% Passando)
-* **22 Testes de Backend (Pytest):** Cobrem contratos de API, motor farmacológico LASA, regras determinísticas, isolamento de persistência SQLite por `run_id`, cadeia criptográfica Merkle e protocolo do provedor VLM (`backend/tests/`).
+### 2. Suíte de 51 Testes Automatizados (100% Passando)
+* **37 Testes de Backend (Pytest):** Cobrem contratos de API, motor farmacológico LASA, regras determinísticas, normalização Unicode NFKD, casos de borda, isolamento de persistência SQLite por `run_id`, integridade da cadeia criptográfica Merkle e protocolo do provedor VLM (`backend/tests/`).
 * **14 Testes End-to-End de Navegador (Playwright):** Validam toda a jornada visual no Chromium headless, incluindo renderização de *bounding boxes* SVG, seleção de hipóteses, bloqueio de aprovação sem revisão humana (HITL), proteção contra *race conditions* e inspeção de anomalias no grafo (`frontend/tests/e2e.spec.ts`).
+
+### 3. Transparência de Modo: Deterministic Fixture vs. VLM Real
+Para permitir que avaliadores e recrutadores testem todo o pipeline forense imediatamente após o `git clone` — **sem exigir chaves pagas de API ou GPU dedicada local** —, o CRIBUM opera em dois modos:
+* **Deterministic Fixture Engine (Padrão de Avaliação):** Reconhece os 20 casos estruturados do catálogo sintético (`CASE-AMB-001` a `CASE-CTR-020`) e fornece a extração base documentada para que os agentes e o motor de regras executem a auditoria de forma **100% reprodutível e determinística**.
+* **Live VLM Mode:** Ativado mediante configuração de variáveis no `.env` (veja `.env.example`), conectando a inferência visual a instâncias locais aceleradas por GPU (`vLLM` com `Qwen2-VL`) ou provedores compatíveis.
+
+> **Nota sobre Métricas (`eval/run_eval.py`):** O script de avaliação afere a **consistência lógica e determinística do motor de regras** contra o gabarito das fixtures sintéticas catalogadas, e não acurácia de OCR em receituários manuscritos de hospitais reais.
 
 ---
 
-## ⚡ Guia Rápido de Execução (Padrão Local vs. Aceleração GPU)
+## ⚠️ Limitações Conhecidas e Escopo
+Este projeto foi desenvolvido como protótipo de engenharia submetido ao **Campus Mobile, do Instituto Claro**. O sistema utiliza dados 100% sintéticos, base referencial de 10 pares críticos LASA (ISMP Brasil), validação estrutural de CRM e não é um dispositivo médico homologado (SaMD). Consulte os detalhes completos em [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
+
+---
+
+## ⚡ Guia Rápido de Execução
 
 > **Nota sobre Execução:** O **CRIBUM** roda imediatamente em **qualquer computador padrão (Windows, Linux ou macOS)** usando Python/FastAPI e React no modo de demonstração determinística (`DEMO`).  
 > Os arquivos [`docker/docker-compose.rocm.yml`](docker/docker-compose.rocm.yml) e [`docs/AMD_SETUP.md`](docs/AMD_SETUP.md) compõem uma **camada adicional de infraestrutura hospitalar on-premise** para inferência multimodal 100% local acelerada por GPU (`vLLM` + `Qwen2-VL`), projetada para garantir soberania de dados e conformidade estrita com a **LGPD** sem envio de receitas médicas reais para APIs comerciais externas.
@@ -127,18 +139,21 @@ npm run dev
 ```
 Acesse **`http://localhost:5173`** no navegador e clique em **"Carregar 20 Casos Sintéticos"** no canto superior direito para inspecionar todos os cenários clínicos e o grafo relacional.
 
-### 3. Executar os 36 Testes Automatizados
-* **Backend (22 testes em Pytest):**
+### 3. Executar as Suítes de Teste Automatizadas
+* **Backend (37 testes em Pytest):**
 ```bash
-python -m pytest -v
+python -m pytest
 ```
 * **Frontend End-to-End (14 cenários em Playwright):**
 ```bash
 cd frontend && npx playwright test
+```
+* **Avaliação de Consistência das Fixtures:**
+```bash
+python eval/run_eval.py
 ```
 
 ---
 
 ## ⚖️ Licença e Propriedade Intelectual
 Código disponibilizado na modalidade **Source-Available para Avaliação Técnica e Acadêmica** (*Proprietary & Source-Available Evaluation License*). Todos os direitos patrimoniais e de propriedade intelectual pertencem a **André Rogério da Silva Filho**. Consulte o arquivo [`LICENSE`](LICENSE) para os termos completos.
-
