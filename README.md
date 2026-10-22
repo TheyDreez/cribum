@@ -2,7 +2,8 @@
 
 # CRIBUM 🛡️
 
-<img src="docs/assets/cribum_binary_shield.gif" alt="CRIBUM: escudo formado por bits, com varredura de auditoria" width="260">
+<img src="docs/assets/cribum_binary_shield.gif" alt="CRIBUM: escudo formado por bits, com varredura de auditoria" width="300">
+
 ### *IA Multiagente para Segurança de Medicação (LASA), Tecnologia Assistiva & Auditoria em Saúde*
 > **O crivo inteligente para prevenção de erros médicos em receitas, segurança farmacológica LASA e auditoria de conformidade no SUS e na Saúde Suplementar (ANS).**  
 > *Arquitetura multiagente Privacy-First (LGPD) com Visão Computacional Multimodal (**Qwen2-VL**), Grafos Relacionais (**NetworkX**) e Cadeia de Custódia **Merkle Tree (RFC 6962)**.*
