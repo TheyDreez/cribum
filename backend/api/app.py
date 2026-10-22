@@ -48,6 +48,7 @@ from backend.services.storage import (
 
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./cribum.db")
+HTTP_413_TOO_LARGE = getattr(status, "HTTP_413_CONTENT_TOO_LARGE", 413)
 SessionLocal = init_db(DATABASE_URL)
 
 APP_NAME = os.getenv("APP_NAME", "CRIBUM")
@@ -231,7 +232,7 @@ async def upload_document(
             content_type=file.content_type,
         )
     except FileTooLargeError as exc:
-        raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail=str(exc))
+        raise HTTPException(status_code=HTTP_413_TOO_LARGE, detail=str(exc))
     except InvalidImageError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
     except Exception as exc:
@@ -314,7 +315,20 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
     else:
         review_status = compute_document_review_status(decisions)
 
+    is_fixture = not latest_run or latest_run.mode == "DEMO"
+    provider_metadata = {
+        "engine": "Deterministic Fixture Engine" if is_fixture else "Live VLM Provider",
+        "mode": "deterministic_fixture" if is_fixture else "vlm_live",
+        "is_synthetic_fixture": bool(is_fixture),
+        "notice": (
+            "Leitura obtida via fixture determinística (dataset sintético)."
+            if is_fixture
+            else "Leitura extraída via modelo de visão multimodal (VLM)."
+        ),
+    }
+
     return {
+        "provider_metadata": provider_metadata,
         "document": {
             "id": doc.id,
             "filename_original": doc.filename_original,

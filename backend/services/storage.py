@@ -10,6 +10,12 @@ MAX_PIXELS = 40_000_000            # 40 Megapixels (proteção contra decompress
 ALLOWED_MIME_TYPES = {"image/jpeg", "image/png"}
 STORAGE_DIR = os.path.abspath("backend/data/storage")
 
+VALID_MAGIC_BYTES = (
+    b"\xff\xd8\xff",        # JPEG
+    b"\x89PNG\r\n\x1a\n",   # PNG
+    b"%PDF-",               # PDF
+)
+
 
 class StorageError(Exception):
     pass
@@ -31,6 +37,13 @@ def compute_sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def validate_file_signature(content: bytes) -> bool:
+    """Verifica se os magic bytes correspondem a assinaturas válidas de imagens/documentos suportados."""
+    if not content or len(content) < 3:
+        return False
+    return any(content.startswith(sig) for sig in VALID_MAGIC_BYTES)
+
+
 def validate_and_save_image(
     file_bytes: bytes,
     original_filename: str,
@@ -38,6 +51,7 @@ def validate_and_save_image(
 ) -> Tuple[str, str, int, int, str]:
     """
     Valida e sanitiza o upload da imagem médica:
+    - Validação de magic bytes (JPEG/PNG/PDF).
     - Validação de tamanho máximo em bytes e pixels.
     - Validação de integridade real via Pillow.
     - Normalização de orientação EXIF e remoção de metadados desnecessários.
@@ -55,6 +69,10 @@ def validate_and_save_image(
 
     if len(file_bytes) == 0:
         raise InvalidImageError("Arquivo vazio.")
+
+    # 1.5 Pré-validação rápida de assinatura mágica
+    if not validate_file_signature(file_bytes):
+        raise InvalidImageError("Conteúdo do arquivo não é uma imagem válida: assinatura binária incompatível.")
 
     # 2. Verificação de integridade e tipo real da imagem
     try:
@@ -140,4 +158,3 @@ async def read_upload_file_chunked(file, max_bytes: int = MAX_FILE_BYTES) -> byt
                 f"Arquivo excede o limite máximo permitido de {max_bytes // (1024 * 1024)}MB."
             )
     return bytes(buffer)
-
