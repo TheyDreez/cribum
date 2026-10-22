@@ -1,9 +1,27 @@
 import json
 import os
+import re
+import unicodedata
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from backend.models.database import DocumentModel, ExtractedFieldModel, FindingModel
+
+
+def normalize_text(value: Optional[str]) -> str:
+    """Remove acentos, espaços extras e converte para minúsculas para comparação determinística."""
+    if not value or not isinstance(value, str):
+        return ""
+    nfkd = unicodedata.normalize("NFKD", value.strip().lower())
+    return "".join(c for c in nfkd if not unicodedata.combining(c))
+
+
+def is_valid_crm_format(crm: Optional[str]) -> bool:
+    """Verifica se o CRM possui dígitos de identificação (ex: CRM-SP 123456 ou 123456-SP)."""
+    if not crm or not isinstance(crm, str):
+        return False
+    cleaned = crm.strip().upper()
+    return bool(re.search(r"\d{4,7}", cleaned))
 
 
 SEVERITY_MAP: Dict[str, str] = {
@@ -27,7 +45,6 @@ class RulesEngine:
 
     def __init__(self, lasa_path: str = "backend/data/references/lasa_ismp.json"):
         self.lasa_database = self._load_lasa(lasa_path)
-
 
     def _load_lasa(self, path: str) -> List[Dict[str, Any]]:
         if os.path.exists(path):
@@ -76,10 +93,10 @@ class RulesEngine:
                     )
                 )
 
-
         # 2. Regra DOC-002: Verificação de campos obrigatórios (CRM do prescritor)
         crm_field = next((f for f in fields if f.field_type == "crm"), None)
-        if not crm_field or not crm_field.normalized_value:
+        crm_val = (crm_field.normalized_value or crm_field.raw_text or "").strip() if crm_field else ""
+        if not crm_field or not crm_val:
             findings.append(
                 FindingModel(
                     document_id=document.id,
@@ -90,7 +107,7 @@ class RulesEngine:
                     rule_version="1.0.0",
                     title="Identificador do Prescritor (CRM) Ausente",
                     explanation="Não foi possível identificar o número de CRM do médico na guia/receita.",
-                    evidence_ids=[],
+                    evidence_ids=crm_field.evidence_ids if crm_field else [],
                     related_document_ids=[],
                     limitations="Caligrafia ilegível no carimbo ou carimbo cortado na digitalização podem causar falso positivo.",
                     requires_review=True,
@@ -111,17 +128,22 @@ class RulesEngine:
                         rule_version="1.0.0",
                         title="Prescrição Ilegível ou Indeterminada",
                         explanation=(
-                            f"O modelo não identificou hipóteses legíveis para a prescrição ('{med.raw_text}'). "
+                            f"O modelo não identificou hipóteses legíveis para a prescrição ('{med.raw_text or ''}'). "
                             "Exige conferência visual obrigatória pelo auditor humano ou solicitação de receita legível."
                         ),
-                        evidence_ids=med.evidence_ids,
+                        evidence_ids=med.evidence_ids or [],
                         related_document_ids=[],
                         limitations="Traçado caligráfico severamente degradado, rasura ou falha de digitalização.",
                         requires_review=True,
                     )
                 )
             elif med.uncertainty_status == "AMBIGUOUS":
-                hyp_texts = [f"{h.get('text')} ({int((h.get('score') or 0)*100)}%)" for h in med.hypotheses]
+                hypotheses_list = med.hypotheses or []
+                hyp_texts = [
+                    f"{h.get('text')} ({int((h.get('score') or 0)*100)}%)"
+                    for h in hypotheses_list
+                    if isinstance(h, dict) and h.get("text")
+                ]
                 hyp_summary = ", ".join(hyp_texts) if hyp_texts else "Múltiplas opções detectadas"
 
                 findings.append(
@@ -132,12 +154,12 @@ class RulesEngine:
                         severity="MEDIUM",
                         rule_id="MED-001-AMBIGUOUS-READING",
                         rule_version="1.0.0",
-                        title=f"Leitura Ambígua: {med.raw_text}",
+                        title=f"Leitura Ambígua: {med.raw_text or ''}",
                         explanation=(
                             f"O traçado caligráfico admite mais de uma leitura plausível: {hyp_summary}. "
                             "Requer conferência visual do auditor humano."
                         ),
-                        evidence_ids=med.evidence_ids,
+                        evidence_ids=med.evidence_ids or [],
                         related_document_ids=[],
                         limitations="Baseado nas hipóteses geradas pelo modelo visual. A caligrafia pode ser resolvida com o contexto clínico.",
                         requires_review=True,
@@ -146,7 +168,7 @@ class RulesEngine:
 
             # 4. Regra MED-002: Detecção de Armadilha LASA (Look-Alike Sound-Alike)
             # Cruza as hipóteses do item com a base de pares de alto risco
-            lasa_match = self._check_lasa_collision(med.hypotheses)
+            lasa_match = self._check_lasa_collision(med.hypotheses or [])
             if lasa_match:
                 par_info, droga_detectada, droga_conflitante = lasa_match
                 raw_sev = str(par_info.get("gravidade", "HIGH")).upper()
@@ -167,13 +189,12 @@ class RulesEngine:
                             f"Droga A: {par_info['droga_a']['nome']} ({par_info['droga_a']['classe']}) | "
                             f"Droga B: {par_info['droga_b']['nome']} ({par_info['droga_b']['classe']})."
                         ),
-                        evidence_ids=med.evidence_ids,
+                        evidence_ids=med.evidence_ids or [],
                         related_document_ids=[],
                         limitations="Alerta de segurança preventiva. O prescritor pode ter indicado a droga corretamente.",
                         requires_review=True,
                     )
                 )
-
 
         return findings
 
@@ -182,27 +203,32 @@ class RulesEngine:
         Verifica se as hipóteses concorrentes colidem com pares LASA catalogados pelo ISMP.
         Uma colisão real ocorre quando a leitura é ambígua (>= 2 hipóteses) e apresenta
         hipóteses alternativas que coincidem simultaneamente com a Droga A e a Droga B do par.
+        Normaliza strings para NFKD (insensível a acentuação e caixa).
         """
         if not hypotheses or len(hypotheses) < 2:
             return None
 
-        hyp_texts = [h.get("text", "").lower() for h in hypotheses]
+        hyp_texts = [
+            normalize_text(h.get("text")) if isinstance(h, dict) else ""
+            for h in hypotheses
+        ]
+        hyp_texts = [t for t in hyp_texts if t]
 
         for par in self.lasa_database:
-            nome_a = par["droga_a"]["nome"].lower()
-            nome_b = par["droga_b"]["nome"].lower()
+            nome_a = normalize_text(par.get("droga_a", {}).get("nome", ""))
+            nome_b = normalize_text(par.get("droga_b", {}).get("nome", ""))
 
-            has_match_a = any(nome_a in t for t in hyp_texts)
-            has_match_b = any(nome_b in t for t in hyp_texts)
+            has_match_a = any(nome_a in t for t in hyp_texts) if nome_a else False
+            has_match_b = any(nome_b in t for t in hyp_texts) if nome_b else False
 
             # Também verifica palavras-chave / marcas registradas do par
-            palavras = [p.lower() for p in par.get("palavras_chave", [])]
+            palavras = [normalize_text(p) for p in par.get("palavras_chave", []) if p]
             for t in hyp_texts:
                 for p in palavras:
                     if p in t:
-                        if nome_a[:4] in p:
+                        if len(nome_a) >= 4 and nome_a[:4] in p:
                             has_match_a = True
-                        if nome_b[:4] in p:
+                        if len(nome_b) >= 4 and nome_b[:4] in p:
                             has_match_b = True
 
             # Colisão LASA confirmada quando o leitor hesita entre droga A e droga B
@@ -210,5 +236,3 @@ class RulesEngine:
                 return (par, par["droga_a"]["nome"], par["droga_b"]["nome"])
 
         return None
-
-
