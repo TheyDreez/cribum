@@ -401,3 +401,480 @@ class MerkleTree:
         return current.hex().lower() == expected_root_hex.lower()
 
 
+# ==============================================================================
+# SECTION 3: BRAZILIAN PORTUGUESE LASA (LOOK-ALIKE SOUND-ALIKE) & DOSAGE SHIELD
+# ==============================================================================
+
+def extract_dosages_pt(text: str) -> List[str]:
+    """
+    Extracts pharmaceutical dosage and strength specifications from Brazilian drug descriptions.
+    Handles single strengths (10mg, 500mcg, 100UI, 5%), ratio strengths (10mg/ml, 50mg/2ml),
+    and decimal formats with either comma or period (0,5mg or 0.5mg).
+    """
+    s = text.lower().replace("µg", "mcg").replace("ug", "mcg")
+    pattern = r"\b(\d+(?:[.,]\d+)?)\s*(mg|mcg|g|ml|ui|%)(?:\s*/\s*(\d+(?:[.,]\d+)?)?\s*(mg|mcg|g|ml))?(?![a-zA-Z0-9])"
+    dosages = []
+    for m in re.finditer(pattern, s):
+        num1 = m.group(1).replace(",", ".")
+        try:
+            val1 = float(num1)
+            num1_str = f"{val1:g}"
+        except ValueError:
+            num1_str = num1
+        unit1 = m.group(2)
+        denom_num = m.group(3)
+        denom_unit = m.group(4)
+        if denom_unit:
+            if denom_num:
+                num2 = denom_num.replace(",", ".")
+                try:
+                    val2 = float(num2)
+                    num2_str = f"{val2:g}"
+                except ValueError:
+                    num2_str = num2
+                spec = f"{num1_str}{unit1}/{num2_str}{denom_unit}"
+            else:
+                spec = f"{num1_str}{unit1}/{denom_unit}"
+        else:
+            spec = f"{num1_str}{unit1}"
+        dosages.append(spec)
+    return dosages
+
+
+def normalize_single_dosage(token: str) -> str:
+    """
+    Standardizes dosage units to prevent false negatives (e.g., '1g' vs '1000mg', '0.5g' vs '500mg').
+    Normalizes mass to 'mg' and microgram variants to 'mcg'.
+    """
+    token = token.lower().strip()
+    if "/" in token:
+        parts = token.split("/", 1)
+        return f"{normalize_single_dosage(parts[0])}/{normalize_single_dosage(parts[1])}"
+    
+    m = re.match(r"^(\d+(?:\.\d+)?)\s*(mg|mcg|g|ml|ui|%)$", token)
+    if not m:
+        return token
+    
+    val = float(m.group(1))
+    unit = m.group(2)
+    
+    if unit == "g":
+        # Convert grams to mg: 1g -> 1000mg
+        mg_val = val * 1000.0
+        return f"{mg_val:g}mg"
+    elif unit == "mcg" and val >= 1000.0 and (val % 1000.0 == 0):
+        # Convert 1000mcg -> 1mg
+        mg_val = val / 1000.0
+        return f"{mg_val:g}mg"
+    elif unit == "mg" and val < 1.0:
+        # Convert 0.5mg -> 500mcg
+        mcg_val = val * 1000.0
+        return f"{mcg_val:g}mcg"
+    
+    return f"{val:g}{unit}"
+
+
+def compare_dosages(dosages_prescribed: List[str], dosages_dispensed: List[str]) -> Tuple[bool, str]:
+    """
+    Compares normalized dosages between prescribed and dispensed items.
+    Returns (is_match, status_code).
+    """
+    if not dosages_prescribed and not dosages_dispensed:
+        return True, "DOSAGE_NOT_SPECIFIED"
+    if not dosages_prescribed and dosages_dispensed:
+        return True, "DOSAGE_SPECIFIED_ONLY_IN_DISPENSED"
+    if dosages_prescribed and not dosages_dispensed:
+        return False, "DOSAGE_MISSING_IN_DISPENSED"
+    
+    norm_p = sorted([normalize_single_dosage(d) for d in dosages_prescribed])
+    norm_d = sorted([normalize_single_dosage(d) for d in dosages_dispensed])
+    
+    if norm_p == norm_d:
+        return True, "DOSAGE_MATCH"
+    else:
+        return False, f"DOSAGE_MISMATCH: Prescribed {norm_p} != Dispensed {norm_d}"
+
+
+def normalize_text_pt(text: str) -> str:
+    """
+    Camada 1: Normalizes Brazilian Portuguese drug names down to the active principle:
+    - Lowercase
+    - Removes accents and diacritics (ç -> c, á -> a, etc.)
+    - Removes dosage, volumes, ratios, pharmaceutical forms (mg, ml, mcg, comp, inj, etc.)
+    - Strips non-alphanumeric characters
+    """
+    s = text.lower()
+    # Strip compound dosages (e.g. 10mg/ml, 500mg, 100 ui, 0,5%)
+    s = re.sub(r"\b\d+([.,]\d+)?\s*(mg|mcg|µg|ug|g|ml|ui|%)(?:\s*/\s*\d*([.,]\d+)?\s*(mg|mcg|µg|ug|g|ml))?(?![a-zA-Z0-9])", " ", s)
+    # Strip pharmaceutical forms and packaging labels
+    s = re.sub(r"\b(comprimido|comprimidos|capsula|capsulas|injetavel|ampola|ampolas|suspensao|gotas|solucao|dragea|drageas|creme|pomada|xarope|frasco|frascos|revestido|revestidos)\w*\b", " ", s)
+    
+    # Decompose unicode to remove diacritics
+    nfkd = unicodedata.normalize("NFD", s)
+    s = "".join([c for c in nfkd if not unicodedata.combining(c)])
+    
+    # Keep only letters and spaces
+    s = re.sub(r"[^a-z\s]", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def pt_br_phonetic_code(name: str) -> str:
+    """
+    Phonetic algorithm tailored specifically to Brazilian Portuguese medical nomenclature.
+    Addresses typical phonetic collisions in pharmacology:
+    - Silent 'H' (Hidralazina -> idralazina)
+    - 'PH' -> 'F' (Morfina, Fosfato)
+    - 'TH' -> 'T'
+    - 'Y' -> 'I', 'W' -> 'V'
+    - 'CH', 'X', 'SH' -> 'X'
+    - 'C' before E/I -> 'S', 'C' elsewhere -> 'K'
+    - 'Ç' -> 'S'
+    - 'QU' before E/I -> 'K', 'QU' elsewhere -> 'K'
+    - 'G' before E/I -> 'J', 'G' elsewhere -> 'G'
+    - 'Z' at word end -> 'S' (Diazepam, etc.)
+    - Intervocalic 'S' -> 'Z'
+    - 'SS' -> 'S', 'RR' -> 'R'
+    - Coda 'L' (end of syllable) -> 'U' (Vocalização do L caipira/brasileiro: e.g. 'Diltiazem', 'Fluconazol')
+    - Coda 'M' / 'N' -> Nasalization token '~'
+    """
+    clean = normalize_text_pt(name)
+    if not clean:
+        return ""
+
+    tokens = clean.split()
+    encoded_tokens = []
+
+    for word in tokens:
+        w = word
+        # 1. Archaic digraphs & silent letters
+        w = re.sub(r"^h+", "", w)
+        w = w.replace("ph", "f")
+        w = w.replace("th", "t")
+        w = w.replace("y", "i")
+        w = w.replace("w", "v")
+        w = w.replace("sh", "x")
+        w = w.replace("ch", "x")
+
+        # 2. 'C' and 'Ç' rules
+        w = w.replace("ç", "s")
+        w = re.sub(r"c(?=[ei])", "s", w)
+        w = re.sub(r"c(?=[aou]|$|[^aeiou])", "k", w)
+
+        # 3. 'QU' rules
+        w = re.sub(r"qu(?=[ei])", "k", w)
+        w = re.sub(r"qu", "k", w)
+
+        # 4. 'G' rules
+        w = re.sub(r"g(?=[ei])", "j", w)
+        w = re.sub(r"gu(?=[ei])", "g", w)
+
+        # 5. Intervocalic 'S' (sounds like 'Z' in PT-BR)
+        vowels = "aeiou"
+        w_list = list(w)
+        for i in range(1, len(w_list) - 1):
+            if w_list[i] == "s" and w_list[i-1] in vowels and w_list[i+1] in vowels:
+                w_list[i] = "z"
+        w = "".join(w_list)
+
+        # 6. Sibilants and double consonants
+        w = w.replace("ss", "s")
+        w = w.replace("rr", "r")
+        w = w.replace("xc", "s")
+        w = w.replace("sc", "s")
+
+        # 7. Word-final Z -> S
+        if w.endswith("z"):
+            w = w[:-1] + "s"
+
+        # 8. Brazilian Portuguese L-vocalization at syllable end (e.g. Atenolol -> atenolou)
+        # Any 'l' followed by a consonant or at end of word sounds like 'u'
+        w = re.sub(r"l(?=$|[^aeiou])", "u", w)
+
+        # 9. Nasalization at coda (m/n before consonant or end of word)
+        w = re.sub(r"[mn](?=$|[^aeiou])", "~", w)
+
+        # 10. Collapse duplicate adjacent consonants
+        collapsed = []
+        for ch in w:
+            if not collapsed or ch != collapsed[-1]:
+                collapsed.append(ch)
+        encoded_tokens.append("".join(collapsed))
+
+    return " ".join(encoded_tokens)
+
+
+def levenshtein_distance(s1: str, s2: str) -> int:
+    """Standard dynamic programming Levenshtein distance."""
+    if s1 == s2:
+        return 0
+    if len(s1) == 0:
+        return len(s2)
+    if len(s2) == 0:
+        return len(s1)
+
+    v0 = list(range(len(s2) + 1))
+    v1 = [0] * (len(s2) + 1)
+
+    for i in range(len(s1)):
+        v1[0] = i + 1
+        for j in range(len(s2)):
+            cost = 0 if s1[i] == s2[j] else 1
+            v1[j + 1] = min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost)
+        v0[:] = v1[:]
+
+    return v0[len(s2)]
+
+
+def similarity_ratio(s1: str, s2: str) -> float:
+    """Normalized similarity score between 0.0 (totally different) and 1.0 (identical)."""
+    max_len = max(len(s1), len(s2))
+    if max_len == 0:
+        return 1.0
+    dist = levenshtein_distance(s1, s2)
+    return max(0.0, 1.0 - (dist / max_len))
+
+
+@dataclasses.dataclass(frozen=True)
+class LASARiskAssessment:
+    """Clinical assessment of Look-Alike Sound-Alike risk and dosage integrity."""
+    drug_prescribed: str
+    drug_dispensed: str
+    active_ingredient_prescribed: str
+    active_ingredient_dispensed: str
+    active_ingredient_match: bool
+    prescribed_dosages: List[str]
+    dispensed_dosages: List[str]
+    dosage_match: bool
+    orthographic_similarity: float   # 0.0 - 1.0
+    phonetic_similarity: float       # 0.0 - 1.0
+    composite_risk_score: float      # Weighted composite
+    risk_level: str                  # 'CRITICAL', 'WARNING', 'SAFE'
+    tall_man_prescribed: str         # Highlighting differentiating characters
+    tall_man_dispensed: str
+    recommendation: str
+
+    def to_dict(self) -> Dict[str, Union[str, float, bool, List[str]]]:
+        return {
+            "drug_prescribed": self.drug_prescribed,
+            "drug_dispensed": self.drug_dispensed,
+            "active_ingredient_prescribed": self.active_ingredient_prescribed,
+            "active_ingredient_dispensed": self.active_ingredient_dispensed,
+            "active_ingredient_match": self.active_ingredient_match,
+            "prescribed_dosages": self.prescribed_dosages,
+            "dispensed_dosages": self.dispensed_dosages,
+            "dosage_match": self.dosage_match,
+            "orthographic_similarity": round(self.orthographic_similarity, 3),
+            "phonetic_similarity": round(self.phonetic_similarity, 3),
+            "composite_risk_score": round(self.composite_risk_score, 3),
+            "risk_level": self.risk_level,
+            "tall_man_prescribed": self.tall_man_prescribed,
+            "tall_man_dispensed": self.tall_man_dispensed,
+            "recommendation": self.recommendation
+        }
+
+
+# Curated ISMP Brasil / ANVISA official Tall Man Lettering catalog for high-risk pairs
+ISMP_TALL_MAN_DICTIONARY: Dict[str, str] = {
+    "clorpromazina": "clorproMAZINA",
+    "clomipramina": "clomiPRAMINA",
+    "ceftriaxona": "cefTRIAXONA",
+    "cefazolina": "cefAZOLINA",
+    "cefotaxima": "cefoTAXIMA",
+    "doxorrubicina": "DOXOrrubicina",
+    "daunorrubicina": "DAUNOrrubicina",
+    "hidralazina": "HIDRAlazina",
+    "hidroxizina": "hidroxiZINA",
+    "metformina": "metFORMINA",
+    "metronidazol": "metroNIDAZOL",
+    "fluoxetina": "fluOXETINA",
+    "fluvoxamina": "fluVOXAMINA",
+    "tramadol": "TRAmadol",
+    "trazodona": "TRAZOdona",
+    "diazepam": "diazePAM",
+    "diltiazem": "dilTIAZEM",
+    "levotiroxina": "levoTIROXINA",
+    "levofloxacino": "levoFLOXACINO",
+    "omeprazol": "omePRAZOL",
+    "pantoprazol": "pantoPRAZOL",
+    "enalapril": "enalaPRIL",
+    "ramipril": "ramiPRIL",
+    "insulina regular": "insulina REGULAR",
+    "insulina nph": "insulina NPH",
+}
+
+
+def generate_tall_man_pair(name1: str, name2: str) -> Tuple[str, str]:
+    """
+    Generates ISMP Brasil / ANVISA Tall Man Lettering for two colliding medication names.
+    Prioritizes the official ISMP Brasil standardized catalog. If not found in the catalog,
+    dynamically computes distinctive character sequences on the normalized generic names
+    and capitalizes the differentiating middle or suffix/prefix.
+    """
+    clean1 = normalize_text_pt(name1)
+    clean2 = normalize_text_pt(name2)
+
+    # 1. Official ISMP Catalog lookup
+    t1 = ISMP_TALL_MAN_DICTIONARY.get(clean1)
+    t2 = ISMP_TALL_MAN_DICTIONARY.get(clean2)
+    if t1 and t2:
+        return t1, t2
+    elif t1 and not t2:
+        return t1, name2
+    elif t2 and not t1:
+        return name1, t2
+
+    # 2. Dynamic Algorithmic Fallback
+    n1 = clean1
+    n2 = clean2
+
+    p = 0
+    while p < len(n1) and p < len(n2) and n1[p] == n2[p]:
+        p += 1
+
+    s = 0
+    while s < (len(n1) - p) and s < (len(n2) - p) and n1[-(s + 1)] == n2[-(s + 1)]:
+        s += 1
+
+    mid1 = n1[p : len(n1) - s] if s > 0 else n1[p:]
+    mid2 = n2[p : len(n2) - s] if s > 0 else n2[p:]
+
+    prefix = n1[:p]
+    suffix = n1[len(n1) - s:] if s > 0 else ""
+
+    tall1 = f"{prefix}{mid1.upper()}{suffix}"
+    tall2 = f"{prefix}{mid2.upper()}{suffix}"
+
+    return tall1, tall2
+
+
+# Curated high-risk ANVISA / ISMP Brasil known LASA collision catalog
+KNOWN_BRAZILIAN_LASA_PAIRS = [
+    ("clorpromazina", "clomipramina"),
+    ("ceftriaxona", "cefazolina"),
+    ("cefotaxima", "cefazolina"),
+    ("doxorrubicina", "daunorrubicina"),
+    ("hidralazina", "hidroxizina"),
+    ("metformina", "metronidazol"),
+    ("fluoxetina", "fluvoxamina"),
+    ("tramadol", "trazodona"),
+    ("diazepam", "diltiazem"),
+    ("levotiroxina", "levofloxacino"),
+    ("omeprazol", "pantoprazol"),
+    ("enalapril", "ramipril"),
+    ("insulina regular", "insulina nph"),
+]
+
+
+class LASACollisionDetector:
+    """
+    Shield against medical dispensing errors caused by phonetic and orthographic
+    confusion in Brazilian Portuguese healthcare settings.
+    """
+    def __init__(self, custom_catalog: Optional[List[Tuple[str, str]]] = None):
+        self.known_pairs = set()
+        for a, b in (custom_catalog or KNOWN_BRAZILIAN_LASA_PAIRS):
+            norm_a = normalize_text_pt(a)
+            norm_b = normalize_text_pt(b)
+            self.known_pairs.add(tuple(sorted((norm_a, norm_b))))
+
+    def assess_collision(self, prescribed_name: str, candidate_name: str) -> LASARiskAssessment:
+        # Camada 1: Normalização do Princípio Ativo
+        norm_prescribed = normalize_text_pt(prescribed_name)
+        norm_candidate = normalize_text_pt(candidate_name)
+        active_match = (norm_prescribed == norm_candidate)
+
+        # Camada 2: Extração e Comparação de Dosagem / Posologia
+        dosages_prescribed = [normalize_single_dosage(d) for d in extract_dosages_pt(prescribed_name)]
+        dosages_dispensed = [normalize_single_dosage(d) for d in extract_dosages_pt(candidate_name)]
+        dosage_match, dosage_status = compare_dosages(dosages_prescribed, dosages_dispensed)
+
+        # Caso 1: Princípios Ativos Idênticos
+        if active_match:
+            if not dosage_match:
+                # CAMADA 2 CRÍTICA: Mesma substância, dosagem/concentração incompatível
+                dose_p_str = ", ".join(dosages_prescribed) if dosages_prescribed else "Não especificada"
+                dose_d_str = ", ".join(dosages_dispensed) if dosages_dispensed else "Não especificada"
+                return LASARiskAssessment(
+                    drug_prescribed=prescribed_name,
+                    drug_dispensed=candidate_name,
+                    active_ingredient_prescribed=norm_prescribed,
+                    active_ingredient_dispensed=norm_candidate,
+                    active_ingredient_match=True,
+                    prescribed_dosages=dosages_prescribed,
+                    dispensed_dosages=dosages_dispensed,
+                    dosage_match=False,
+                    orthographic_similarity=1.0,
+                    phonetic_similarity=1.0,
+                    composite_risk_score=1.0,
+                    risk_level="CRITICAL",
+                    tall_man_prescribed=f"{prescribed_name} [DOSE: {dose_p_str}]",
+                    tall_man_dispensed=f"{candidate_name} [DIVERGENTE: {dose_d_str}]",
+                    recommendation=f"BLOQUEIO POSOLÓGICO CRÍTICO: Princípio ativo '{norm_prescribed.upper()}' idêntico, mas dosagem/concentração incompatível ({dose_p_str} vs {dose_d_str}). Risco fatal de intoxicação ou subdose!"
+                )
+            else:
+                # Princípio ativo e dosagem correspondem perfeitamente
+                return LASARiskAssessment(
+                    drug_prescribed=prescribed_name,
+                    drug_dispensed=candidate_name,
+                    active_ingredient_prescribed=norm_prescribed,
+                    active_ingredient_dispensed=norm_candidate,
+                    active_ingredient_match=True,
+                    prescribed_dosages=dosages_prescribed,
+                    dispensed_dosages=dosages_dispensed,
+                    dosage_match=True,
+                    orthographic_similarity=1.0,
+                    phonetic_similarity=1.0,
+                    composite_risk_score=0.0,
+                    risk_level="SAFE",
+                    tall_man_prescribed=prescribed_name,
+                    tall_man_dispensed=candidate_name,
+                    recommendation="Medicamento e dosagem correspondem exatamente ao prescrito."
+                )
+
+        # Caso 2: Princípios Ativos Diferentes (Avaliação LASA Fonética e Ortográfica)
+        ortho_sim = similarity_ratio(norm_prescribed, norm_candidate)
+        phone_prescribed = pt_br_phonetic_code(prescribed_name)
+        phone_candidate = pt_br_phonetic_code(candidate_name)
+        phone_sim = similarity_ratio(phone_prescribed, phone_candidate)
+
+        pair_key = tuple(sorted((norm_prescribed, norm_candidate)))
+        is_known_lasa = pair_key in self.known_pairs
+
+        composite = (0.55 * phone_sim) + (0.45 * ortho_sim)
+
+        if is_known_lasa:
+            composite = max(composite, 0.88)
+            risk_level = "CRITICAL"
+            rec = "ALERTA MÁXIMO (ISMP/ANVISA): Medicamento com alto índice de colisão fatal registrado."
+        elif composite >= 0.72 or (phone_sim >= 0.80 and ortho_sim >= 0.60):
+            risk_level = "CRITICAL"
+            rec = "BLOQUEIO CLÍNICO RECOMENDADO: Alta probabilidade de confusão LASA (troca inadvertida de substância)."
+        elif composite >= 0.58:
+            risk_level = "WARNING"
+            rec = "ATENÇÃO: Semelhança ortográfica/fonética moderada. Confirmar prescrição e indicação."
+        else:
+            risk_level = "SAFE"
+            rec = "Risco de confusão LASA insignificante."
+
+        tall1, tall2 = generate_tall_man_pair(prescribed_name, candidate_name)
+
+        return LASARiskAssessment(
+            drug_prescribed=prescribed_name,
+            drug_dispensed=candidate_name,
+            active_ingredient_prescribed=norm_prescribed,
+            active_ingredient_dispensed=norm_candidate,
+            active_ingredient_match=False,
+            prescribed_dosages=dosages_prescribed,
+            dispensed_dosages=dosages_dispensed,
+            dosage_match=dosage_match,
+            orthographic_similarity=ortho_sim,
+            phonetic_similarity=phone_sim,
+            composite_risk_score=composite,
+            risk_level=risk_level,
+            tall_man_prescribed=tall1,
+            tall_man_dispensed=tall2,
+            recommendation=rec
+        )
+
+
