@@ -878,3 +878,369 @@ class LASACollisionDetector:
         )
 
 
+# ==============================================================================
+# SECTION 4: UNIFIED CRIBUM MOBILE DISPENSING WORKFLOW ENGINE
+# ==============================================================================
+
+class CribumCoreShield:
+    """
+    Integrated clinical and cryptographic orchestrator.
+    Executes the entire verification pipeline at point-of-dispense:
+    1. Scan & validate GS1 DataMatrix (expiry, GTIN checksum, ANVISA fields)
+    2. Check LASA collision against physician prescription
+    3. Check local duplicate dispensation in Merkle Tree
+    4. Seal dispensing transaction into RFC 6962 tamper-evident log
+    """
+    def __init__(self, cnes_unit: str = "CNES-7654321"):
+        self.cnes_unit = cnes_unit
+        self.merkle_tree = MerkleTree()
+        self.lasa_detector = LASACollisionDetector()
+
+    def process_dispensation(
+        self,
+        raw_barcode: str,
+        prescribed_drug_name: str,
+        dispensed_drug_label: str,
+        patient_cpf: str,
+        prescriber_crm: str,
+        dispenser_crf: str,
+        as_of_date: Optional[datetime.date] = None
+    ) -> Dict[str, Union[bool, str, dict]]:
+        
+        # Step 1: Parse GS1 DataMatrix
+        medication = parse_gs1_datamatrix(raw_barcode)
+
+        # Step 2: Validate expiration
+        ref_date = as_of_date or datetime.date.today()
+        if medication.is_expired(as_of=ref_date):
+            return {
+                "success": False,
+                "error_code": "MEDICATION_EXPIRED",
+                "message": f"MEDICAMENTO VENCIDO: Vencimento em {medication.expiration_date.isoformat()}, data atual {ref_date.isoformat()}."
+            }
+
+        # Step 3: Check Clinical Safety (Camada 1: LASA Fonético + Camada 2: Posologia/Dosagem Estrita)
+        lasa_assessment = self.lasa_detector.assess_collision(prescribed_drug_name, dispensed_drug_label)
+        if lasa_assessment.risk_level == "CRITICAL":
+            if not lasa_assessment.dosage_match and lasa_assessment.active_ingredient_match:
+                return {
+                    "success": False,
+                    "error_code": "DOSAGE_MISMATCH_BLOCKED",
+                    "message": f"DISPENSAÇÃO BLOQUEADA POR ERRO POSOLÓGICO: Princípio ativo '{lasa_assessment.active_ingredient_prescribed.upper()}' compatível, mas concentração diverge ({lasa_assessment.prescribed_dosages} vs {lasa_assessment.dispensed_dosages}).",
+                    "lasa_assessment": lasa_assessment.to_dict()
+                }
+            else:
+                return {
+                    "success": False,
+                    "error_code": "LASA_COLLISION_BLOCKED",
+                    "message": f"DISPENSAÇÃO BLOQUEADA POR SEGURANÇA CLÍNICA (LASA): Prescrito '{lasa_assessment.tall_man_prescribed}', lido '{lasa_assessment.tall_man_dispensed}'.",
+                    "lasa_assessment": lasa_assessment.to_dict()
+                }
+
+        # Step 4: Double Dispensation Check & Cryptographic Merkle Sealing
+        # LGPD-safe patient hash: SHA256 of CPF + CNES salt
+        patient_hash = hashlib.sha256(f"{patient_cpf}:{self.cnes_unit}:cribum_salt".encode()).hexdigest()
+        
+        event_id = hashlib.sha256(f"{medication.canonical_id}:{datetime.datetime.now(datetime.timezone.utc).isoformat()}".encode()).hexdigest()[:16]
+        event = DispensingEvent(
+            event_id=event_id,
+            canonical_drug_id=medication.canonical_id,
+            patient_hash=patient_hash,
+            prescriber_crm=prescriber_crm,
+            dispenser_crf=dispenser_crf,
+            cnes_clinic_code=self.cnes_unit,
+            timestamp_utc=datetime.datetime.now(datetime.timezone.utc).isoformat()
+        )
+
+        try:
+            leaf_idx = self.merkle_tree.append_dispensing(event)
+        except DoubleDispenseError as dde:
+            return {
+                "success": False,
+                "error_code": "DOUBLE_DISPENSATION_FRAUD",
+                "message": str(dde),
+                "canonical_drug_id": medication.canonical_id
+            }
+
+        # Step 5: Generate Cryptographic Proof
+        root_hash = self.merkle_tree.get_root_hash()
+        audit_proof = self.merkle_tree.get_audit_proof(leaf_idx)
+
+        return {
+            "success": True,
+            "message": "DISPENSAÇÃO VALIDADA E REGISTRADA COM SUCESSO NO ESCRITÓRIO CRIPTOGRÁFICO.",
+            "medication": medication.to_dict(),
+            "lasa_assessment": lasa_assessment.to_dict(),
+            "merkle_receipt": {
+                "leaf_index": leaf_idx,
+                "tree_size": len(self.merkle_tree),
+                "merkle_root": root_hash,
+                "audit_proof_steps": len(audit_proof),
+                "audit_proof": audit_proof
+            }
+        }
+
+
+# ==============================================================================
+# SECTION 5: COMPREHENSIVE UNIT TEST SUITE
+# ==============================================================================
+
+def run_all_tests() -> bool:
+    """Executes full verification suite for GS1, Merkle Tree, and LASA engine."""
+    print("=" * 80)
+    print("INICIANDO SUÍTE DE TESTES: CRIBUM MOBILE TECHNICAL CORE")
+    print("=" * 80)
+
+    # ---------------------------------------------------------
+    # TEST 1: GS1 DataMatrix Parser (Bracketed & Raw)
+    # ---------------------------------------------------------
+    print("\n[TEST 1] GS1 DataMatrix ANVISA Parser...")
+    
+    # Valid sample with correct check digit (GTIN-14: 07891234567895)
+    # Check digit calculation for 0789123456789:
+    # 0*3 + 7*1 + 8*3 + 9*1 + 1*3 + 2*1 + 3*3 + 4*1 + 5*3 + 6*1 + 7*3 + 8*1 + 9*3
+    # = 0 + 7 + 24 + 9 + 3 + 2 + 9 + 4 + 15 + 6 + 21 + 8 + 27 = 135 -> (10 - 135%10)%10 = 5.
+    bracketed_sample = "(01)07891234567895(21)BR987654321(17)281231(10)LOTE2026A"
+    med = parse_gs1_datamatrix(bracketed_sample)
+    assert med.gtin == "07891234567895", f"GTIN mismatch: {med.gtin}"
+    assert med.serial_number == "BR987654321", f"Serial mismatch: {med.serial_number}"
+    assert med.expiration_date == datetime.date(2028, 12, 31), f"Expiry mismatch: {med.expiration_date}"
+    assert med.batch_lot == "LOTE2026A", f"Lot mismatch: {med.batch_lot}"
+    assert not med.is_expired(datetime.date(2026, 1, 1)), "Should not be expired in 2026"
+    assert med.is_expired(datetime.date(2029, 1, 1)), "Should be expired in 2029"
+    print("  -> Bracketed ANVISA GS1 scan: PASS")
+
+    # Raw scan with <GS> separator
+    raw_sample = f"010789123456789521SN11223344{GS_CHAR}1727060010LOTE99"
+    med_raw = parse_gs1_datamatrix(raw_sample)
+    assert med_raw.gtin == "07891234567895"
+    assert med_raw.serial_number == "SN11223344"
+    # June has 30 days; day 00 resolves to 30
+    assert med_raw.expiration_date == datetime.date(2027, 6, 30), f"Day 00 GS1 rule failed: {med_raw.expiration_date}"
+    assert med_raw.batch_lot == "LOTE99"
+    print("  -> Raw GS-separated ANVISA scan & Day-00 rule: PASS")
+
+    # Invalid check digit test
+    try:
+        parse_gs1_datamatrix("(01)07891234567890(21)SER1(17)261231(10)LOT1")
+        assert False, "Should have raised GS1ParseError for bad check digit"
+    except GS1ParseError:
+        print("  -> Check digit tamper detection: PASS")
+
+    # ---------------------------------------------------------
+    # TEST 2: Standalone RFC 6962 Merkle Tree & Tamper Resistance
+    # ---------------------------------------------------------
+    print("\n[TEST 2] RFC 6962 Merkle Tree & Audit Proofs...")
+    tree = MerkleTree()
+    
+    events = [
+        DispensingEvent(
+            event_id=f"EVT-{i}",
+            canonical_drug_id=f"07891234567895:SER-{i:04d}",
+            patient_hash=hashlib.sha256(f"CPF-{i}".encode()).hexdigest(),
+            prescriber_crm="CRM/SP 123456",
+            dispenser_crf="CRF/SP 654321",
+            cnes_clinic_code="CNES-1122334",
+            timestamp_utc="2026-10-23T12:00:00Z"
+        )
+        for i in range(1, 9)  # 8 events (perfect binary tree)
+    ]
+
+    for ev in events:
+        tree.append_dispensing(ev)
+
+    root_hex = tree.get_root_hash()
+    assert len(root_hex) == 64, f"Invalid hex root length: {len(root_hex)}"
+    print(f"  -> Generated Merkle Root for 8 leaves: {root_hex[:16]}...{root_hex[-8:]}")
+
+    # Audit proof verification for each leaf
+    for i in range(8):
+        proof = tree.get_audit_proof(i)
+        is_valid = MerkleTree.verify_audit_proof(
+            leaf_data=events[i].to_canonical_bytes(),
+            leaf_index=i,
+            tree_size=len(tree),
+            expected_root_hex=root_hex,
+            proof=proof
+        )
+        assert is_valid, f"Audit proof failed for leaf {i}"
+    print("  -> Verified all 8 cryptographic audit proofs: PASS")
+
+    # Tampering test (modified leaf data must fail verification)
+    tampered_data = events[0].to_canonical_bytes() + b"TAMPERED"
+    tampered_proof = tree.get_audit_proof(0)
+    is_tampered_valid = MerkleTree.verify_audit_proof(
+        leaf_data=tampered_data,
+        leaf_index=0,
+        tree_size=len(tree),
+        expected_root_hex=root_hex,
+        proof=tampered_proof
+    )
+    assert not is_tampered_valid, "Tampered leaf should NOT pass audit proof"
+    print("  -> Merkle audit tamper rejection: PASS")
+
+    # Arbitrary and odd tree sizes verification (RFC 6962 power-of-two decomposition)
+    for test_size in [1, 2, 3, 5, 7, 9, 13]:
+        sub_tree = MerkleTree()
+        sub_events = [
+            DispensingEvent(
+                event_id=f"SUB-EVT-{k}",
+                canonical_drug_id=f"07891234567895:SERIAL-TEST-{k:04d}",
+                patient_hash=hashlib.sha256(f"CPF-TEST-{k}".encode()).hexdigest(),
+                prescriber_crm="CRM/SP 000001",
+                dispenser_crf="CRF/SP 000002",
+                cnes_clinic_code="CNES-ODD",
+                timestamp_utc="2026-10-23T12:00:00Z"
+            )
+            for k in range(test_size)
+        ]
+        for se in sub_events:
+            sub_tree.append_dispensing(se)
+        sub_root = sub_tree.get_root_hash()
+        for k in range(test_size):
+            p = sub_tree.get_audit_proof(k)
+            assert MerkleTree.verify_audit_proof(
+                leaf_data=sub_events[k].to_canonical_bytes(),
+                leaf_index=k,
+                tree_size=test_size,
+                expected_root_hex=sub_root,
+                proof=p
+            ), f"Failed odd-size audit proof: size {test_size}, leaf {k}"
+    print("  -> Verified arbitrary/unbalanced Merkle tree sizes (1, 2, 3, 5, 7, 9, 13): PASS")
+
+    # Double Dispensation Prevention test
+    try:
+        tree.append_dispensing(events[0])  # Duplicate!
+        assert False, "Should have caught double dispensation"
+    except DoubleDispenseError as e:
+        print(f"  -> Double-dispensation fraud shield triggered: PASS ({e})")
+
+    # ---------------------------------------------------------
+    # TEST 3: Brazilian Portuguese LASA Detector & Tall Man
+    # ---------------------------------------------------------
+    print("\n[TEST 3] Brazilian Portuguese LASA Collision Engine...")
+    lasa = LASACollisionDetector()
+
+    # Case 3.1: Deadly collision pair (Clorpromazina vs Clomipramina)
+    res_clor = lasa.assess_collision("Clorpromazina 100mg", "Clomipramina 25mg")
+    assert res_clor.risk_level == "CRITICAL", f"Expected CRITICAL, got {res_clor.risk_level}"
+    assert res_clor.composite_risk_score > 0.75, f"Score too low: {res_clor.composite_risk_score}"
+    assert "MAZINA" in res_clor.tall_man_prescribed and "PRAMINA" in res_clor.tall_man_dispensed
+    print(f"  -> Critical LASA detected: '{res_clor.tall_man_prescribed}' vs '{res_clor.tall_man_dispensed}' (Score: {res_clor.composite_risk_score:.2f})")
+
+    # Case 3.2: Doxorrubicina vs Daunorrubicina
+    res_doxo = lasa.assess_collision("Doxorrubicina injetavel", "Daunorrubicina")
+    assert res_doxo.risk_level == "CRITICAL"
+    print(f"  -> High-risk Oncology LASA: '{res_doxo.tall_man_prescribed}' vs '{res_doxo.tall_man_dispensed}'")
+
+    # Case 3.3: Hidralazina vs Hidroxizina (Phonetic subtle difference)
+    res_hidra = lasa.assess_collision("Hidralazina 50mg", "Hidroxizina 25mg")
+    assert res_hidra.risk_level == "CRITICAL"
+    print(f"  -> Antihypertensive/Antihistaminic LASA: '{res_hidra.tall_man_prescribed}' vs '{res_hidra.tall_man_dispensed}'")
+
+    # Case 3.4: Safe pair (Metformina vs Amoxicilina)
+    res_safe = lasa.assess_collision("Metformina 850mg", "Amoxicilina 500mg")
+    assert res_safe.risk_level == "SAFE", f"Expected SAFE, got {res_safe.risk_level}"
+    print(f"  -> Safe pair correctly categorized: Score {res_safe.composite_risk_score:.2f}")
+
+    # Case 3.5: Critical Dosage Mismatch (Morfina 10mg vs Morfina 30mg)
+    res_dose = lasa.assess_collision("Sulfato de Morfina 10mg", "Sulfato de Morfina 30mg")
+    assert res_dose.risk_level == "CRITICAL", f"Expected CRITICAL for dosage mismatch, got {res_dose.risk_level}"
+    assert res_dose.active_ingredient_match is True, "Active ingredient should match"
+    assert res_dose.dosage_match is False, "Dosage should NOT match"
+    print(f"  -> Critical Dosage Discrepancy blocked: '{res_dose.drug_prescribed}' vs '{res_dose.drug_dispensed}'")
+
+    # Case 3.6: Unit equivalence normalization (Ceftriaxona 1g vs 1000mg)
+    res_equiv = lasa.assess_collision("Ceftriaxona 1g", "Ceftriaxona 1000mg")
+    assert res_equiv.risk_level == "SAFE", f"Expected SAFE for unit equivalence, got {res_equiv.risk_level}"
+    assert res_equiv.active_ingredient_match is True
+    assert res_equiv.dosage_match is True
+    print(f"  -> Unit equivalence recognized (1g == 1000mg): PASS")
+
+    # ---------------------------------------------------------
+    # TEST 4: Integrated End-to-End Dispensation Pipeline
+    # ---------------------------------------------------------
+    print("\n[TEST 4] End-to-End Integrated Dispensing Shield...")
+    shield = CribumCoreShield(cnes_unit="CNES-CENTRO-SP")
+
+    # Dispense legitimate drug
+    barcode_valid = "(01)07891234567895(21)SER-ALPHA-01(17)281231(10)LOTE-X"
+    r1 = shield.process_dispensation(
+        raw_barcode=barcode_valid,
+        prescribed_drug_name="Sulfato de Morfina 10mg",
+        dispensed_drug_label="Sulfato de Morfina 10mg",
+        patient_cpf="123.456.789-00",
+        prescriber_crm="CRM/SP 998877",
+        dispenser_crf="CRF/SP 554433",
+        as_of_date=datetime.date(2026, 10, 23)
+    )
+    assert r1["success"] is True, f"R1 failed: {r1}"
+    print("  -> First legitimate dispensation: CONFIRMED & SEALED IN MERKLE TREE")
+
+    # Attempt double dispensation of same unit
+    r2 = shield.process_dispensation(
+        raw_barcode=barcode_valid,
+        prescribed_drug_name="Sulfato de Morfina 10mg",
+        dispensed_drug_label="Sulfato de Morfina 10mg",
+        patient_cpf="987.654.321-99",
+        prescriber_crm="CRM/SP 112233",
+        dispenser_crf="CRF/SP 554433",
+        as_of_date=datetime.date(2026, 10, 23)
+    )
+    assert r2["success"] is False
+    assert r2["error_code"] == "DOUBLE_DISPENSATION_FRAUD"
+    print(f"  -> Blocked duplicate dispensation fraud: PASS ({r2['error_code']})")
+
+    # Attempt expired medication dispensation
+    barcode_expired = "(01)07891234567895(21)SER-EXPIRED(17)240101(10)LOTE-OLD"
+    r3 = shield.process_dispensation(
+        raw_barcode=barcode_expired,
+        prescribed_drug_name="Sulfato de Morfina 10mg",
+        dispensed_drug_label="Sulfato de Morfina 10mg",
+        patient_cpf="123.456.789-00",
+        prescriber_crm="CRM/SP 998877",
+        dispenser_crf="CRF/SP 554433",
+        as_of_date=datetime.date(2026, 10, 23)
+    )
+    assert r3["success"] is False
+    assert r3["error_code"] == "MEDICATION_EXPIRED"
+    print(f"  -> Blocked expired drug dispensation: PASS ({r3['error_code']})")
+
+    # Attempt LASA lethal mix-up
+    r4 = shield.process_dispensation(
+        raw_barcode="(01)07891234567895(21)SER-LASA-99(17)281231(10)LOTE-Y",
+        prescribed_drug_name="Clorpromazina 100mg",
+        dispensed_drug_label="Clomipramina 25mg",
+        patient_cpf="123.456.789-00",
+        prescriber_crm="CRM/SP 998877",
+        dispenser_crf="CRF/SP 554433",
+        as_of_date=datetime.date(2026, 10, 23)
+    )
+    assert r4["success"] is False
+    assert r4["error_code"] == "LASA_COLLISION_BLOCKED"
+    print(f"  -> Blocked LASA confusion at point of care: PASS ({r4['error_code']})")
+
+    # Attempt Dosage Discrepancy dispensation (Morfina 10mg vs 30mg)
+    r5 = shield.process_dispensation(
+        raw_barcode="(01)07891234567895(21)SER-DOSE-99(17)281231(10)LOTE-Z",
+        prescribed_drug_name="Sulfato de Morfina 10mg",
+        dispensed_drug_label="Sulfato de Morfina 30mg",
+        patient_cpf="123.456.789-00",
+        prescriber_crm="CRM/SP 998877",
+        dispenser_crf="CRF/SP 554433",
+        as_of_date=datetime.date(2026, 10, 23)
+    )
+    assert r5["success"] is False
+    assert r5["error_code"] == "DOSAGE_MISMATCH_BLOCKED"
+    print(f"  -> Blocked dosage discrepancy at point of care: PASS ({r5['error_code']})")
+
+    print("\n" + "=" * 80)
+    print("TODOS OS TESTES UNITÁRIOS E DE INTEGRAÇÃO PASSARAM COM SUCESSO (100% OK)")
+    print("=" * 80)
+    return True
+
+
+if __name__ == "__main__":
+    import sys
+    success = run_all_tests()
+    sys.exit(0 if success else 1)
