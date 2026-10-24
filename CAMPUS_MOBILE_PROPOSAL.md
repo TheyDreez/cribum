@@ -127,6 +127,23 @@ O Cribum Mobile não armazena o número do CPF do paciente em texto puro no log 
 $$\text{PatientHash} = \text{HMAC-SHA256}(\text{CPF}, \text{Salt}_{\text{CNES}})$$
 Dessa forma, caso o dispositivo móvel seja furtado ou perca a integridade física, nenhum dado pessoal sensível de saúde (diagnósticos, terapias em curso ou registros de doenças raras) poderá ser exposto ou descriptografado por terceiros.
 
+### 3.5 Módulo de Tecnologia Assistiva e Desenho Universal (WCAG 2.2 Nível AAA & ISO 9241-112)
+Alinhado à categoria **Saúde e Tecnologias Assistivas**, o Cribum Mobile incorpora Desenho Universal e Ergonomia Sensorial/Cognitiva para eliminar barreiras físicas e sensoriais nos plantões do SUS:
+1. **Tripla Codificação Redundante (Paleta Okabe-Ito CVD-Safe + Marcadores Geométricos + Texto):**
+   - Elimina o risco de falha visual para profissionais ou pacientes daltônicos (Deuteranopia, Protanopia, Tritanopia) ou sob fadiga visual extrema;
+   - Substitui o verde/vermelho tradicional por marcadores geométricos com contraste luminal $> 7:1$ (WCAG 2.2 AAA):
+     - **● Círculo Sólido Azul (#0072B2):** Dispensação homologada e selada;
+     - **▲ Triângulo Âmbar (#E69F00):** Alerta posológico ou par fonético ambíguo LASA;
+     - **■ Quadrado Vermelhão (#D55E00):** Bloqueio de duplicidade/gasto duplo ou fraude.
+2. **Ergonomia Motora, Thumb Zone (Lei de Fitts) e Hands-Free Auto-Trigger:**
+   - **Alvos Expandidos de 60x60dp:** Redução do índice de dificuldade motora ao manusear caixas pesadas ou refrigeradas;
+   - **Disparo Óptico Sem Toque (Hands-Free):** O loop da câmera analisa nitidez focal ($\sigma^2_{\text{Laplaciano}} > \tau$) e estabilização espacial por 400ms, realizando a leitura e validação automaticamente sem necessidade de tocar na tela com luvas de procedimento.
+3. **Escudo Anti-Tremores (Anti-Tremor Shield):**
+   - Filtro de histerese temporal (debounce de 350ms) e tolerância espacial de 24px, amortecendo micro-toques involuntários de operadores ou pacientes idosos, com Doença de Parkinson ou artrite reumatoide.
+4. **Feedback Multissensorial Redundante (Háptico + Auditivo Adaptativo):**
+   - **Assinatura Háptica:** Padrões distintos de vibração física (1 pulso longo de 450ms para sucesso; 2 pulsos intervalados para alerta de dosagem; 3 pulsos curtos e secos para fraude);
+   - **Síntese de Voz Presbiacusia-Safe (Web Speech API):** Cadência vocal pausada ($0.92$) e escansão silábica com linguagem simples (ISO 24495-1) para pacientes com deficiência visual ou baixa literacia.
+
 ---
 
 ## 4. O IMPACTO E MÉTRICAS ESTIMADAS DE ECONOMIA PÚBLICA
