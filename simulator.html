@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cribum Mobile – Simulador Forense de Dispensação SUS</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #131b2e;
+      --accent: #00d26a;
+      --danger: #ff3b30;
+      --warning: #ff9500;
+      --info: #0a84ff;
+      --text: #f0f4f8;
+      --muted: #8a9bb0;
+      --border: #22304d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .device-container {
+      display: flex;
+      gap: 30px;
+      max-width: 1000px;
+      width: 100%;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .phone {
+      width: 380px;
+      height: 760px;
+      background: #000;
+      border-radius: 48px;
+      border: 6px solid #2d3748;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 40px rgba(0, 210, 106, 0.15);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .notch {
+      width: 160px;
+      height: 24px;
+      background: #2d3748;
+      margin: 0 auto;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+    }
+    .status-bar {
+      padding: 10px 24px 6px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      z-index: 90;
+      margin-top: 6px;
+    }
+    .app-header {
+      padding: 12px 20px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .app-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-offline {
+      background: rgba(255, 149, 0, 0.15);
+      color: var(--warning);
+      border: 1px solid var(--warning);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-5g {
+      background: rgba(10, 132, 255, 0.15);
+      color: var(--info);
+      border: 1px solid var(--info);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .screen-content {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+    }
+    .scanner-box {
+      width: 100%;
+      height: 200px;
+      background: #080c14;
+      border-radius: 20px;
+      border: 2px dashed #3a4b6e;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .laser {
+      position: absolute;
+      width: 90%;
+      height: 2px;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      animation: scan 2s infinite ease-in-out alternate;
+    }
+    @keyframes scan {
+      0% { top: 15%; opacity: 0.3; }
+      100% { top: 85%; opacity: 1; }
+    }
+    .target-overlay {
+      width: 120px;
+      height: 120px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 12px;
+      position: relative;
+    }
+    .target-overlay::before, .target-overlay::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-color: var(--accent);
+      border-style: solid;
+    }
+    .target-overlay::before { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+    .target-overlay::after { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+    .scan-label {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .status-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    .status-card.success { border-color: var(--accent); background: rgba(0, 210, 106, 0.08); }
+    .status-card.fraud { border-color: var(--danger); background: rgba(255, 59, 48, 0.12); }
+    .status-card.warning { border-color: var(--warning); background: rgba(255, 149, 0, 0.12); }
+    .status-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .status-body {
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+    .tallman {
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    .tallman span { color: var(--warning); text-decoration: underline; }
+    .merkle-dock {
+      background: #060911;
+      border-radius: 12px;
+      padding: 10px;
+      border: 1px solid #1c263c;
+      font-family: monospace;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .merkle-root {
+      color: #38bdf8;
+      word-break: break-all;
+      margin-top: 4px;
+    }
+    .controls-panel {
+      flex: 1;
+      min-width: 320px;
+      max-width: 480px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+    }
+    .controls-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .controls-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.15); }
+    .btn-green { background: #008744; color: #fff; }
+    .btn-red { background: #b71c1c; color: #fff; }
+    .btn-orange { background: #d97706; color: #fff; }
+    .btn-blue { background: #1d4ed8; color: #fff; }
+    .btn-icon { font-size: 18px; }
+  </style>
+</head>
+<body>
+
+<div class="device-container">
+  
+  <!-- SMARTPHONE SIMULATOR -->
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>UBS JD. PAULISTA (042)</span>
+      <span>📶 CLARO 5G | 🔋 98%</span>
+    </div>
+
+    <div class="app-header">
+      <div class="app-title">
+        <span>🛡️ CRIBUM MOBILE</span>
+      </div>
+      <div style="display:flex; gap:6px;">
+        <div id="connectionBadge" class="badge-offline">OFFLINE ATIVO</div>
+        <div id="shieldBadge" style="background:rgba(0,210,106,0.15); color:var(--accent); border:1px solid var(--accent); padding:2px 6px; border-radius:12px; font-size:9px; font-weight:700;">BI-CAMADA</div>
+      </div>
+    </div>
+
+    <div class="screen-content">
+      <div class="scanner-box">
+        <div class="laser"></div>
+        <div class="target-overlay"></div>
+        <div class="scan-label">ANVISA GS1 DATAMATRIX SCAN</div>
+      </div>
+
+      <div id="statusCard" class="status-card success">
+        <div class="status-header">
+          <span id="statusIcon">🟢</span>
+          <span id="statusTitle">SISTEMA PRONTO</span>
+        </div>
+        <div id="statusDesc" class="status-body">
+          Aponte a câmera para a caixa de medicamento do Componente Especializado (CEAF). Escudo fonético e livro-razão offline ativos.
+        </div>
+      </div>
+
+      <div class="merkle-dock">
+        <div>🌲 <strong>LIVRO-RAZÃO OFFLINE (RFC 6962)</strong></div>
+        <div style="margin-top:4px;">Transações Locais: <strong id="leafCount" style="color:#fff;">4 folhas</strong></div>
+        <div>Merkle Root:</div>
+        <div id="merkleRoot" class="merkle-root">0xa4c7e812d90f23b1...8f91</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROL PANEL / DEMO TRIGGER -->
+  <div class="controls-panel">
+    <div class="controls-title">🎮 Painel de Demonstração (Pitch 90s)</div>
+    <div class="controls-desc">
+      Use estes botões durante a gravação do seu vídeo de 90 segundos para simular na tela exatamente o que o Cribum Mobile faz na prática.
+    </div>
+
+    <button class="btn btn-green" onclick="simulateSuccess()">
+      <span class="btn-icon">📦</span>
+      <div>
+        <div>1. Escanear Medicamento Legítimo (R$ 8.500)</div>
+        <div style="font-size:11px; opacity:0.8;">Adalimumabe 40mg • Selagem imediata em Árvore de Merkle</div>
+      </div>
+    </button>
+
+    <button class="btn btn-red" onclick="simulateFraud()">
+      <span class="btn-icon">🚨</span>
+      <div>
+        <div>2. Escanear a MESMA Caixa (Gasto Duplo)</div>
+        <div style="font-size:11px; opacity:0.8;">Simula tentativa de fraude de dupla dispensação sem internet</div>
+      </div>
+    </button>
+
+    <button class="btn btn-orange" onclick="simulateLasa()">
+      <span class="btn-icon">⚠️</span>
+      <div>
+        <div>3. Escanear Risco de Troca (LASA)</div>
+        <div style="font-size:11px; opacity:0.8;">Clorpromazina vs Clomipramina com Tall Man Lettering</div>
+      </div>
+    </button>
+
+    <button class="btn btn-red" onclick="simulateDosageMismatch()" style="background:#8b0000;">
+      <span class="btn-icon">⛔</span>
+      <div>
+        <div>4. Escanear Erro Posológico (Morfina 10mg vs 30mg)</div>
+        <div style="font-size:11px; opacity:0.8;">Camada 2: Mesma substância, dose triplicada (DOSAGE_MISMATCH)</div>
+      </div>
+    </button>
+
+    <button class="btn btn-blue" onclick="simulateSync()">
+      <span class="btn-icon">📡</span>
+      <div>
+        <div>5. Sincronização Claro 5G Standalone</div>
+        <div style="font-size:11px; opacity:0.8;">Reconciliação da Raiz de Merkle com SES / DATASUS (8ms)</div>
+      </div>
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // Web Audio synth for authentic feedback sounds
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function beep(freq, duration, type="sine") {
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function simulateSuccess() {
+    beep(880, 0.15);
+    const card = document.getElementById('statusCard');
+    card.className = "status-card success";
+    document.getElementById('statusIcon').textContent = "✅";
+    document.getElementById('statusTitle').textContent = "DISPENSAÇÃO HOMOLOGADA";
+    document.getElementById('statusDesc').innerHTML = `
+      <strong>Adalimumabe 40mg (Humira)</strong><br>
+      • GTIN-14: 07891010771234 (Mod10: OK)<br>
+      • Serial IUID: <code>BR-CEAF-99214</code><br>
+      • Validade: 31/12/2027 • Lote: LT8801<br>
+      • Paciente LGPD: <code>hmac_6b2f...81e</code><br>
+      <strong>🛡️ Selado na Árvore de Merkle local.</strong>
+    `;
+    document.getElementById('leafCount').textContent = "5 folhas";
+    document.getElementById('merkleRoot').textContent = "0x89f41b9c3e72...4a12";
+  }
+
+  function simulateFraud() {
+    beep(220, 0.4, "sawtooth");
+    const card = document.getElementById('statusCard');
+    card.className = "status-card fraud";
+    document.getElementById('statusIcon').textContent = "🚨";
+    document.getElementById('statusTitle').textContent = "DUPLA DISPENSAÇÃO DETECTADA!";
+    document.getElementById('statusDesc').innerHTML = `
+      <strong style="color:var(--danger)">BLOQUEIO CRIPTOGRÁFICO DE FRAUDE</strong><br>
+      O medicamento serial <code>BR-CEAF-99214</code> já foi dispensado nesta unidade hoje às 23:42.<br>
+      <strong>O Problema do Gasto Duplo foi interceptado offline pela Árvore de Merkle.</strong> Dispensação bloqueada.
+    `;
+  }
+
+  function simulateLasa() {
+    beep(440, 0.25, "triangle");
+    const card = document.getElementById('statusCard');
+    card.className = "status-card warning";
+    document.getElementById('statusIcon').textContent = "⚠️";
+    document.getElementById('statusTitle').textContent = "ALERTA: CASCATA IATROGÊNICA (LASA)";
+    document.getElementById('statusDesc').innerHTML = `
+      Prescrito: <strong>Clorpromazina 100mg</strong><br>
+      Escaneado: <strong>Clomipramina 25mg</strong> (Risco Fonético: 88%)<br>
+      <div class="tallman">clor<span>PROMAZINA</span> vs clomi<span>PRAMINA</span></div><br>
+      <small>Troca fatal interceptada pelo motor assistivo antes da entrega.</small>
+    `;
+  }
+
+  function simulateDosageMismatch() {
+    beep(180, 0.45, "sawtooth");
+    const card = document.getElementById('statusCard');
+    card.className = "status-card fraud";
+    document.getElementById('statusIcon').textContent = "⛔";
+    document.getElementById('statusTitle').textContent = "ERRO POSOLÓGICO: DOSAGEM DIVERGENTE";
+    document.getElementById('statusDesc').innerHTML = `
+      <strong style="color:var(--danger)">BLOQUEIO CLÍNICO DA CAMADA 2</strong><br>
+      Prescrito: <strong>Sulfato de Morfina 10mg</strong><br>
+      Escaneado: <strong>Sulfato de Morfina 30mg</strong><br>
+      <span style="display:inline-block; margin-top:6px; background:rgba(255,59,48,0.2); padding:3px 8px; border-radius:6px; font-weight:700; color:#ff6b6b;">
+        CÓDIGO: DOSAGE_MISMATCH_BLOCKED
+      </span><br>
+      <small style="color:#cbd5e1; margin-top:4px; display:block;">Princípio ativo idêntico, mas dosagem 3x superior à prescrita. Risco de óbito por depressão respiratória evitado!</small>
+    `;
+  }
+
+  function simulateSync() {
+    beep(1200, 0.2);
+    const badge = document.getElementById('connectionBadge');
+    badge.className = "badge-5g";
+    badge.textContent = "CLARO 5G MEC SINCRONIZADO";
+    const card = document.getElementById('statusCard');
+    card.className = "status-card success";
+    document.getElementById('statusIcon').textContent = "📡";
+    document.getElementById('statusTitle').textContent = "CONCILIAÇÃO FEDERADA 5G CONCLUÍDA";
+    document.getElementById('statusDesc').innerHTML = `
+      Raiz de Merkle transmitida via <strong>Network Slicing de Missão Crítica Claro 5G</strong>.<br>
+      Latência: <strong>8 milissegundos</strong>.<br>
+      Auditoria consolidada no DATASUS e Secretaria Estadual de Saúde.
+    `;
+    setTimeout(() => {
+      badge.className = "badge-offline";
+      badge.textContent = "OFFLINE ATIVO";
+    }, 4000);
+  }
+</script>
+
+</body>
+</html>
