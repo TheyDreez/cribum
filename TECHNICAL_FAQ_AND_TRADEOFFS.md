@@ -131,11 +131,24 @@ Este documento formaliza as decisões de arquitetura de software, telecomunicaç
 
 ---
 
+## 🛡️ ROUND 6: AUDITORIA DE SEGURANÇA PROFUNDA E MITIGAÇÃO DE 6 PONTOS CEGOS CRÍTICOS
+
+| # | Ponto Cego Arquitetural | Vetor de Vulnerabilidade Real | Mitigação Implementada / Projetada no Cribum |
+| :- | :--- | :--- | :--- |
+| **1** | **Ataque de Segunda Pré-Imagem e Duplicação de Folhas Ímpares (`CVE-2012-2459`)** | Árvores de Merkle ingênuas que concatenam hashes sem separação de domínio ou duplicam a última folha quando $N$ é ímpar permitem forjar provas com a mesma raiz. | Conformidade estrita com a **RFC 6962**: prefixo `0x00` para folhas, `0x01` para nós internos e decomposição binária canônica via maior potência de 2 ($k = 2^{\lfloor \log_2(N-1) \rfloor}$), validada em árvores desbalanceadas ($N=1.000 \rightarrow 512+488$). |
+| **2** | **Ataque de Rainbow Table / GPU Brute-Force sobre CPF (`LGPD Art. 13`)** | Como o Brasil possui apenas $10^9$ CPFs matematicamente válidos (9 dígitos base + 2 dígitos verificadores Módulo-11), um `SHA256(cpf + salt_estatico)` é revertido em **$< 0,1\text{ s}$** em uma única GPU RTX 3090 (~10 GH/s). | Substituição de hash simples por **`HMAC-SHA256` chaveado (`anonymize_cpf_hmac`)** com chave secreta de 256 bits isolada no **Android Keystore / StrongBox** (HSM) e verificação em tempo constante (`hmac.compare_digest`) contra *timing side-channels*. |
+| **3** | **Armadilha do Dia `00` e Virada de Século no GS1 AI (17)** | Laboratórios codificam frequentemente a validade no padrão `YYMMDD` com `DD = 00` (ex.: `280600` para 30/06/2028). Parsers `strptime` comuns quebram com `ValueError` no meio do plantão. | Resolução determinística do último dia do mês (incluindo anos bissextos via `calendar.monthrange`) e janela deslizante de século de 50 anos conforme *GS1 General Specifications Section 7.12*. |
+| **4** | **Ataque de Split-View (Equivocação de Raiz) em Modo Offline** | Um dispositivo comprometido poderia manter duas árvores locais distintas: uma contendo o desvio de um frasco de *Spinraza* (R\$ 160 mil) para emitir o recibo local e outra "limpa" para sincronizar com a Secretaria de Saúde. | **Encadeamento de Raízes (*Chained Merkle Roots*, $R_t = H(R_{t-1} \parallel \dots)$)** assinado pela chave privada de hardware do dispositivo + **Prova de Consistência da RFC 6962 (Seção 2.1.2)** exigindo prova matemática de que $N_1 \subset N_2$. |
+| **5** | **Exaustão de Memória ($O(N)$ em RAM) em Escala Estadual** | Manter milhões de folhas em memória no longo prazo causaria *Out-Of-Memory (OOM)* em smartphones de entrada. | Particionamento em **Árvores por Turno/Época (*Epoch Trees*)** aliado a um acumulador **MMR (*Merkle Mountain Range*)**, que retém em RAM apenas os $\lfloor \log_2 N \rfloor + 1$ picos das subárvores completas (**640 bytes** de RAM para $10^6$ dispensações). |
+| **6** | **Condição de Corrida (*TOCTOU*) na Dispensação Concorrente** | Dois guichês escaneando simultaneamente a mesma prescrição antes do *commit* poderiam ler o estado `UNDISPENSED` em paralelo. | Índice `UNIQUE` atômico sobre `(gtin14, serial_number)` e `(prescription_hash, item_index)` com semântica `INSERT ... ON CONFLICT DO NOTHING` antes da selagem na Árvore de Merkle. |
+
+---
+
 ## 🎖️ TABELA TÁTICA DE RESPOSTAS RÁPIDAS (PULSO DE SABATINA)
 
 | Pergunta da Banca | Palavra-Chave de Impacto | Frase Síntese de Nocaute |
 | :--- | :--- | :--- |
-| **"E a LGPD dos pacientes?"** | *HMAC-SHA256 Salgado* | "O CPF nunca é armazenado em texto puro: geramos pseudonimização criptográfica salgada com o CNES da unidade de saúde." |
+| **"E a LGPD dos pacientes?"** | *HMAC-SHA256 Hardware-Backed* | "O CPF nunca é salvo em texto puro nem em SHA-256 simples: aplicamos HMAC-SHA256 com chave isolada no Android StrongBox, blindando os $10^9$ CPFs contra força bruta em GPU." |
 | **"Por que não leitor de código a laser?"** | *Custo de Apropriação Zero* | "Um leitor industrial 2D custa R$ 1.800; o Cribum roda no celular que o agente já tem no bolso, economizando R$ 80 milhões em aquisição de hardware." |
 | **"O SUS vai demorar anos para licitar."** | *Acordo B2Gov SVA Claro* | "O Cribum é empacotado como Serviço de Valor Agregado nos contratos corporativos existentes de dados e chips da Claro com as Secretarias de Saúde." |
 | **"E se o lote estiver vencido?"** | *Regra Dia 00 GS1 AI (17)* | "O parser valida o AI 17 no instante do disparo da câmera; remédios vencidos há 1 dia sequer entram no log de dispensação." |

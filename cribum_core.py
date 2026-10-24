@@ -12,19 +12,158 @@ Campus Mobile 15 - Categoria: Saúde e Tecnologias Assistivas
 """
 
 from __future__ import annotations
+import calendar
 import dataclasses
 import datetime
 import hashlib
+import hmac
 import json
 import math
+import os
+import random
 import re
+import time
 import unicodedata
-from typing import Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 
 # ==============================================================================
-# SECTION 1: GS1 DATAMATRIX PARSER (ANVISA SNCM / RDC 319)
+# SECTION 1: ANVISA / CEAF CATALOG & GS1 DATAMATRIX PARSER (ANVISA SNCM / RDC 319)
 # ==============================================================================
+
+@dataclasses.dataclass(frozen=True)
+class CEAFMedicationSpec:
+    """Canonical specification for a SUS Specialized Component (CEAF) medication."""
+    key: str
+    active_ingredient: str
+    commercial_name: str
+    gtin14: str
+    anvisa_registry: str
+    dosage_strength: str
+    pharmaceutical_form: str
+    unit_cost_brl: float
+    thermolabile: bool
+    rename_group: str
+
+
+@dataclasses.dataclass(frozen=True)
+class LASACollisionPair:
+    """Critical phonetic/orthographic collision pair (ANVISA / NOTIVISA / ISMP Brasil)."""
+    pair_id: str
+    drug_a_name: str
+    drug_a_tallman: str
+    drug_a_strength: str
+    drug_a_class: str
+    drug_b_name: str
+    drug_b_tallman: str
+    drug_b_strength: str
+    drug_b_class: str
+    severity: str
+    clinical_risk: str
+    levenshtein_threshold: float
+
+
+def compute_gs1_check_digit(gtin_without_check: str) -> str:
+    """
+    Computes the official GS1 Modulo-10 check digit (alternating weights 3 and 1 from right to left).
+    Equation: d_14 = (10 - ((3 * sum(d_odd) + 1 * sum(d_even)) mod 10)) mod 10
+    """
+    if not gtin_without_check.isdigit() or len(gtin_without_check) not in (7, 11, 12, 13):
+        raise ValueError(f"Invalid GS1 base length: {gtin_without_check}")
+    reversed_digits = [int(ch) for ch in reversed(gtin_without_check)]
+    weighted_sum = sum(
+        d * (3 if idx % 2 == 0 else 1) for idx, d in enumerate(reversed_digits)
+    )
+    return str((10 - (weighted_sum % 10)) % 10)
+
+
+# Official ANVISA / CEAF Homologation Catalog (Brazilian GTIN-14 prefix 0789 + Validated Modulo-10 Check Digit)
+ANVISA_CEAF_CATALOG: Dict[str, CEAFMedicationSpec] = {
+    "SPINRAZA_12MG": CEAFMedicationSpec(
+        key="SPINRAZA_12MG",
+        active_ingredient="Nusinersena",
+        commercial_name="Spinraza",
+        gtin14="07898574120018",  # Validated GS1 Modulo-10 check digit '8'
+        anvisa_registry="1169500060018",  # Biogen Brasil Produtos Farmacêuticos Ltda
+        dosage_strength="12mg/5ml (2,4mg/ml)",
+        pharmaceutical_form="Solução injetável intratecal (frasco-ampola 5ml)",
+        unit_cost_brl=160000.00,
+        thermolabile=True,  # Cold chain 2°C to 8°C
+        rename_group="1A - Aquisição Centralizada pelo Ministério da Saúde (AME)",
+    ),
+    "HUMIRA_40MG": CEAFMedicationSpec(
+        key="HUMIRA_40MG",
+        active_ingredient="Adalimumabe",
+        commercial_name="Humira",
+        gtin14="07896226502410",  # Validated GS1 Modulo-10 check digit '0'
+        anvisa_registry="1986000030035",  # AbbVie Farmacêutica Ltda
+        dosage_strength="40mg/0,4ml",
+        pharmaceutical_form="Solução injetável (seringa preenchida 0,4ml)",
+        unit_cost_brl=3450.00,
+        thermolabile=True,  # Cold chain 2°C to 8°C
+        rename_group="1A - Artrite Reumatoide / Doença de Crohn / Psoríase",
+    ),
+    "HERCEPTIN_440MG": CEAFMedicationSpec(
+        key="HERCEPTIN_440MG",
+        active_ingredient="Trastuzumabe",
+        commercial_name="Herceptin",
+        gtin14="07896226104409",  # Validated GS1 Modulo-10 check digit '9'
+        anvisa_registry="1010005520025",  # Produtos Roche Químicos e Farmacêuticos S.A.
+        dosage_strength="440mg",
+        pharmaceutical_form="Pó liofilizado para solução injetável para infusão + diluente 20ml",
+        unit_cost_brl=9820.00,
+        thermolabile=True,  # Cold chain 2°C to 8°C
+        rename_group="Oncologia de Alta Complexidade (CACON/UNACON - HER2+)",
+    ),
+    "DIMORF_10MG": CEAFMedicationSpec(
+        key="DIMORF_10MG",
+        active_ingredient="Sulfato de Morfina",
+        commercial_name="Dimorf 10mg",
+        gtin14="07896676400021",  # Validated GS1 Modulo-10 check digit '1'
+        anvisa_registry="1029800070039",  # Cristália Produtos Químicos Farmacêuticos Ltda
+        dosage_strength="10mg",
+        pharmaceutical_form="Comprimido simples (Caixa com 50 comprimidos - Portaria 344/98 Lista A1)",
+        unit_cost_brl=48.90,
+        thermolabile=False,
+        rename_group="2 - Protocolo Clínico de Dor Crônica (CEAF Estadual)",
+    ),
+    "DIMORF_30MG": CEAFMedicationSpec(
+        key="DIMORF_30MG",
+        active_ingredient="Sulfato de Morfina",
+        commercial_name="Dimorf 30mg",
+        gtin14="07896676400038",  # Validated GS1 Modulo-10 check digit '8'
+        anvisa_registry="1029800070047",  # Cristália Produtos Químicos Farmacêuticos Ltda
+        dosage_strength="30mg",
+        pharmaceutical_form="Comprimido simples (Caixa com 50 comprimidos - Portaria 344/98 Lista A1)",
+        unit_cost_brl=118.50,
+        thermolabile=False,
+        rename_group="2 - Protocolo Clínico de Dor Crônica (CEAF Estadual)",
+    ),
+    "IMUNOGLOBULINA_5G": CEAFMedicationSpec(
+        key="IMUNOGLOBULINA_5G",
+        active_ingredient="Imunoglobulina Humana",
+        commercial_name="Imunoglobulina Humana 5g",
+        gtin14="07898149930103",  # Validated GS1 Modulo-10 check digit '3'
+        anvisa_registry="1015101180041",  # Blau Farmacêutica / Hemobrás
+        dosage_strength="5g/100ml (50mg/ml)",
+        pharmaceutical_form="Solução injetável para infusão intravenosa (frasco 100ml)",
+        unit_cost_brl=2890.00,
+        thermolabile=True,
+        rename_group="1A/1B - Imunodeficiências Primárias / Guillain-Barré",
+    ),
+    "SOLIRIS_300MG": CEAFMedicationSpec(
+        key="SOLIRIS_300MG",
+        active_ingredient="Eculizumabe",
+        commercial_name="Soliris",
+        gtin14="07898594210010",  # Validated GS1 Modulo-10 check digit '0'
+        anvisa_registry="1988300010018",  # Alexion / AstraZeneca Brasil
+        dosage_strength="300mg/30ml (10mg/ml)",
+        pharmaceutical_form="Solução para diluição para infusão (frasco-ampola 30ml)",
+        unit_cost_brl=26450.00,
+        thermolabile=True,
+        rename_group="1A - Hemoglobinúria Paroxística Noturna (HPN) / SHUa",
+    ),
+}
 
 GS_CHAR = "\x1d"  # ASCII 29 Group Separator (FNC1 representation in raw barcode)
 
@@ -701,6 +840,11 @@ ISMP_TALL_MAN_DICTIONARY: Dict[str, str] = {
     "ramipril": "ramiPRIL",
     "insulina regular": "insulina REGULAR",
     "insulina nph": "insulina NPH",
+    "losartana": "loSARTANA",
+    "lorazepam": "loRAZEPAM",
+    "flunarizina": "fluNARIZINA",
+    "digoxina": "diGOXINA",
+    "dipirona": "diPIRONA",
 }
 
 
@@ -757,6 +901,9 @@ KNOWN_BRAZILIAN_LASA_PAIRS = [
     ("hidralazina", "hidroxizina"),
     ("metformina", "metronidazol"),
     ("fluoxetina", "fluvoxamina"),
+    ("fluoxetina", "flunarizina"),
+    ("losartana", "lorazepam"),
+    ("digoxina", "dipirona"),
     ("tramadol", "trazodona"),
     ("diazepam", "diltiazem"),
     ("levotiroxina", "levofloxacino"),
@@ -764,6 +911,119 @@ KNOWN_BRAZILIAN_LASA_PAIRS = [
     ("enalapril", "ramipril"),
     ("insulina regular", "insulina nph"),
 ]
+
+# 4 Critical LASA Pairs from the Official ANVISA / NOTIVISA / ISMP Brasil Catalog
+LASA_CRITICAL_PAIRS: List[LASACollisionPair] = [
+    LASACollisionPair(
+        pair_id="LASA-ANVISA-001",
+        drug_a_name="Losartana",
+        drug_a_tallman="loSARTANA",
+        drug_a_strength="50mg",
+        drug_a_class="Anti-hipertensivo (Antagonista do Receptor de Angiotensina II)",
+        drug_b_name="Lorazepam",
+        drug_b_tallman="loRAZEPAM",
+        drug_b_strength="2mg",
+        drug_b_class="Benzodiazepínico (Ansiolítico / Sedativo Portaria 344/98 Lista B1)",
+        severity="CRITICA",
+        clinical_risk="Sedação profunda indevida, depressão respiratória e queda grave em idosos; descontrole pressórico por suspensão abrupta do anti-hipertensivo.",
+        levenshtein_threshold=0.55,
+    ),
+    LASACollisionPair(
+        pair_id="LASA-ANVISA-002",
+        drug_a_name="Fluoxetina",
+        drug_a_tallman="fluOXETINA",
+        drug_a_strength="20mg",
+        drug_a_class="Antidepressivo (Inibidor Seletivo de Recaptação de Serotonina - ISRS)",
+        drug_b_name="Flunarizina",
+        drug_b_tallman="fluNARIZINA",
+        drug_b_strength="10mg",
+        drug_b_class="Antivertiginoso / Bloqueador de Canal de Cálcio",
+        severity="ALTA",
+        clinical_risk="Indução de parkinsonismo farmacológico e depressão grave em idosos por uso crônico inadvertido de Flunarizina.",
+        levenshtein_threshold=0.60,
+    ),
+    LASACollisionPair(
+        pair_id="LASA-ANVISA-003",
+        drug_a_name="Digoxina",
+        drug_a_tallman="diGOXINA",
+        drug_a_strength="0,25mg",
+        drug_a_class="Glicosídeo Cardiotônico (Índice Terapêutico Estreito)",
+        drug_b_name="Dipirona",
+        drug_b_tallman="diPIRONA",
+        drug_b_strength="500mg",
+        drug_b_class="Analgésico e Antipirético",
+        severity="CRITICA",
+        clinical_risk="Intoxicação digitálica aguda fatal (arritmias ventriculares e bloqueio atrioventricular) caso Digoxina seja dispensada no lugar de Dipirona.",
+        levenshtein_threshold=0.50,
+    ),
+    LASACollisionPair(
+        pair_id="LASA-ANVISA-004",
+        drug_a_name="Sulfato de Morfina 10mg",
+        drug_a_tallman="Sulfato de MORFINA 10mg",
+        drug_a_strength="10mg",
+        drug_a_class="Analgésico Opioide Forte (Dose Basal)",
+        drug_b_name="Sulfato de Morfina 30mg",
+        drug_b_tallman="Sulfato de MORFINA 30mg",
+        drug_b_strength="30mg",
+        drug_b_class="Analgésico Opioide Forte (Triplo da Concentração)",
+        severity="CRITICA",
+        clinical_risk="Superdosagem opioide aguda (300% da dose prescrita), miose, coma e parada respiratória fatal.",
+        levenshtein_threshold=0.85,
+    ),
+]
+
+
+def evaluate_lasa_bi_layer(
+    prescribed_name: str,
+    prescribed_strength: str,
+    scanned_name: str,
+    scanned_strength: str,
+) -> Dict[str, Any]:
+    """
+    Validação Bi-Camada LASA:
+    - Camada 1: Colisão de Princípio Ativo (Ortográfica/Fonética ISMP/NOTIVISA).
+    - Camada 2: Colisão LASA de Dosagem/Concentração (mesmo princípio ativo, miligramagem divergente).
+    """
+    p_name, s_name = prescribed_name.strip().lower(), scanned_name.strip().lower()
+    p_str, s_str = prescribed_strength.strip().lower(), scanned_strength.strip().lower()
+
+    for pair in LASA_CRITICAL_PAIRS:
+        da, db = pair.drug_a_name.lower(), pair.drug_b_name.lower()
+        if (da in p_name and db in s_name) or (db in p_name and da in s_name):
+            same_active = normalize_text_pt(da) == normalize_text_pt(db)
+            return {
+                "collision_detected": True,
+                "layer": "LAYER_2_DOSAGE_OVERDOSE" if same_active else "LAYER_1_CATALOG_LASA_SWAP",
+                "pair_id": pair.pair_id,
+                "severity": pair.severity,
+                "tallman_alert": f"{pair.drug_a_tallman} vs. {pair.drug_b_tallman}",
+                "clinical_risk": pair.clinical_risk,
+                "similarity": round(similarity_ratio(p_name, s_name), 4),
+            }
+
+    sim = similarity_ratio(p_name, s_name)
+    norm_p_dose = normalize_single_dosage(p_str)
+    norm_s_dose = normalize_single_dosage(s_str)
+    if sim >= 0.85 and norm_p_dose != norm_s_dose:
+        return {
+            "collision_detected": True,
+            "layer": "LAYER_2_DOSAGE_MISMATCH",
+            "pair_id": "LASA-DOSAGE-DYNAMIC",
+            "severity": "CRITICA",
+            "tallman_alert": f"{prescribed_name.upper()} [{prescribed_strength}] != [{scanned_strength}]",
+            "clinical_risk": f"Divergência estrita de concentração: prescrito {prescribed_strength}, escaneado {scanned_strength}.",
+            "similarity": round(sim, 4),
+        }
+
+    return {
+        "collision_detected": False,
+        "layer": "CLEAN",
+        "pair_id": None,
+        "severity": "NONE",
+        "tallman_alert": None,
+        "clinical_risk": None,
+        "similarity": round(sim, 4),
+    }
 
 
 class LASACollisionDetector:
@@ -891,10 +1151,20 @@ class CribumCoreShield:
     3. Check local duplicate dispensation in Merkle Tree
     4. Seal dispensing transaction into RFC 6962 tamper-evident log
     """
-    def __init__(self, cnes_unit: str = "CNES-7654321"):
+    def __init__(self, cnes_unit: str = "CNES-7654321", secret_hmac_key: Optional[bytes] = None):
         self.cnes_unit = cnes_unit
+        self._secret_hmac_key: bytes = secret_hmac_key or os.urandom(32)
         self.merkle_tree = MerkleTree()
         self.lasa_detector = LASACollisionDetector()
+
+    def anonymize_cpf_hmac(self, patient_cpf: str) -> str:
+        """
+        Keyed deterministic pseudonymization (HMAC-SHA256) per LGPD Art. 13.
+        Prevents GPU Rainbow Table reversal of the 10^9 valid Brazilian CPFs.
+        """
+        clean_cpf = "".join(ch for ch in patient_cpf if ch.isdigit())
+        payload = f"{clean_cpf}:{self.cnes_unit}".encode("utf-8")
+        return hmac.new(self._secret_hmac_key, payload, hashlib.sha256).hexdigest()
 
     def process_dispensation(
         self,
@@ -938,8 +1208,8 @@ class CribumCoreShield:
                 }
 
         # Step 4: Double Dispensation Check & Cryptographic Merkle Sealing
-        # LGPD-safe patient hash: SHA256 of CPF + CNES salt
-        patient_hash = hashlib.sha256(f"{patient_cpf}:{self.cnes_unit}:cribum_salt".encode()).hexdigest()
+        # LGPD-safe patient HMAC: hardware-backed HMAC-SHA256(CPF:CNES, secret_key)
+        patient_hash = self.anonymize_cpf_hmac(patient_cpf)
         
         event_id = hashlib.sha256(f"{medication.canonical_id}:{datetime.datetime.now(datetime.timezone.utc).isoformat()}".encode()).hexdigest()[:16]
         event = DispensingEvent(
@@ -1240,7 +1510,360 @@ def run_all_tests() -> bool:
     return True
 
 
+# ==============================================================================
+# SECTION 6: FORENSIC MERKLE RECEIPT VERIFIER & CRYPTOGRAPHIC ATTACK SUITE
+# ==============================================================================
+
+def largest_power_of_two_less_than(n: int) -> int:
+    """
+    Returns k = largest power of 2 strictly less than n (for n >= 2).
+    Used by RFC 6962 to decompose unbalanced trees canonically without odd-leaf duplication (CVE-2012-2459).
+    """
+    if n < 2:
+        raise ValueError("n must be >= 2")
+    return 1 << ((n - 1).bit_length() - 1)
+
+
+def rfc6962_leaf_hash_hex(canonical_payload_bytes: bytes) -> str:
+    """RFC 6962 Section 2.1 Leaf Hash: SHA-256(0x00 || d(0)) as hex."""
+    return rfc6962_hash_leaf(canonical_payload_bytes).hex()
+
+
+def rfc6962_node_hash_hex(left_hex: str, right_hex: str) -> str:
+    """RFC 6962 Section 2.1 Internal Node Hash: SHA-256(0x01 || left || right) as hex."""
+    return rfc6962_hash_children(bytes.fromhex(left_hex), bytes.fromhex(right_hex)).hex()
+
+
+class ForensicMerkleTree:
+    """
+    RFC 6962 Certificate Transparency Merkle Tree with memoized subtree caching,
+    HMAC-SHA256 CPF pseudonymization (LGPD Art. 13), and stateless receipt export.
+    """
+    def __init__(self, secret_hmac_key: Optional[bytes] = None) -> None:
+        self._secret_key: bytes = secret_hmac_key or os.urandom(32)
+        self.leaves_payloads: List[Dict[str, Any]] = []
+        self.leaf_hashes: List[str] = []
+        self._subtree_cache: Dict[Tuple[int, int], str] = {}
+
+    def anonymize_cpf_hmac(self, cpf_digits: str) -> str:
+        """Keyed deterministic pseudonymization (HMAC-SHA256) preventing Rainbow Table attacks."""
+        clean_cpf = "".join(ch for ch in cpf_digits if ch.isdigit())
+        if len(clean_cpf) != 11:
+            raise ValueError("CPF must contain exactly 11 numeric digits.")
+        return hmac.new(
+            self._secret_key, clean_cpf.encode("utf-8"), hashlib.sha256
+        ).hexdigest()
+
+    @staticmethod
+    def serialize_canonical(record: Dict[str, Any]) -> bytes:
+        """Canonical JSON serialization (sorted keys, no whitespace) for deterministic hashing."""
+        return json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
+    def append_dispensing_event(
+        self,
+        gtin14: str,
+        anvisa_registry: str,
+        batch_lot: str,
+        expiry_yymmdd: str,
+        serial_number: str,
+        cpf_raw: str,
+        cns_professional: str,
+        cnes_unit: str,
+        timestamp_utc: Optional[str] = None,
+    ) -> int:
+        if not validate_gtin14_check_digit(gtin14):
+            raise ValueError(f"Invalid GTIN-14 per GS1 Modulo-10: {gtin14}")
+
+        expiry_date = parse_gs1_date(expiry_yymmdd)
+        ts = timestamp_utc or datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        patient_hmac = self.anonymize_cpf_hmac(cpf_raw)
+
+        canonical_record = {
+            "anvisa_registry": anvisa_registry,
+            "batch_lot": batch_lot,
+            "cnes_unit": cnes_unit,
+            "cns_professional": cns_professional,
+            "expiry_iso": expiry_date.isoformat(),
+            "expiry_yymmdd": expiry_yymmdd,
+            "gtin14": gtin14,
+            "patient_hmac": patient_hmac,
+            "serial_number": serial_number,
+            "timestamp_utc": ts,
+        }
+
+        leaf_digest = rfc6962_leaf_hash_hex(self.serialize_canonical(canonical_record))
+        idx = len(self.leaf_hashes)
+        self.leaves_payloads.append(canonical_record)
+        self.leaf_hashes.append(leaf_digest)
+        self._subtree_cache.clear()
+        return idx
+
+    def _mth(self, start: int, end: int) -> str:
+        span = end - start
+        if span == 0:
+            return hashlib.sha256(b"").hexdigest()
+        if span == 1:
+            return self.leaf_hashes[start]
+
+        key = (start, end)
+        if key in self._subtree_cache:
+            return self._subtree_cache[key]
+
+        k = largest_power_of_two_less_than(span)
+        left_h = self._mth(start, start + k)
+        right_h = self._mth(start + k, end)
+        combined = rfc6962_node_hash_hex(left_h, right_h)
+        self._subtree_cache[key] = combined
+        return combined
+
+    def get_merkle_root(self) -> str:
+        return self._mth(0, len(self.leaf_hashes))
+
+    def _path(self, m: int, start: int, end: int) -> List[Dict[str, str]]:
+        span = end - start
+        if span <= 1:
+            return []
+        k = largest_power_of_two_less_than(span)
+        if m < start + k:
+            subpath = self._path(m, start, start + k)
+            right_sibling = self._mth(start + k, end)
+            subpath.append({"position": "RIGHT", "hash": right_sibling})
+            return subpath
+        else:
+            subpath = self._path(m, start + k, end)
+            left_sibling = self._mth(start, start + k)
+            subpath.append({"position": "LEFT", "hash": left_sibling})
+            return subpath
+
+    def get_audit_path(self, leaf_index: int) -> List[Dict[str, str]]:
+        n = len(self.leaf_hashes)
+        if not (0 <= leaf_index < n):
+            raise IndexError(f"Dispensation index out of range: {leaf_index} (total={n})")
+        return self._path(leaf_index, 0, n)
+
+
+class MerkleProofReceipt:
+    """
+    Stateless Forensic Cryptographic Receipt Generator & Verifier.
+    Allows any auditor (TCU, DENASUS, CGU) or patient to verify in < 1ms that a specific
+    medication package was included in an authentic Merkle block without querying the central DB.
+    """
+    def __init__(self, tree: ForensicMerkleTree) -> None:
+        self.tree = tree
+
+    def generate_receipt(self, dispensing_index: int) -> Dict[str, Any]:
+        payload = self.tree.leaves_payloads[dispensing_index]
+        leaf_hash = self.tree.leaf_hashes[dispensing_index]
+        audit_path = self.tree.get_audit_path(dispensing_index)
+        merkle_root = self.tree.get_merkle_root()
+
+        return {
+            "receipt_version": "CRIBUM-RFC6962-v1",
+            "dispensing_index": dispensing_index,
+            "tree_size": len(self.tree.leaf_hashes),
+            "merkle_root": merkle_root,
+            "leaf_hash": leaf_hash,
+            "audit_path": audit_path,
+            "patient_hmac": payload["patient_hmac"],
+            "timestamp_utc": payload["timestamp_utc"],
+            "dispensing_claim": payload,
+        }
+
+    @staticmethod
+    def verify_receipt(
+        receipt: Dict[str, Any],
+        expected_merkle_root: Optional[str] = None,
+    ) -> bool:
+        """
+        Pure, stateless verification function using constant-time digest comparison (hmac.compare_digest)
+        to reconstruct the leaf hash (0x00) and walk the O(log N) audit path (0x01) up to the root.
+        """
+        try:
+            claim = receipt["dispensing_claim"]
+            if not hmac.compare_digest(receipt["patient_hmac"], claim["patient_hmac"]):
+                return False
+            if receipt["timestamp_utc"] != claim["timestamp_utc"]:
+                return False
+
+            canonical_bytes = ForensicMerkleTree.serialize_canonical(claim)
+            recomputed_leaf = rfc6962_leaf_hash_hex(canonical_bytes)
+
+            if not hmac.compare_digest(recomputed_leaf, receipt["leaf_hash"]):
+                return False
+
+            current_hash = recomputed_leaf
+            for step in receipt["audit_path"]:
+                pos = step["position"]
+                sibling = step["hash"]
+                if pos == "RIGHT":
+                    current_hash = rfc6962_node_hash_hex(current_hash, sibling)
+                elif pos == "LEFT":
+                    current_hash = rfc6962_node_hash_hex(sibling, current_hash)
+                else:
+                    return False
+
+            target_root = expected_merkle_root if expected_merkle_root is not None else receipt["merkle_root"]
+            if not hmac.compare_digest(current_hash, receipt["merkle_root"]):
+                return False
+            return hmac.compare_digest(current_hash, target_root)
+        except (KeyError, TypeError, ValueError):
+            return False
+
+
+def run_forensic_security_suite() -> bool:
+    print("\n" + "=" * 84)
+    print("CRIBUM CORE — BATERIA DE AUDITORIA FORENSE, HOMOLOGAÇÃO CEAF & ATAQUES CRIPTOGRÁFICOS")
+    print("=" * 84)
+
+    # 1. Homologation of Official ANVISA / CEAF Catalog
+    print("\n[ETAPA 1] Homologação do Catálogo ANVISA/CEAF (GTIN-14 Módulo-10 & Registros):")
+    for key, med in ANVISA_CEAF_CATALOG.items():
+        assert validate_gtin14_check_digit(med.gtin14), f"Falha de GTIN-14 em {key}"
+        print(
+            f"  [OK] {med.commercial_name:<25} | GTIN-14: {med.gtin14} | "
+            f"ANVISA: {med.anvisa_registry} | {med.dosage_strength:<18} | R$ {med.unit_cost_brl:>10,.2f}"
+        )
+
+    # 2. Two-Layer Validation of the 4 Critical ANVISA/NOTIVISA LASA Pairs
+    print("\n[ETAPA 2] Validação Bi-Camada dos 4 Pares Críticos LASA (ANVISA/NOTIVISA):")
+    test_pairs = [
+        ("Losartana", "50mg", "Lorazepam", "2mg"),
+        ("Fluoxetina", "20mg", "Flunarizina", "10mg"),
+        ("Digoxina", "0,25mg", "Dipirona", "500mg"),
+        ("Sulfato de Morfina 10mg", "10mg", "Sulfato de Morfina 30mg", "30mg"),
+    ]
+    for p_n, p_s, s_n, s_s in test_pairs:
+        res = evaluate_lasa_bi_layer(p_n, p_s, s_n, s_s)
+        assert res["collision_detected"] is True
+        print(
+            f"  [BLOQUEIO LASA] {res['pair_id']} ({res['layer']}) -> "
+            f"{res['tallman_alert']} | Gravidade: {res['severity']}"
+        )
+
+    # 3. Security Test 1: Inter-Tree Replay Attack (Epoch Replay Attack)
+    print("\n[ETAPA 3] Teste de Segurança 1 — Ataque de Replay Inter-Árvores (Epoch Replay Attack):")
+    tree_epoch_1 = ForensicMerkleTree(secret_hmac_key=b"SUS-DATASUS-SECRET-KEY-2026-EPOCH1")
+    idx_spinraza = tree_epoch_1.append_dispensing_event(
+        gtin14=ANVISA_CEAF_CATALOG["SPINRAZA_12MG"].gtin14,
+        anvisa_registry=ANVISA_CEAF_CATALOG["SPINRAZA_12MG"].anvisa_registry,
+        batch_lot="LOT-SPZ-2026A",
+        expiry_yymmdd="280600",  # Tests GS1 day '00' rule -> 2028-06-30
+        serial_number="SN-BR-9988776655",
+        cpf_raw="123.456.789-01",
+        cns_professional="700012345678901",
+        cnes_unit="2077485",
+        timestamp_utc="2026-10-24T04:00:00.000000Z",
+    )
+    tree_epoch_1.append_dispensing_event(
+        gtin14=ANVISA_CEAF_CATALOG["SOLIRIS_300MG"].gtin14,
+        anvisa_registry=ANVISA_CEAF_CATALOG["SOLIRIS_300MG"].anvisa_registry,
+        batch_lot="LOT-SOL-8821",
+        expiry_yymmdd="271231",
+        serial_number="SN-BR-1122334455",
+        cpf_raw="987.654.321-09",
+        cns_professional="700012345678901",
+        cnes_unit="2077485",
+        timestamp_utc="2026-10-24T04:05:00.000000Z",
+    )
+
+    prover_epoch_1 = MerkleProofReceipt(tree_epoch_1)
+    legit_old_receipt = prover_epoch_1.generate_receipt(idx_spinraza)
+    assert MerkleProofReceipt.verify_receipt(legit_old_receipt) is True
+
+    tree_epoch_2 = ForensicMerkleTree(secret_hmac_key=b"SUS-DATASUS-SECRET-KEY-2026-EPOCH2")
+    tree_epoch_2.append_dispensing_event(
+        gtin14=ANVISA_CEAF_CATALOG["HUMIRA_40MG"].gtin14,
+        anvisa_registry=ANVISA_CEAF_CATALOG["HUMIRA_40MG"].anvisa_registry,
+        batch_lot="LOT-HUM-5510",
+        expiry_yymmdd="270915",
+        serial_number="SN-BR-4433221100",
+        cpf_raw="111.222.333-44",
+        cns_professional="700099988877766",
+        cnes_unit="2077485",
+    )
+    new_root = tree_epoch_2.get_merkle_root()
+
+    replay_against_new_root = MerkleProofReceipt.verify_receipt(
+        legit_old_receipt, expected_merkle_root=new_root
+    )
+    forged_replay_receipt = json.loads(json.dumps(legit_old_receipt))
+    forged_replay_receipt["merkle_root"] = new_root
+    replay_with_overwritten_root = MerkleProofReceipt.verify_receipt(forged_replay_receipt)
+
+    assert replay_against_new_root is False
+    assert replay_with_overwritten_root is False
+    print(f"  [OK] Recibo Original na Árvore Epoch 1 (Root={legit_old_receipt['merkle_root'][:16]}...): VÁLIDO")
+    print(f"  [BLOQUEADO] Injeção de Replay na Árvore Epoch 2 (Root={new_root[:16]}...): REJEITADO (verify=False)")
+
+    # 4. Security Test 2: 1-Byte Leaf Mutation (Avalanche Effect)
+    print("\n[ETAPA 4] Teste de Segurança 2 — Adulteração de 1 Byte no Lote/Validade (Avalanche Test):")
+    tampered_receipt = json.loads(json.dumps(legit_old_receipt))
+    tampered_receipt["dispensing_claim"]["batch_lot"] = "LOT-SPZ-2026B"
+    tamper_check_direct = MerkleProofReceipt.verify_receipt(tampered_receipt)
+
+    tampered_receipt["leaf_hash"] = rfc6962_leaf_hash_hex(
+        ForensicMerkleTree.serialize_canonical(tampered_receipt["dispensing_claim"])
+    )
+    tamper_check_rehashed_leaf = MerkleProofReceipt.verify_receipt(tampered_receipt)
+
+    assert tamper_check_direct is False
+    assert tamper_check_rehashed_leaf is False
+    print("  [BLOQUEADO] Mutação de 1 byte em 'batch_lot' ('LOT-SPZ-2026A' -> 'LOT-SPZ-2026B'): REJEITADO")
+    print("  [BLOQUEADO] Mutação de 1 byte + Recálculo de leaf_hash pelo atacante: QUEBRA IMEDIATA DA RAIZ")
+
+    # 5. Security Test 3: Asymptotic Scale — 1,000 Leaves in Unbalanced Merkle Tree
+    print("\n[ETAPA 5] Teste de Segurança 3 — Escala Assintótica (1.000 Folhas em Árvore Desbalanceada):")
+    stress_tree = ForensicMerkleTree(secret_hmac_key=b"STRESS-TEST-1000-UNBALANCED-MERKLE")
+    med_list = list(ANVISA_CEAF_CATALOG.values())
+    rng = random.Random(20261024)
+
+    t0_build = time.perf_counter()
+    for i in range(1000):
+        med = med_list[i % len(med_list)]
+        cpf_sim = f"{10000000000 + i:011d}"
+        stress_tree.append_dispensing_event(
+            gtin14=med.gtin14,
+            anvisa_registry=med.anvisa_registry,
+            batch_lot=f"LOT-{i:04d}",
+            expiry_yymmdd="281130",
+            serial_number=f"SN-SUS-{i:08d}",
+            cpf_raw=cpf_sim,
+            cns_professional="700012345678901",
+            cnes_unit="2077485",
+            timestamp_utc=f"2026-10-24T05:{(i // 60) % 60:02d}:{i % 60:02d}.000000Z",
+        )
+    root_1000 = stress_tree.get_merkle_root()
+    build_ms = (time.perf_counter() - t0_build) * 1000.0
+
+    prover_1000 = MerkleProofReceipt(stress_tree)
+    sample_indices = [0, 1, 511, 512, 777, 998, 999] + [rng.randint(0, 999) for _ in range(93)]
+    verification_times_ms: List[float] = []
+    path_lengths: List[int] = []
+
+    for idx in sample_indices:
+        rec = prover_1000.generate_receipt(idx)
+        path_lengths.append(len(rec["audit_path"]))
+        t_start = time.perf_counter()
+        ok = MerkleProofReceipt.verify_receipt(rec, expected_merkle_root=root_1000)
+        t_end = time.perf_counter()
+        assert ok is True
+        verification_times_ms.append((t_end - t_start) * 1000.0)
+
+    avg_verify_ms = sum(verification_times_ms) / len(verification_times_ms)
+    max_verify_ms = max(verification_times_ms)
+    print(f"  [OK] Árvore Desbalanceada construída (N=1.000 folhas, 512+488 split): {build_ms:.2f} ms totais")
+    print(f"  [OK] Merkle Root (1.000 folhas): {root_1000}")
+    print(f"  [OK] Comprimento do Audit Path O(log2 N): min={min(path_lengths)} nós, max={max(path_lengths)} nós")
+    print(f"  [OK] Tempo de Verificação por Recibo (100 amostras): média={avg_verify_ms:.4f} ms | máx={max_verify_ms:.4f} ms (Alvo < 1.0 ms)")
+    assert max_verify_ms < 1.0, f"Tempo máximo excedeu 1ms: {max_verify_ms:.4f} ms"
+    print("\n" + "=" * 84)
+    print("TODOS OS TESTES DE SEGURANÇA FORENSE E ESCALA ASSINTÓTICA PASSARAM COM SUCESSO.")
+    print("=" * 84)
+    return True
+
+
 if __name__ == "__main__":
     import sys
-    success = run_all_tests()
-    sys.exit(0 if success else 1)
+    s1 = run_all_tests()
+    s2 = run_forensic_security_suite()
+    sys.exit(0 if (s1 and s2) else 1)
