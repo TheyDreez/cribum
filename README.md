@@ -29,6 +29,10 @@ uv run python cribum_core.py
 ---
 
 ## 📂 Estrutura de Arquivos
-* `cribum_core.py`: Implementação completa dos 3 motores e testes unitários/integração.
-* `simulator.html`: Simulador visual interativo de smartphone para demonstração e pitch.
-* `CAMPUS_MOBILE_PROPOSAL.md`: Dossiê oficial para submissão (Resumo, Problema, Solução, Métricas, Sinergia com Claro 5G e Roteiro do Vídeo Pitch de 90s).
+* `cribum_core.py`: Implementação completa dos motores de validação clínica, DataMatrix e Árvores de Merkle RFC 6962.
+* `simulator.html`: Simulador forense visual e interativo (WCAG 2.2 Nível AAA, paleta Okabe-Ito, síntese de voz e feedback háptico).
+* `CAMPUS_MOBILE_PROPOSAL.md`: Dossiê oficial de submissão do Campus Mobile 15ª Edição.
+* `TECHNICAL_FAQ_AND_TRADEOFFS.md`: Análise formal de trade-offs arquiteturais (Teorema CAP, provas O(log N), 5G URLLC e mitigação de riscos).
+* `EDGE_VISION_ROBUSTNESS.md`: Especificação de visão computacional na borda sob condensação na cadeia de frio (ECC 200, CLAHE e CameraX).
+* `ARQUITETURA_CLARO_5G.md`: Especificação de engenharia de telecomunicações (Network Slicing 3GPP Rel-16/17, Claro MEC e modelo B2Gov).
+* `GUIA_GRAVACAO_PITCH_90S.md`: Teleprompter calibrado segundo a segundo e manual de direção cênica para o vídeo pitch.

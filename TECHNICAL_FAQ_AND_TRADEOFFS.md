@@ -1,13 +1,13 @@
-# CRIBUM MOBILE: MANUAL OFICIAL DE SABATINA
-## Dossiê de Defesa Oral e Rigor Técnico-Científico – Campus Mobile 15ª Edição
-**Banca Examinadora:** Escola Politécnica da USP, Instituto Claro e BeOn Claro  
-**Autor e Defensor:** André Rogério da Silva Filho (TheyDreez)  
+# CRIBUM MOBILE: ARCHITECTURAL CONSIDERATIONS, TRADE-OFFS & DEFENSE FAQ
+## Dossiê Técnico de Resolução de Trade-offs e Rigor Científico – Campus Mobile 15ª Edição
+**Banca Avaliadora:** Escola Politécnica da USP, Instituto Claro e BeOn Claro  
+**Autor:** André Rogério da Silva Filho (TheyDreez)  
 **Categoria:** Saúde e Tecnologias Assistivas  
 
 ---
 
-## 🏛️ APRESENTAÇÃO E POSTURA DEFENSIVA
-Este documento constitui o guia formal de sustentação oral para a Semana de Imersão e Sabatina Presencial na Universidade de São Paulo (Poli-USP). Cada round aborda o questionamento de maior atrito levantado pela banca, fornecendo a fundamentação matemática, a lógica de sistemas distribuídos e o modelo regulatório-clínico necessário para neutralizar o ceticismo dos avaliadores.
+## 🏛️ APRESENTAÇÃO E CONSIDERAÇÕES DE ENGENHARIA
+Este documento formaliza as decisões de arquitetura de software, telecomunicações e farmacologia clínica do Cribum Mobile, detalhando como os principais dilemas e restrições de sistemas distribuídos e de segurança pública foram matematicamente resolvidos. Cada seção aborda um trade-off crítico de engenharia, fornecendo a fundamentação matemática, a lógica de sistemas distribuídos e o modelo regulatório-clínico que sustentam o projeto.
 
 ```
 +---------------------------------------------------------------------------------------------------+
