@@ -92,7 +92,38 @@
     @media (max-width: 860px) {
       .app-grid {
         grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
       }
+      .phone-simulator {
+        order: 1; /* Celular em primeiro lugar na tela do smartphone */
+        width: 100%;
+      }
+      .panel:first-of-type {
+        order: 2; /* Controles assistivos logo abaixo */
+      }
+      .merkle-inspector-col {
+        order: 3; /* Inspetor criptografico no final */
+      }
+    }
+
+    /* Modo App Nativo Fullscreen (via ?view=app) */
+    body.app-only-mode {
+      padding: 0;
+    }
+    body.app-only-mode .panel {
+      display: none !important;
+    }
+    body.app-only-mode .app-grid {
+      display: block;
+      max-width: 100%;
+    }
+    body.app-only-mode .phone-simulator {
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+      min-height: 100vh;
+      width: 100%;
     }
 
     .panel {
@@ -1542,6 +1573,43 @@
         evaluateGS1OnEdge(gs1String);
       });
     };
+
+
+    // Suporte a parametros de URL para teste e capturas de tela (?case=1..4, ?cvd=1, ?view=app, ?cartela=1)
+    function applyUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("cvd") === "1" || params.get("cvd") === "true") {
+        const btnCvd = document.getElementById("btn-toggle-cvd");
+        if (btnCvd) btnCvd.click();
+      }
+      if (params.get("onehand") === "1") {
+        const btnOne = document.getElementById("btn-toggle-onehand");
+        if (btnOne) btnOne.click();
+      }
+      if (params.get("cartela") === "1") {
+        const btnCart = document.getElementById("btn-toggle-cartela");
+        if (btnCart) btnCart.click();
+      }
+      const caseParam = params.get("case");
+      if (caseParam === "1") {
+        document.getElementById("btn-case-1").click();
+      } else if (caseParam === "2") {
+        document.getElementById("btn-case-2").click();
+      } else if (caseParam === "3") {
+        document.getElementById("btn-case-3").click();
+      } else if (caseParam === "4") {
+        document.getElementById("btn-case-4").click();
+      }
+      if (params.get("view") === "app") {
+        document.body.classList.add("app-only-mode");
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", applyUrlParams);
+    } else {
+      applyUrlParams();
+    }
 
   </script>
 
