@@ -15,6 +15,7 @@ from __future__ import annotations
 import calendar
 import dataclasses
 import datetime
+import functools
 import hashlib
 import hmac
 import json
@@ -645,6 +646,18 @@ def compare_dosages(dosages_prescribed: List[str], dosages_dispensed: List[str])
         return False, f"DOSAGE_MISMATCH: Prescribed {norm_p} != Dispensed {norm_d}"
 
 
+# Precompiled module-level regex patterns for hot-path LASA phonetics and normalization
+_RE_DOSAGE_CLEAN = re.compile(
+    r"\b\d+([.,]\d+)?\s*(mg|mcg|µg|ug|g|ml|ui|%)(?:\s*/\s*\d*([.,]\d+)?\s*(mg|mcg|µg|ug|g|ml))?(?![a-zA-Z0-9])"
+)
+_RE_PHARMA_FORM = re.compile(
+    r"\b(comprimido|comprimidos|capsula|capsulas|injetavel|ampola|ampolas|suspensao|gotas|solucao|dragea|drageas|creme|pomada|xarope|frasco|frascos|revestido|revestidos)\w*\b"
+)
+_RE_NON_ALPHA = re.compile(r"[^a-z\s]")
+_RE_WHITESPACE = re.compile(r"\s+")
+
+
+@functools.lru_cache(maxsize=2048)
 def normalize_text_pt(text: str) -> str:
     """
     Camada 1: Normalizes Brazilian Portuguese drug names down to the active principle:
@@ -652,23 +665,24 @@ def normalize_text_pt(text: str) -> str:
     - Removes accents and diacritics (ç -> c, á -> a, etc.)
     - Removes dosage, volumes, ratios, pharmaceutical forms (mg, ml, mcg, comp, inj, etc.)
     - Strips non-alphanumeric characters
+    Uses precompiled regexes and LRU memoization to eliminate repeated normalization passes.
     """
     s = text.lower()
     # Strip compound dosages (e.g. 10mg/ml, 500mg, 100 ui, 0,5%)
-    s = re.sub(r"\b\d+([.,]\d+)?\s*(mg|mcg|µg|ug|g|ml|ui|%)(?:\s*/\s*\d*([.,]\d+)?\s*(mg|mcg|µg|ug|g|ml))?(?![a-zA-Z0-9])", " ", s)
+    s = _RE_DOSAGE_CLEAN.sub(" ", s)
     # Strip pharmaceutical forms and packaging labels
-    s = re.sub(r"\b(comprimido|comprimidos|capsula|capsulas|injetavel|ampola|ampolas|suspensao|gotas|solucao|dragea|drageas|creme|pomada|xarope|frasco|frascos|revestido|revestidos)\w*\b", " ", s)
+    s = _RE_PHARMA_FORM.sub(" ", s)
     
     # Decompose unicode to remove diacritics
     nfkd = unicodedata.normalize("NFD", s)
     s = "".join([c for c in nfkd if not unicodedata.combining(c)])
     
     # Keep only letters and spaces
-    s = re.sub(r"[^a-z\s]", " ", s)
-    s = re.sub(r"\s+", " ", s).strip()
-    return s
+    s = _RE_NON_ALPHA.sub(" ", s)
+    return _RE_WHITESPACE.sub(" ", s).strip()
 
 
+@functools.lru_cache(maxsize=2048)
 def pt_br_phonetic_code(name: str) -> str:
     """
     Phonetic algorithm tailored specifically to Brazilian Portuguese medical nomenclature.
@@ -776,6 +790,7 @@ def levenshtein_distance(s1: str, s2: str) -> int:
     return v0[len(s2)]
 
 
+@functools.lru_cache(maxsize=4096)
 def similarity_ratio(s1: str, s2: str) -> float:
     """Normalized similarity score between 0.0 (totally different) and 1.0 (identical)."""
     max_len = max(len(s1), len(s2))
@@ -1723,7 +1738,7 @@ class MerkleProofReceipt:
 
 def run_forensic_security_suite() -> bool:
     print("\n" + "=" * 84)
-    print("CRIBUM CORE — BATERIA DE AUDITORIA FORENSE, HOMOLOGAÇÃO CEAF & ATAQUES CRIPTOGRÁFICOS")
+    print("CRIBUM CORE: BATERIA DE AUDITORIA FORENSE, HOMOLOGAÇÃO CEAF & ATAQUES CRIPTOGRÁFICOS")
     print("=" * 84)
 
     # 1. Homologation of Official ANVISA / CEAF Catalog
@@ -1752,7 +1767,7 @@ def run_forensic_security_suite() -> bool:
         )
 
     # 3. Security Test 1: Inter-Tree Replay Attack (Epoch Replay Attack)
-    print("\n[ETAPA 3] Teste de Segurança 1 — Ataque de Replay Inter-Árvores (Epoch Replay Attack):")
+    print("\n[ETAPA 3] Teste de Segurança 1: Ataque de Replay Inter-Árvores (Epoch Replay Attack):")
     tree_epoch_1 = ForensicMerkleTree(secret_hmac_key=b"SUS-DATASUS-SECRET-KEY-2026-EPOCH1")
     idx_spinraza = tree_epoch_1.append_dispensing_event(
         gtin14=ANVISA_CEAF_CATALOG["SPINRAZA_12MG"].gtin14,
@@ -1807,7 +1822,7 @@ def run_forensic_security_suite() -> bool:
     print(f"  [BLOQUEADO] Injeção de Replay na Árvore Epoch 2 (Root={new_root[:16]}...): REJEITADO (verify=False)")
 
     # 4. Security Test 2: 1-Byte Leaf Mutation (Avalanche Effect)
-    print("\n[ETAPA 4] Teste de Segurança 2 — Adulteração de 1 Byte no Lote/Validade (Avalanche Test):")
+    print("\n[ETAPA 4] Teste de Segurança 2: Adulteração de 1 Byte no Lote/Validade (Avalanche Test):")
     tampered_receipt = json.loads(json.dumps(legit_old_receipt))
     tampered_receipt["dispensing_claim"]["batch_lot"] = "LOT-SPZ-2026B"
     tamper_check_direct = MerkleProofReceipt.verify_receipt(tampered_receipt)
@@ -1822,8 +1837,8 @@ def run_forensic_security_suite() -> bool:
     print("  [BLOQUEADO] Mutação de 1 byte em 'batch_lot' ('LOT-SPZ-2026A' -> 'LOT-SPZ-2026B'): REJEITADO")
     print("  [BLOQUEADO] Mutação de 1 byte + Recálculo de leaf_hash pelo atacante: QUEBRA IMEDIATA DA RAIZ")
 
-    # 5. Security Test 3: Asymptotic Scale — 1,000 Leaves in Unbalanced Merkle Tree
-    print("\n[ETAPA 5] Teste de Segurança 3 — Escala Assintótica (1.000 Folhas em Árvore Desbalanceada):")
+    # 5. Security Test 3: Asymptotic Scale: 1,000 Leaves in Unbalanced Merkle Tree
+    print("\n[ETAPA 5] Teste de Segurança 3: Escala Assintótica (1.000 Folhas em Árvore Desbalanceada):")
     stress_tree = ForensicMerkleTree(secret_hmac_key=b"STRESS-TEST-1000-UNBALANCED-MERKLE")
     med_list = list(ANVISA_CEAF_CATALOG.values())
     rng = random.Random(20261024)
