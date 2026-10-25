@@ -430,6 +430,10 @@ class MerkleTree:
         self.leaf_hashes: List[bytes] = []        # rfc6962_hash_leaf(data)
         self._serial_registry: Dict[str, int] = {} # canonical_drug_id -> leaf_index
         self._tree_cache: Optional[bytes] = None
+        # Subtree digest memoization cache: (start, end) -> bytes.
+        # In RFC 6962 append-only trees, leaves[start:end] is strictly immutable,
+        # so any computed subtree digest remains valid across subsequent appends.
+        self._subtree_cache: Dict[Tuple[int, int], bytes] = {}
 
     def __len__(self) -> int:
         return len(self.leaves)
@@ -460,27 +464,34 @@ class MerkleTree:
         return idx
 
     def get_root_hash(self) -> str:
-        """Computes and returns the RFC 6962 Merkle Tree Root as hex string."""
+        """Computes and returns the RFC 6962 Merkle Tree Root as hex string with memoization."""
         if not self.leaf_hashes:
             # Empty tree hash per standard RFC 6962 is SHA-256 of empty string
             return hashlib.sha256(b"").hexdigest()
-        root_bytes = self._compute_subtree_hash(0, len(self.leaf_hashes))
-        return root_bytes.hex()
+        if self._tree_cache is None:
+            self._tree_cache = self._compute_subtree_hash(0, len(self.leaf_hashes))
+        return self._tree_cache.hex()
 
     def _compute_subtree_hash(self, start: int, end: int) -> bytes:
         """
-        RFC 6962 subtree hash recursive computation.
+        RFC 6962 subtree hash recursive computation with O(1) subtree cache memoization.
         If length == 1: return leaf_hash
         Else: k = largest power of 2 < length
               return hash(0x01 || subtree(start, start+k) || subtree(start+k, end))
+        Reduces audit proof generation and root updates from O(N) down to O(log N).
         """
         count = end - start
         if count == 1:
             return self.leaf_hashes[start]
+        key = (start, end)
+        if key in self._subtree_cache:
+            return self._subtree_cache[key]
         k = 1 << ((count - 1).bit_length() - 1)
         left = self._compute_subtree_hash(start, start + k)
         right = self._compute_subtree_hash(start + k, end)
-        return rfc6962_hash_children(left, right)
+        res = rfc6962_hash_children(left, right)
+        self._subtree_cache[key] = res
+        return res
 
     def get_audit_proof(self, leaf_index: int) -> List[Tuple[str, str]]:
         """

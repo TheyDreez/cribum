@@ -1,784 +1,748 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CRIBUM Mobile – Simulador Forense & Tecnologia Assistiva (WCAG 2.2 AAA)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRIBUM Mobile — Simulador Assistivo Universal (WCAG 2.2 AAA & SUS)</title>
   <style>
     :root {
-      --bg: #070b14;
-      --card: #0f172a;
-      --card-border: #1e293b;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      
-      /* Standard colors */
-      --color-ok: #10b981;
-      --color-warn: #f59e0b;
-      --color-danger: #ef4444;
-      --color-info: #0ea5e9;
-
-      /* Okabe-Ito CVD Safe Palette (ISO 9241-112 / WCAG 2.2 AAA > 7:1) */
-      --cvd-ok: #0072b2;       /* Blue */
-      --cvd-ok-border: #56b4e9;/* Light Blue */
-      --cvd-warn: #e69f00;     /* Orange */
-      --cvd-warn-high: #f0e442;/* Yellow */
-      --cvd-danger: #d55e00;   /* Vermillion */
-      --cvd-danger-border: #ffffff;
-
-      --active-ok: var(--color-ok);
-      --active-warn: var(--color-warn);
-      --active-danger: var(--color-danger);
-
-      --tap-min-h: 46px;
-      --tap-padding: 12px 16px;
-      --font-scale: 1rem;
+      --bg-primary: #090d16;
+      --bg-panel: #111827;
+      --bg-card: #1f2937;
+      --text-primary: #f9fafb;
+      --text-secondary: #9ca3af;
+      --border-color: #374151;
+      --status-safe: #10b981;
+      --status-warn: #f59e0b;
+      --status-danger: #ef4444;
+      --accent-primary: #6366f1;
+      --touch-min-height: 44px;
+      --touch-padding: 10px 16px;
+      --font-scale: 1;
+      --focus-ring: 3px solid #60a5fa;
     }
 
-    /* WCAG 2.2 AAA High Contrast / CVD Mode */
+    /* Okabe-Ito Universal CVD-Safe & High Contrast AAA Theme (WCAG 2.2 AAA > 7:1) */
     body.cvd-high-contrast {
-      --bg: #000000;
-      --card: #0a0a0a;
-      --card-border: #475569;
-      --text: #ffffff;
-      --muted: #cbd5e1;
-      --active-ok: var(--cvd-ok);
-      --active-warn: var(--cvd-warn);
-      --active-danger: var(--cvd-danger);
+      --bg-primary: #000000;
+      --bg-panel: #0a0a0a;
+      --bg-card: #141414;
+      --text-primary: #ffffff;
+      --text-secondary: #e5e7eb;
+      --border-color: #ffffff;
+      --status-safe: #0072B2;    /* Okabe-Ito Blue (Homologado) */
+      --status-warn: #E69F00;    /* Okabe-Ito Orange (Alerta LASA / Dosagem) */
+      --status-danger: #D55E00;  /* Okabe-Ito Vermilion (Bloqueio / Fraude) */
+      --accent-primary: #56B4E9; /* Okabe-Ito Sky Blue */
+      --focus-ring: 4px solid #F0E442;
     }
 
-    /* One-Handed Thumb Zone Mode (Fitts's Law 60dp targets) */
+    /* One-Handed / Expanded Touch Targets (Fitts's Law >= 56x56dp) */
     body.one-handed-mode {
-      --tap-min-h: 60px;
-      --tap-padding: 16px 22px;
-      --font-scale: 1.125rem;
+      --touch-min-height: 60px;
+      --touch-padding: 16px 22px;
+      --font-scale: 1.12;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 16px;
-      transition: background 0.3s ease;
-    }
-
-    .container {
-      display: flex;
-      gap: 28px;
-      max-width: 1100px;
-      width: 100%;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    /* PHONE SHELL */
-    .phone {
-      width: 390px;
-      height: 790px;
-      background: #000000;
-      border-radius: 46px;
-      border: 6px solid #334155;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.85), 0 0 35px rgba(14, 165, 233, 0.2);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .notch {
-      width: 150px;
-      height: 22px;
-      background: #334155;
-      margin: 0 auto;
-      border-bottom-left-radius: 14px;
-      border-bottom-right-radius: 14px;
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
-    }
-
-    .status-bar {
-      padding: 10px 20px 4px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--muted);
-      z-index: 90;
-      margin-top: 4px;
-      font-weight: 600;
-    }
-
-    .app-header {
-      padding: 10px 16px;
-      background: var(--card);
-      border-bottom: 1px solid var(--card-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .app-title {
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .badge {
-      padding: 3px 8px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .badge-offline { background: rgba(245, 158, 11, 0.2); color: var(--active-warn); border: 1px solid var(--active-warn); }
-    .badge-handsfree { background: rgba(14, 165, 233, 0.2); color: var(--color-info); border: 1px solid var(--color-info); }
-
-    .screen-content {
-      flex: 1;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow-y: auto;
-    }
-
-    /* SCANNER VIEWPORT */
-    .scanner-viewport {
-      width: 100%;
-      height: 170px;
-      background: #020617;
-      border-radius: 18px;
-      border: 2px dashed #475569;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .laser-line {
-      position: absolute;
-      width: 88%;
-      height: 2px;
-      background: var(--color-info);
-      box-shadow: 0 0 10px var(--color-info);
-      animation: scanAnim 2.2s infinite ease-in-out alternate;
-    }
-    @keyframes scanAnim {
-      0% { top: 18%; opacity: 0.3; }
-      100% { top: 82%; opacity: 1; }
-    }
-    .target-brackets {
-      width: 100px;
-      height: 100px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-radius: 10px;
-      position: relative;
-    }
-    .stability-track {
-      position: absolute;
-      bottom: 8px;
-      left: 12px;
-      right: 12px;
-      height: 4px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .stability-progress {
-      width: 0%;
-      height: 100%;
-      background: var(--active-ok);
-      transition: width 0.2s ease;
-    }
-
-    /* CLINICAL STATUS CARD (TRIPLE REDUNDANCY: COLOR + GEOMETRY + TEXT) */
-    .status-card {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 14px;
-      border: 2px solid var(--card-border);
-      transition: all 0.25s ease;
-    }
-    .status-card.state-ok {
-      border-color: var(--active-ok);
-      background: rgba(16, 185, 129, 0.08);
-    }
-    body.cvd-high-contrast .status-card.state-ok {
-      border-color: var(--cvd-ok);
-      background: rgba(0, 114, 178, 0.15);
-    }
-
-    .status-card.state-warn {
-      border-color: var(--active-warn);
-      background: rgba(245, 158, 11, 0.08);
-    }
-    body.cvd-high-contrast .status-card.state-warn {
-      border-color: var(--cvd-warn);
-      background: rgba(230, 159, 0, 0.18);
-    }
-
-    .status-card.state-danger {
-      border-color: var(--active-danger);
-      background: rgba(239, 68, 68, 0.12);
-    }
-    body.cvd-high-contrast .status-card.state-danger {
-      border-color: var(--cvd-danger-border);
-      background: rgba(213, 94, 0, 0.25);
-    }
-
-    .status-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .geom-icon {
-      width: 26px;
-      height: 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: 900;
-    }
-    .geom-circle { background: var(--active-ok); color: #fff; border-radius: 50%; }
-    .geom-triangle { background: var(--active-warn); color: #000; border-radius: 4px; }
-    .geom-square { background: var(--active-danger); color: #fff; border-radius: 4px; border: 2px solid #fff; }
-
-    .status-title-text {
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-    }
-
-    .tallman-tag {
-      font-family: monospace;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      color: #fff;
-      background: rgba(0,0,0,0.6);
-      padding: 5px 8px;
-      border-radius: 6px;
-      display: inline-block;
-      margin: 4px 0;
-      border: 1px solid rgba(255,255,255,0.15);
-    }
-    .tallman-tag span {
-      color: var(--active-warn);
-      text-decoration: underline;
-      font-size: 15px;
-    }
-
-    .haptic-dock {
-      background: #030712;
-      border-radius: 12px;
-      padding: 8px 12px;
-      border: 1px solid var(--card-border);
-      font-size: 11px;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .haptic-pulse-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #475569;
-      display: inline-block;
-    }
-    .haptic-pulse-dot.pulsing {
-      background: var(--active-warn);
-      box-shadow: 0 0 10px var(--active-warn);
-    }
-
-    /* THUMB ZONE BOTTOM BAR (ONE-HANDED MODE) */
-    .thumb-zone-bar {
-      padding: 10px 14px 14px;
-      background: var(--card);
-      border-top: 1px solid var(--card-border);
-      display: flex;
-      gap: 8px;
-    }
-    .btn-thumb {
-      flex: 1;
-      height: var(--tap-min-h);
-      padding: var(--tap-padding);
-      border-radius: 14px;
-      border: none;
-      font-size: var(--font-scale);
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.15s ease;
-    }
-    .btn-thumb:active { transform: scale(0.96); }
-    .btn-voice { background: #1e293b; color: #fff; border: 1px solid #475569; }
-    .btn-trigger { background: var(--cvd-ok); color: #fff; }
-
-    /* ACCESSIBILITY & DEMO CONTROL PANEL */
-    .panel {
-      flex: 1;
-      min-width: 340px;
-      max-width: 500px;
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 22px;
-    }
-    .panel-header {
-      font-size: 17px;
-      font-weight: 800;
-      margin-bottom: 6px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .panel-subtitle {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 18px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
       line-height: 1.5;
+      font-size: calc(16px * var(--font-scale));
+      padding: 20px;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .switch-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 14px;
-      background: #020617;
-      border-radius: 14px;
-      border: 1px solid var(--card-border);
-      margin-bottom: 10px;
-    }
-    .switch-label {
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .switch-desc {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-    .btn-toggle {
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid #475569;
-      background: #1e293b;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      min-width: 70px;
-    }
-    .btn-toggle[aria-pressed="true"] {
-      background: var(--cvd-ok);
-      border-color: var(--cvd-ok-border);
+    .layout-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+      align-items: start;
     }
 
-    .case-btn {
-      width: 100%;
-      height: var(--tap-min-h);
-      padding: var(--tap-padding);
-      border-radius: 12px;
-      border: none;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
+    @media (max-width: 960px) {
+      .layout-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .assistive-panel {
+      background: var(--bg-panel);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+    }
+
+    .panel-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 8px;
-      transition: all 0.15s ease;
-      text-align: left;
+      color: var(--text-primary);
     }
-    .case-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
-    .btn-case-ok { background: #0072b2; color: #fff; }
-    .btn-case-warn { background: #d97706; color: #fff; }
-    .btn-case-danger { background: #d55e00; color: #fff; }
+
+    .panel-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 18px;
+    }
+
+    .control-group {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .control-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .control-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .btn-assistive {
+      width: 100%;
+      min-height: var(--touch-min-height);
+      padding: var(--touch-padding);
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+    }
+
+    .btn-assistive:focus-visible,
+    button:focus-visible,
+    select:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .btn-assistive[aria-pressed="true"] {
+      background: var(--accent-primary);
+      color: #000000;
+      border-color: #ffffff;
+    }
+
+    .badge-state {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-assistive[aria-pressed="true"] .badge-state {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .mobile-frame {
+      background: var(--bg-panel);
+      border: 3px solid var(--border-color);
+      border-radius: 28px;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+      min-height: 780px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    body.one-handed-mode .mobile-header {
+      padding-top: 28px;
+    }
+
+    .mobile-header {
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sus-badge {
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--accent-primary);
+      color: #000;
+    }
+
+    .mobile-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .scanner-viewport {
+      background: #000;
+      border: 2px dashed var(--border-color);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .stability-bar-wrap {
+      margin-top: 10px;
+      background: #1f2937;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .stability-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--status-safe);
+      transition: width 0.1s linear;
+    }
+
+    .result-card {
+      border-radius: 14px;
+      padding: 18px;
+      border: 3px solid var(--border-color);
+      background: var(--bg-card);
+    }
+
+    .result-card.status-safe {
+      border-color: var(--status-safe);
+    }
+
+    .result-card.status-warn {
+      border-color: var(--status-warn);
+    }
+
+    .result-card.status-danger {
+      border-color: var(--status-danger);
+    }
+
+    .status-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: #000000;
+    }
+
+    .status-safe .status-banner {
+      background: var(--status-safe);
+      color: #ffffff;
+    }
+
+    .status-warn .status-banner {
+      background: var(--status-warn);
+      color: #000000;
+    }
+
+    .status-danger .status-banner {
+      background: var(--status-danger);
+      color: #ffffff;
+    }
+
+    .geo-icon {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .tall-man-drug {
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      padding: 8px 12px;
+      background: var(--bg-primary);
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      margin: 8px 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .tall-man-highlight {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      color: var(--status-warn);
+    }
 
     .telemetry-box {
-      margin-top: 14px;
-      padding: 10px 14px;
-      background: #020617;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.82rem;
+    }
+
+    .pulse-track {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      min-height: 24px;
+    }
+
+    .haptic-visual-bar {
+      height: 16px;
+      border-radius: 4px;
+      background: var(--accent-primary);
+      opacity: 0.85;
+    }
+
+    .thumb-zone-bar {
+      background: var(--bg-card);
+      border-top: 2px solid var(--border-color);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .thumb-zone-indicator {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-primary-action {
+      min-height: var(--touch-min-height);
+      padding: var(--touch-padding);
       border-radius: 12px;
-      font-size: 11px;
-      color: var(--muted);
-      font-family: monospace;
-      border: 1px solid #1e293b;
+      font-weight: 800;
+      font-size: 0.95rem;
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    .btn-primary-action.voice-btn {
+      background: var(--accent-primary);
+      color: #000000;
+      border-color: #ffffff;
+    }
+
+    .case-selector {
+      width: 100%;
+      min-height: var(--touch-min-height);
+      padding: var(--touch-padding);
+      border-radius: 10px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .anti-tremor-status {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-
-  <!-- PHONE VIEWPORT -->
-  <div class="phone">
-    <div class="notch"></div>
-    <div class="status-bar">
-      <span>UBS JD. PAULISTA • CNES 2078412</span>
-      <span>📶 CLARO 5G | 🔋 98%</span>
-    </div>
-
-    <div class="app-header">
-      <div class="app-title">
-        <span>🛡️ CRIBUM ASSISTIVO</span>
+  <div class="layout-container">
+    <aside class="assistive-panel" aria-label="Painel de Tecnologia Assistiva Ativa">
+      <div class="panel-title">
+        <span>♿ Tecnologia Assistiva Ativa</span>
       </div>
-      <div id="badgeStatus" class="badge badge-offline">OFFLINE ATIVO</div>
-    </div>
+      <p class="panel-subtitle">
+        Desenho Universal WCAG 2.2 Nível AAA calibrado para plantões de 12h no SUS e pacientes da Farmácia de Alto Custo.
+      </p>
 
-    <div class="screen-content">
-      
-      <!-- SCANNER -->
-      <div class="scanner-viewport">
-        <div class="laser-line"></div>
-        <div class="target-brackets"></div>
-        <div class="stability-track">
-          <div id="stabilityBar" class="stability-progress"></div>
+      <div class="control-group">
+        <div class="control-header">
+          <span class="control-label">1. Modo Alto Contraste / CVD Safe</span>
         </div>
+        <p class="control-desc">
+          Paleta universal de Okabe-Ito (segura para Deuteranopia, Protanopia e Tritanopia) + ícones geométricos redundantes (● ▲ ■) e contraste &gt; 7:1.
+        </p>
+        <button id="toggle-cvd" class="btn-assistive" type="button" aria-pressed="false">
+          <span>Paleta Okabe-Ito + Geometria</span>
+          <span class="badge-state" id="badge-cvd">OFF</span>
+        </button>
       </div>
 
-      <!-- MAIN CLINICAL CARD WITH TRIPLE REDUNDANCY -->
-      <div id="mainCard" class="status-card state-warn">
-        <div class="status-header">
-          <div id="geomIcon" class="geom-icon geom-triangle">▲</div>
-          <div>
-            <div id="statusTitle" class="status-title-text">ALERTA POSOLÓGICO ESTREITO</div>
-            <div id="statusCode" style="font-size:10px; color:var(--muted); font-family:monospace;">DOSAGE_MISMATCH_BLOCKED</div>
+      <div class="control-group">
+        <div class="control-header">
+          <span class="control-label">2. Síntese Vocal &amp; Cadência Fonética</span>
+        </div>
+        <p class="control-desc">
+          Leitura falada (Web Speech API) com soletração silábica de pares LASA e anúncio pausado (rate=0.92) de princípio ativo e dosagem.
+        </p>
+        <button id="btn-tts-panel" class="btn-assistive" type="button" aria-pressed="false">
+          <span>🔊 Ler Resultado do Scan em Voz Alta</span>
+          <span class="badge-state" id="badge-tts">PRONTO</span>
+        </button>
+      </div>
+
+      <div class="control-group">
+        <div class="control-header">
+          <span class="control-label">3. Alvos Ampliados (Uma Mão Só)</span>
+        </div>
+        <p class="control-desc">
+          Expande botões para ≥ 60x60dp (Lei de Fitts) e ancora todas as ações críticas no arco inferior do polegar.
+        </p>
+        <button id="toggle-onehand" class="btn-assistive" type="button" aria-pressed="false">
+          <span>🖐️ Modo Uma Mão (Alvos ≥ 56dp)</span>
+          <span class="badge-state" id="badge-onehand">OFF</span>
+        </button>
+      </div>
+
+      <div class="control-group">
+        <div class="control-header">
+          <span class="control-label">4. Escudo Anti-Tremor &amp; Hands-Free</span>
+        </div>
+        <p class="control-desc">
+          Filtro de histerese temporal (debounce 350ms + tolerância espacial de 24px para tremores de 4–12 Hz) e disparo óptico sem toque.
+        </p>
+        <button id="toggle-tremor" class="btn-assistive" type="button" aria-pressed="true">
+          <span>🛡️ Anti-Tremor Shield (4–12 Hz)</span>
+          <span class="badge-state" id="badge-tremor">ATIVO</span>
+        </button>
+        <button id="btn-handsfree" class="btn-assistive" type="button">
+          <span>📷 Simular Captura Hands-Free (Sem Toque)</span>
+          <span class="badge-state" id="badge-handsfree">AUTO</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="mobile-frame" aria-live="polite">
+      <header class="mobile-header">
+        <div>
+          <strong style="font-size: 1.05rem;">CRIBUM MOBILE</strong>
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">Farmácia de Alto Custo • SUS / ANS</div>
+        </div>
+        <span class="sus-badge">WCAG 2.2 AAA</span>
+      </header>
+
+      <div class="mobile-body">
+        <section class="scanner-viewport" aria-label="Visor de Captura Hands-Free">
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary);">
+            <span id="scanner-status-text">Visor Óptico: Aguardando Estabilização...</span>
+            <span id="tremor-telemetry">Filtro: 350ms / 24px</span>
           </div>
-        </div>
+          <div class="stability-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+            <div class="stability-bar" id="stability-bar" style="width: 100%;"></div>
+          </div>
+        </section>
 
-        <div id="drugDisplay">
-          <div style="font-size:12px; color:var(--muted);">Prescrito: <strong>Sulfato de Morfina 10mg</strong></div>
-          <div style="font-size:12px; margin-top:2px;">Escaneado: <strong style="color:var(--active-warn);">Sulfato de Morfina 30mg</strong></div>
-          <div class="tallman-tag">mor<span>FINA</span> 10mg ≠ mor<span>FINA</span> 30mg</div>
-        </div>
+        <section id="result-card" class="result-card status-warn" role="region" aria-label="Resultado da Auditoria Assistiva">
+          <div class="status-banner" id="status-banner">
+            <svg id="status-icon" class="geo-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>
+            </svg>
+            <div>
+              <div id="status-code" style="font-size: 0.75rem; text-transform: uppercase;">[▲ ALERTA DE DOSAGEM / PAR LASA]</div>
+              <div id="status-title" style="font-size: 1.05rem;">Conferência Obrigatória de Princípio Ativo</div>
+            </div>
+          </div>
 
-        <div id="clinicalDesc" style="font-size:12px; margin-top:6px; line-height:1.4;">
-          Princípio ativo compatível, porém concentração física diverge em 300%. Risco fatal de depressão respiratória em UTI. Dispensação barrada na borda.
-        </div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary);">Princípio Ativo &amp; Tall Man Lettering (ISMP):</div>
+          <div class="tall-man-drug" id="drug-display">
+            Sulfato de <span class="tall-man-highlight">MORFINA 30mg</span> vs 10mg
+          </div>
+
+          <p id="clinical-summary" style="font-size: 0.92rem; margin-top: 6px;">
+            Atenção: A prescrição exige <strong>Morfina 10mg</strong>, mas a caixa inspecionada é de <strong>30mg (Triplo da Dose)</strong>. Risco severo de depressão respiratória em paciente idoso.
+          </p>
+
+          <div class="telemetry-box" style="margin-top: 14px;">
+            <div><strong>Assinatura Háptica (navigator.vibrate):</strong> <span id="haptic-label">2 pulsos intervalados [180, 140, 180] ms</span></div>
+            <div class="pulse-track" id="pulse-track" aria-hidden="true"></div>
+            <div style="margin-top: 6px;"><strong>Transcrição Vocal Simplificada:</strong></div>
+            <div id="voice-transcript" style="color: var(--text-secondary); font-style: italic;">
+              "Atenção: Alerta de dosagem. Caixa lida: Mor-fi-na, trinta miligramas. Receita pede: dez miligramas. Confira antes de entregar."
+            </div>
+          </div>
+        </section>
       </div>
 
-      <!-- MULTISENSORY FEEDBACK DOCK -->
-      <div class="haptic-dock">
-        <div>📳 <strong>Assinatura Háptica:</strong> <span id="hapticDesc">2 pulsos (180ms - 140ms - 180ms)</span></div>
-        <div id="hapticDot" class="haptic-pulse-dot"></div>
-      </div>
+      <footer class="thumb-zone-bar" aria-label="Controles na Zona do Polegar">
+        <div class="thumb-zone-indicator">▼ Zona de Alcance do Polegar (Operação com Uma Mão) ▼</div>
 
-      <div class="haptic-dock">
-        <div>🗣️ <strong>Síntese de Voz (TTS):</strong> <span id="ttsTranscript" style="color:#38bdf8;">"Alerta: Morfina 30mg escaneada. Prescrição é 10mg."</span></div>
-      </div>
+        <label for="case-select" style="font-size: 0.8rem; font-weight: 700;">Cenário Clínico do SUS:</label>
+        <select id="case-select" class="case-selector">
+          <option value="dosage_warn" selected>▲ Alerta de Dosagem / LASA: Morfina 10mg vs 30mg (2 Pulsos)</option>
+          <option value="homologated">● Dispensação Homologada: Losartana Potássica 50mg (1 Pulso Longo)</option>
+          <option value="fraud_double">■ Bloqueio de Gasto Duplo / LASA Crítico: Lorazepam 2mg (3 Pulsos Secos)</option>
+        </select>
 
-    </div>
-
-    <!-- ONE-HANDED THUMB ZONE -->
-    <div class="thumb-zone-bar">
-      <button id="btnVoiceThumb" class="btn-thumb btn-voice" onclick="speakCurrent()">
-        <span>🔊 Ouvir</span>
-      </button>
-      <button id="btnHandsFreeThumb" class="btn-thumb btn-trigger" onclick="triggerHandsFreeScan()">
-        <span>📸 Disparo Automático</span>
-      </button>
-    </div>
+        <div class="action-grid">
+          <button id="btn-speak-thumb" class="btn-primary-action voice-btn" type="button">
+            <span>🔊 Ouvir Laudo</span>
+          </button>
+          <button id="btn-haptic-thumb" class="btn-primary-action" type="button">
+            <span>📳 Testar Vibração</span>
+          </button>
+        </div>
+        <div class="anti-tremor-status">
+          <span id="tremor-log">Anti-Tremor: Pronto (0 toques involuntários filtrados)</span>
+        </div>
+      </footer>
+    </main>
   </div>
 
-  <!-- CONTROL PANEL / ACCESSIBILITY SUITE -->
-  <div class="panel">
-    <div class="panel-header">
-      <span>♿ Tecnologia Assistiva & Desenho Universal</span>
-    </div>
-    <div class="panel-subtitle">
-      Conformidade WCAG 2.2 Nível AAA, ISO 9241-112 (Ergonomia Sensorial) e ISO 24495-1 (Plain Language). Desenvolvido para operadores sob estresse e pacientes do SUS.
-    </div>
+  <script>
+    const CLINICAL_CASES = {
+      homologated: {
+        statusClass: 'status-safe',
+        geoSymbol: '●',
+        codeLabel: '[● DISPENSAÇÃO HOMOLOGADA — CÍRCULO DE SEGURANÇA]',
+        title: 'Receita Íntegra & Princípio Ativo Confirmado',
+        drugHtml: '<span class="tall-man-highlight">LOSARTANA</span> Potássica 50mg',
+        summary: 'Validação concluída sem divergências LASA. Registro de dispensação assinado na Árvore de Merkle (RFC 6962).',
+        hapticPattern: [450],
+        hapticDesc: '1 pulso longo e suave [450] ms (Dispensação Homologada)',
+        voiceText: 'Dispensação homologada. Medicamento confirmado: Lo-sar-ta-na Potássica, cinquenta miligramas. Tomar um comprimido pela manhã.',
+        svgPath: '<circle cx="12" cy="12" r="9" />'
+      },
+      dosage_warn: {
+        statusClass: 'status-warn',
+        geoSymbol: '▲',
+        codeLabel: '[▲ ALERTA DE DOSAGEM / LASA — TRIÂNGULO DE ATENÇÃO]',
+        title: 'Conferência Obrigatória de Dosagem (10mg vs 30mg)',
+        drugHtml: 'Sulfato de <span class="tall-man-highlight">MORFINA 30mg</span> vs 10mg',
+        summary: 'Atenção: A prescrição exige Morfina 10mg, mas a embalagem inspecionada é de 30mg (Triplo da Dose). Exige dupla checagem humana.',
+        hapticPattern: [180, 140, 180],
+        hapticDesc: '2 pulsos intervalados [180, 140, 180] ms (Alerta de Dosagem)',
+        voiceText: 'Atenção. Alerta de dosagem. Princípio ativo: Sulfato de Mor-fi-na. Caixa lida: trinta miligramas. Receita exige: dez miligramas. Pare e confira.',
+        svgPath: '<path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>'
+      },
+      fraud_double: {
+        statusClass: 'status-danger',
+        geoSymbol: '■',
+        codeLabel: '[■ BLOQUEIO CRÍTICO — QUADRADO DE INTERDIÇÃO]',
+        title: 'Tentativa de Gasto Duplo / Troca LASA Crítica',
+        drugHtml: '<span class="tall-man-highlight">LORAZEPAM</span> 2mg (LASA: Losartana)',
+        summary: 'Bloqueio imediato: Guia previamente dispensada há 4 horas em outra unidade (Gasto Duplo detectado no Grafo) + Risco LASA Crítico.',
+        hapticPattern: [90, 70, 90, 70, 90],
+        hapticDesc: '3 pulsos curtos e secos [90, 70, 90, 70, 90] ms (Fraude / Gasto Duplo)',
+        voiceText: 'Bloqueio crítico. Tentativa de gasto duplo detectada e risco de troca entre Lo-ra-ze-pam dois miligramas e Lo-sar-ta-na. Dispensação bloqueada.',
+        svgPath: '<rect x="3" y="3" width="18" height="18" rx="2" />'
+      }
+    };
 
-    <!-- SWITCH 1: CVD OKABE-ITO -->
-    <div class="switch-row">
-      <div>
-        <div class="switch-label">Paleta Anti-Daltonismo (Okabe-Ito CVD)</div>
-        <div class="switch-desc">Substitui verde/vermelho por azul/âmbar/vermelhão + geometria (●, ▲, ■). Contraste > 7:1.</div>
-      </div>
-      <button id="btnToggleCvd" class="btn-toggle" aria-pressed="false" onclick="toggleCvd()">OFF</button>
-    </div>
+    let state = {
+      cvdHighContrast: false,
+      oneHanded: false,
+      antiTremor: true,
+      filteredTouches: 0,
+      lastActionTimestamp: 0,
+      currentCase: 'dosage_warn'
+    };
 
-    <!-- SWITCH 2: ONE-HANDED / 60DP -->
-    <div class="switch-row">
-      <div>
-        <div class="switch-label">Modo Uma Mão Só (Alvos 60dp - Lei de Fitts)</div>
-        <div class="switch-desc">Expande alvos táteis e fixa ações no raio de varredura natural do polegar.</div>
-      </div>
-      <button id="btnToggleOneHand" class="btn-toggle" aria-pressed="false" onclick="toggleOneHand()">OFF</button>
-    </div>
+    function executeWithAntiTremor(actionFn) {
+      const now = performance.now();
+      const debounceWindowMs = state.antiTremor ? 350 : 0;
 
-    <!-- SWITCH 3: ANTI-TREMOR SHIELD -->
-    <div class="switch-row">
-      <div>
-        <div class="switch-label">Escudo Anti-Tremores (Parkinson / Artrite)</div>
-        <div class="switch-desc">Filtro de histerese (debounce 350ms e tolerância de 24px) para micro-toques involuntários.</div>
-      </div>
-      <button id="btnToggleTremor" class="btn-toggle" aria-pressed="true" onclick="toggleTremor()">ATIVO</button>
-    </div>
-
-    <div style="margin: 18px 0 10px; font-size:13px; font-weight:700; color:#fff;">
-      🧪 Casos Clínicos Simulados (Testes E2E):
-    </div>
-
-    <button class="case-btn btn-case-warn" onclick="loadCase('dosage_warn')">
-      <span>▲</span>
-      <div>
-        <div>1. Erro de Dosagem Crítico (Morfina 10mg vs 30mg)</div>
-        <div style="font-size:11px; opacity:0.85;">Bloqueio posológico bi-camada: DOSAGE_MISMATCH_BLOCKED</div>
-      </div>
-    </button>
-
-    <button class="case-btn btn-case-warn" onclick="loadCase('lasa_warn')">
-      <span>▲</span>
-      <div>
-        <div>2. Confusão Fonética LASA (Clorpromazina vs Clomipramina)</div>
-        <div style="font-size:11px; opacity:0.85;">Diferenciação Tall Man Lettering e quebra da Cascata Iatrogênica</div>
-      </div>
-    </button>
-
-    <button class="case-btn btn-case-ok" onclick="loadCase('dispense_ok')">
-      <span>●</span>
-      <div>
-        <div>3. Dispensação Homologada (Adalimumabe 40mg - R$ 8.500)</div>
-        <div style="font-size:11px; opacity:0.85;">Princípio e dose exatos: Selagem na Árvore de Merkle</div>
-      </div>
-    </button>
-
-    <button class="case-btn btn-case-danger" onclick="loadCase('fraud_block')">
-      <span>■</span>
-      <div>
-        <div>4. Tentativa de Gasto Duplo (Serial Reutilizado)</div>
-        <div style="font-size:11px; opacity:0.85;">Interdição imediata por duplicidade offline com log forense</div>
-      </div>
-    </button>
-
-    <div class="telemetry-box">
-      <div>📊 <strong>Telemetria do Anti-Tremor Shield:</strong></div>
-      <div id="tremorCount" style="color:#38bdf8; margin-top:2px;">Toques involuntários amortecidos: 0</div>
-      <div style="margin-top:4px;">Taxa de Voz Calibrada: <strong>0.92 (Presbiacusia-Safe)</strong></div>
-    </div>
-  </div>
-
-</div>
-
-<script>
-  // STATE MANAGEMENT
-  const state = {
-    cvd: false,
-    oneHand: false,
-    antiTremor: true,
-    filteredTaps: 0,
-    lastTapTime: 0,
-    currentCase: 'dosage_warn'
-  };
-
-  const CASES = {
-    dosage_warn: {
-      geom: '▲',
-      geomClass: 'geom-triangle',
-      stateClass: 'state-warn',
-      code: 'DOSAGE_MISMATCH_BLOCKED',
-      title: 'ALERTA POSOLÓGICO ESTREITO',
-      drugHtml: `
-        <div style="font-size:12px; color:var(--muted);">Prescrito: <strong>Sulfato de Morfina 10mg</strong></div>
-        <div style="font-size:12px; margin-top:2px;">Escaneado: <strong style="color:var(--active-warn);">Sulfato de Morfina 30mg</strong></div>
-        <div class="tallman-tag">mor<span>FINA</span> 10mg ≠ mor<span>FINA</span> 30mg</div>
-      `,
-      desc: 'Princípio ativo compatível, porém concentração física diverge em 300%. Risco fatal de depressão respiratória em UTI. Dispensação barrada na borda.',
-      hapticDesc: '2 pulsos (180ms - 140ms - 180ms)',
-      hapticPattern: [180, 140, 180],
-      voice: 'Atenção. Alerta posológico. Caixa escaneada de Morfina trinta miligramas. Prescrição médica é de dez miligramas. Risco de superdosagem.'
-    },
-    lasa_warn: {
-      geom: '▲',
-      geomClass: 'geom-triangle',
-      stateClass: 'state-warn',
-      code: 'LASA_COLLISION_BLOCKED',
-      title: 'CONFUSÃO FONÉTICA LASA (ISMP BRASIL)',
-      drugHtml: `
-        <div style="font-size:12px; color:var(--muted);">Prescrito: <strong>Clorpromazina 100mg</strong> (Antipsicótico)</div>
-        <div style="font-size:12px; margin-top:2px;">Escaneado: <strong style="color:var(--active-warn);">Clomipramina 25mg</strong> (Antidepressivo)</div>
-        <div class="tallman-tag">clor<span>PROMAZINA</span> vs clomi<span>PRAMINA</span></div>
-      `,
-      desc: 'Similaridade fonética PT-BR de 88%. Interceptação preventiva antes do desencadeamento de Cascata Iatrogênica.',
-      hapticDesc: '2 pulsos (180ms - 140ms - 180ms)',
-      hapticPattern: [180, 140, 180],
-      voice: 'Alerta clínico. Medicamento prescrito Clorpromazina. Caixa lida Clomipramina. Risco de troca por semelhança de nome.'
-    },
-    dispense_ok: {
-      geom: '●',
-      geomClass: 'geom-circle',
-      stateClass: 'state-ok',
-      code: 'DISPENSATION_HOMOLOGATED',
-      title: 'DISPENSAÇÃO HOMOLOGADA',
-      drugHtml: `
-        <div style="font-size:12px; color:var(--muted);">Prescrito: <strong>Adalimumabe 40mg</strong></div>
-        <div style="font-size:12px; margin-top:2px;">Escaneado: <strong style="color:var(--active-ok);">Adalimumabe 40mg (Humira)</strong></div>
-        <div class="tallman-tag" style="border-color:var(--active-ok);">GTIN 07891010771234 • SERIAL BR-CEAF-99214</div>
-      `,
-      desc: 'Princípio ativo e dosagem 100% validados. Código GS1 DataMatrix autêntico. Evento selado na Árvore de Merkle local.',
-      hapticDesc: '1 pulso longo e suave (450ms)',
-      hapticPattern: [450],
-      voice: 'Dispensação confirmada. Adalimumabe quarenta miligramas. Selado na árvore criptográfica.'
-    },
-    fraud_block: {
-      geom: '■',
-      geomClass: 'geom-square',
-      stateClass: 'state-danger',
-      code: 'DOUBLE_DISPENSATION_FRAUD',
-      title: 'DUPLA DISPENSAÇÃO INTERDITADA',
-      drugHtml: `
-        <div style="font-size:12px; color:var(--muted);">Medicamento: <strong>Nusinersena 12mg (Spinraza)</strong></div>
-        <div style="font-size:12px; margin-top:2px; color:var(--active-danger);">SERIAL JÁ UTILIZADO: <code>BR-SP-009182</code></div>
-        <div class="tallman-tag" style="border-color:var(--active-danger); background:rgba(213,94,0,0.3);">■ BLOQUEIO OFFLINE DO GASTO DUPLO</div>
-      `,
-      desc: 'Este serial unitário já foi dispensado nesta unidade hoje às 23:42. Tentativa de re-dispensação física bloqueada pela Árvore de Merkle.',
-      hapticDesc: '3 pulsos curtos e secos (90ms - 70ms - 90ms - 70ms - 90ms)',
-      hapticPattern: [90, 70, 90, 70, 90],
-      voice: 'Bloqueio de segurança. Remédio já entregue anteriormente. Dupla dispensação barrada.'
+      if (state.antiTremor && (now - state.lastActionTimestamp < debounceWindowMs)) {
+        state.filteredTouches += 1;
+        document.getElementById('tremor-log').textContent =
+          `Anti-Tremor: Ativo (${state.filteredTouches} micro-toques involuntários amortecidos)`;
+        return;
+      }
+      state.lastActionTimestamp = now;
+      actionFn();
     }
-  };
 
-  // ANTI-TREMOR DEBOUNCE FUNCTION
-  function executeWithAntiTremor(action) {
-    const now = Date.now();
-    if (state.antiTremor && (now - state.lastTapTime < 350)) {
-      state.filteredTaps++;
-      document.getElementById('tremorCount').textContent = `Toques involuntários amortecidos: ${state.filteredTaps}`;
-      return;
+    function triggerHapticSignature(pattern) {
+      if ('vibrate' in navigator) {
+        try {
+          navigator.vibrate(pattern);
+        } catch (e) {}
+      }
+      const track = document.getElementById('pulse-track');
+      track.innerHTML = '';
+      pattern.forEach((duration, idx) => {
+        if (idx % 2 === 0) {
+          const bar = document.createElement('div');
+          bar.className = 'haptic-visual-bar';
+          bar.style.width = `${Math.max(24, Math.min(180, duration / 2.2))}px`;
+          bar.title = `Pulso: ${duration}ms`;
+          track.appendChild(bar);
+        }
+      });
     }
-    state.lastTapTime = now;
-    action();
-  }
 
-  // HAPTIC FEEDBACK (VIBRATION)
-  function triggerHaptic(pattern) {
-    if ('vibrate' in navigator) {
-      try { navigator.vibrate(pattern); } catch(e) {}
-    }
-    const dot = document.getElementById('hapticDot');
-    dot.classList.add('pulsing');
-    setTimeout(() => dot.classList.remove('pulsing'), 600);
-  }
-
-  // ADAPTIVE VOICE SYNTHESIS (PRESBICUSIA-SAFE RATE 0.92)
-  function speakCurrent() {
-    if ('speechSynthesis' in window) {
+    function speakAssistiveResult(text) {
+      const badgeTts = document.getElementById('badge-tts');
+      if (!('speechSynthesis' in window)) {
+        badgeTts.textContent = 'SIMULADO';
+        return;
+      }
       window.speechSynthesis.cancel();
-      const text = CASES[state.currentCase].voice;
-      const utt = new SpeechSynthesisUtterance(text);
-      utt.lang = 'pt-BR';
-      utt.rate = 0.92; // Slower cadence for auditory clarity
-      utt.pitch = 1.0;
-      window.speechSynthesis.speak(utt);
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'pt-BR';
+      utterance.rate = 0.92;
+      utterance.pitch = 1.0;
+
+      utterance.onstart = () => {
+        badgeTts.textContent = 'FALANDO...';
+        document.getElementById('btn-tts-panel').setAttribute('aria-pressed', 'true');
+      };
+      utterance.onend = () => {
+        badgeTts.textContent = 'CONCLUÍDO';
+        document.getElementById('btn-tts-panel').setAttribute('aria-pressed', 'false');
+      };
+      window.speechSynthesis.speak(utterance);
     }
-  }
 
-  // LOAD CLINICAL CASE
-  function loadCase(caseKey, playVoice = true) {
-    executeWithAntiTremor(() => {
+    function renderClinicalCase(caseKey, autoFeedback = true) {
       state.currentCase = caseKey;
-      const data = CASES[caseKey];
+      const data = CLINICAL_CASES[caseKey];
+      const card = document.getElementById('result-card');
+      card.className = `result-card ${data.statusClass}`;
 
-      const card = document.getElementById('mainCard');
-      card.className = `status-card ${data.stateClass}`;
+      document.getElementById('status-icon').innerHTML = data.svgPath;
+      document.getElementById('status-code').textContent = data.codeLabel;
+      document.getElementById('status-title').textContent = data.title;
+      document.getElementById('drug-display').innerHTML = data.drugHtml;
+      document.getElementById('clinical-summary').textContent = data.summary;
+      document.getElementById('haptic-label').textContent = data.hapticDesc;
+      document.getElementById('voice-transcript').textContent = `"${data.voiceText}"`;
 
-      const icon = document.getElementById('geomIcon');
-      icon.className = `geom-icon ${data.geomClass}`;
-      icon.textContent = data.geom;
+      triggerHapticSignature(data.hapticPattern);
+      if (autoFeedback) {
+        speakAssistiveResult(data.voiceText);
+      }
+    }
 
-      document.getElementById('statusTitle').textContent = data.title;
-      document.getElementById('statusCode').textContent = data.code;
-      document.getElementById('drugDisplay').innerHTML = data.drugHtml;
-      document.getElementById('clinicalDesc').textContent = data.desc;
-      document.getElementById('hapticDesc').textContent = data.hapticDesc;
-      document.getElementById('ttsTranscript').textContent = `"${data.voice}"`;
-
-      triggerHaptic(data.hapticPattern);
-      if (playVoice) speakCurrent();
+    document.getElementById('toggle-cvd').addEventListener('click', () => {
+      executeWithAntiTremor(() => {
+        state.cvdHighContrast = !state.cvdHighContrast;
+        document.body.classList.toggle('cvd-high-contrast', state.cvdHighContrast);
+        document.getElementById('toggle-cvd').setAttribute('aria-pressed', String(state.cvdHighContrast));
+        document.getElementById('badge-cvd').textContent = state.cvdHighContrast ? 'AAA ATIVO' : 'OFF';
+      });
     });
-  }
 
-  // TOGGLES
-  function toggleCvd() {
-    executeWithAntiTremor(() => {
-      state.cvd = !state.cvd;
-      document.body.classList.toggle('cvd-high-contrast', state.cvd);
-      const btn = document.getElementById('btnToggleCvd');
-      btn.setAttribute('aria-pressed', String(state.cvd));
-      btn.textContent = state.cvd ? 'AAA ATIVO' : 'OFF';
+    document.getElementById('toggle-onehand').addEventListener('click', () => {
+      executeWithAntiTremor(() => {
+        state.oneHanded = !state.oneHanded;
+        document.body.classList.toggle('one-handed-mode', state.oneHanded);
+        document.getElementById('toggle-onehand').setAttribute('aria-pressed', String(state.oneHanded));
+        document.getElementById('badge-onehand').textContent = state.oneHanded ? '60dp ATIVO' : 'OFF';
+      });
     });
-  }
 
-  function toggleOneHand() {
-    executeWithAntiTremor(() => {
-      state.oneHand = !state.oneHand;
-      document.body.classList.toggle('one-handed-mode', state.oneHand);
-      const btn = document.getElementById('btnToggleOneHand');
-      btn.setAttribute('aria-pressed', String(state.oneHand));
-      btn.textContent = state.oneHand ? '60dp ATIVO' : 'OFF';
+    document.getElementById('toggle-tremor').addEventListener('click', () => {
+      state.antiTremor = !state.antiTremor;
+      document.getElementById('toggle-tremor').setAttribute('aria-pressed', String(state.antiTremor));
+      document.getElementById('badge-tremor').textContent = state.antiTremor ? 'ATIVO' : 'OFF';
+      document.getElementById('tremor-telemetry').textContent = state.antiTremor ? 'Filtro: 350ms / 24px' : 'Filtro: Desativado';
     });
-  }
 
-  function toggleTremor() {
-    state.antiTremor = !state.antiTremor;
-    const btn = document.getElementById('btnToggleTremor');
-    btn.setAttribute('aria-pressed', String(state.antiTremor));
-    btn.textContent = state.antiTremor ? 'ATIVO' : 'OFF';
-  }
+    document.getElementById('btn-tts-panel').addEventListener('click', () => {
+      executeWithAntiTremor(() => {
+        speakAssistiveResult(CLINICAL_CASES[state.currentCase].voiceText);
+      });
+    });
 
-  // HANDS-FREE AUTO TRIGGER SIMULATION
-  function triggerHandsFreeScan() {
-    executeWithAntiTremor(() => {
-      const bar = document.getElementById('stabilityBar');
-      const badge = document.getElementById('badgeStatus');
-      badge.textContent = "ESTABILIZANDO...";
-      badge.className = "badge badge-handsfree";
-      bar.style.width = "0%";
+    document.getElementById('btn-speak-thumb').addEventListener('click', () => {
+      executeWithAntiTremor(() => {
+        speakAssistiveResult(CLINICAL_CASES[state.currentCase].voiceText);
+      });
+    });
+
+    document.getElementById('btn-haptic-thumb').addEventListener('click', () => {
+      executeWithAntiTremor(() => {
+        triggerHapticSignature(CLINICAL_CASES[state.currentCase].hapticPattern);
+      });
+    });
+
+    document.getElementById('case-select').addEventListener('change', (e) => {
+      renderClinicalCase(e.target.value, true);
+    });
+
+    document.getElementById('btn-handsfree').addEventListener('click', () => {
+      const bar = document.getElementById('stability-bar');
+      const statusText = document.getElementById('scanner-status-text');
+      const badge = document.getElementById('badge-handsfree');
+      bar.style.width = '0%';
+      badge.textContent = 'FOCANDO...';
+      statusText.textContent = 'Estabilizando quadro óptico (Laplaciano > limiar)...';
 
       let progress = 0;
-      const interval = setInterval(() => {
+      const timer = setInterval(() => {
         progress += 25;
         bar.style.width = `${progress}%`;
         if (progress >= 100) {
-          clearInterval(interval);
-          badge.textContent = "DISPARO ÓPTICO";
-          setTimeout(() => {
-            badge.textContent = "OFFLINE ATIVO";
-            badge.className = "badge badge-offline";
-            bar.style.width = "0%";
-            // Toggle next case
-            const keys = Object.keys(CASES);
-            const next = keys[(keys.indexOf(state.currentCase) + 1) % keys.length];
-            loadCase(next, true);
-          }, 400);
+          clearInterval(timer);
+          badge.textContent = 'CAPTURADO';
+          statusText.textContent = 'Disparo Hands-Free concluído sem toque na tela!';
+          const keys = Object.keys(CLINICAL_CASES);
+          const nextKey = keys[(keys.indexOf(state.currentCase) + 1) % keys.length];
+          document.getElementById('case-select').value = nextKey;
+          renderClinicalCase(nextKey, true);
         }
-      }, 120);
+      }, 180);
     });
-  }
 
-  // Initial load without autovoice
-  loadCase('dosage_warn', false);
-</script>
-
+    renderClinicalCase('dosage_warn', false);
+  </script>
 </body>
 </html>
