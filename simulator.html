@@ -3,45 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CRIBUM Mobile — Simulador Assistivo Universal (WCAG 2.2 AAA & SUS)</title>
+  <title>CRIBUM Mobile: Simulador Forense, GS1 & Tecnologia Assistiva (Campus Mobile 15)</title>
   <style>
     :root {
-      --bg-primary: #090d16;
-      --bg-panel: #111827;
-      --bg-card: #1f2937;
-      --text-primary: #f9fafb;
-      --text-secondary: #9ca3af;
-      --border-color: #374151;
+      /* Paleta Clinica Padrao (Dark Mode) */
+      --bg-primary: #070b14;
+      --bg-panel: #0f172a;
+      --bg-card: #1e293b;
+      --bg-input: #090e17;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --border-color: #334155;
+
+      /* Cores Semanticas Padrao */
       --status-safe: #10b981;
       --status-warn: #f59e0b;
       --status-danger: #ef4444;
       --accent-primary: #6366f1;
-      --touch-min-height: 44px;
-      --touch-padding: 10px 16px;
+      --accent-hover: #818cf8;
+
+      /* Ergonomia e Alvos de Toque */
+      --touch-min-height: 46px;
+      --touch-padding: 10px 14px;
       --font-scale: 1;
-      --focus-ring: 3px solid #60a5fa;
+      --focus-ring: 3px solid #38bdf8;
     }
 
-    /* Okabe-Ito Universal CVD-Safe & High Contrast AAA Theme (WCAG 2.2 AAA > 7:1) */
+    /* Paleta Universal Okabe-Ito CVD Safe + Alto Contraste WCAG 2.2 AAA (> 7:1) */
     body.cvd-high-contrast {
       --bg-primary: #000000;
-      --bg-panel: #0a0a0a;
-      --bg-card: #141414;
+      --bg-panel: #080808;
+      --bg-card: #121212;
+      --bg-input: #000000;
       --text-primary: #ffffff;
-      --text-secondary: #e5e7eb;
+      --text-secondary: #e2e8f0;
       --border-color: #ffffff;
-      --status-safe: #0072B2;    /* Okabe-Ito Blue (Homologado) */
-      --status-warn: #E69F00;    /* Okabe-Ito Orange (Alerta LASA / Dosagem) */
-      --status-danger: #D55E00;  /* Okabe-Ito Vermilion (Bloqueio / Fraude) */
-      --accent-primary: #56B4E9; /* Okabe-Ito Sky Blue */
+
+      /* Okabe-Ito Cientifica */
+      --status-safe: #0072B2;    /* Azul Okabe-Ito (Homologado) */
+      --status-warn: #E69F00;    /* Ambar/Laranja Okabe-Ito (Alerta LASA/Posologico) */
+      --status-danger: #D55E00;  /* Vermelhao Okabe-Ito (Fraude/Gasto Duplo) */
+      --accent-primary: #56B4E9; /* Azul Celeste Okabe-Ito */
+      --accent-hover: #F0E442;
       --focus-ring: 4px solid #F0E442;
     }
 
-    /* One-Handed / Expanded Touch Targets (Fitts's Law >= 56x56dp) */
+    /* Modo Uma Mao So (Lei de Fitts >= 60dp na Zona do Polegar) */
     body.one-handed-mode {
       --touch-min-height: 60px;
-      --touch-padding: 16px 22px;
-      --font-scale: 1.12;
+      --touch-padding: 16px 20px;
+      --font-scale: 1.08;
     }
 
     * {
@@ -54,695 +65,1339 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-primary);
+      font-size: calc(15px * var(--font-scale));
       line-height: 1.5;
-      font-size: calc(16px * var(--font-scale));
-      padding: 20px;
+      padding: 16px;
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .layout-container {
-      max-width: 1280px;
+    .app-grid {
+      max-width: 1440px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 24px;
+      grid-template-columns: 360px 480px 1fr;
+      gap: 20px;
       align-items: start;
     }
 
-    @media (max-width: 960px) {
-      .layout-container {
+    @media (max-width: 1280px) {
+      .app-grid {
+        grid-template-columns: 350px 1fr;
+      }
+      .merkle-inspector-col {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .app-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    .assistive-panel {
+    .panel {
       background: var(--bg-panel);
       border: 2px solid var(--border-color);
-      border-radius: 16px;
-      padding: 20px;
-      position: sticky;
-      top: 20px;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .panel-title {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 800;
       letter-spacing: 0.02em;
-      margin-bottom: 6px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      color: var(--text-primary);
+      gap: 8px;
     }
 
-    .panel-subtitle {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-bottom: 18px;
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      background: var(--accent-primary);
+      color: #000000;
     }
 
-    .control-group {
+    .control-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
     }
 
-    .control-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 6px;
-    }
-
-    .control-label {
+    .control-card h3 {
+      font-size: 0.9rem;
       font-weight: 700;
-      font-size: 0.95rem;
+      margin-bottom: 4px;
     }
 
-    .control-desc {
-      font-size: 0.8rem;
+    .control-card p {
+      font-size: 0.78rem;
       color: var(--text-secondary);
+      margin-bottom: 8px;
     }
 
-    .btn-assistive {
-      width: 100%;
-      min-height: var(--touch-min-height);
-      padding: var(--touch-padding);
-      margin-top: 10px;
-      border-radius: 10px;
-      border: 2px solid var(--border-color);
-      background: var(--bg-panel);
-      color: var(--text-primary);
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: all 0.15s ease;
+    button, input, select, textarea {
+      font-family: inherit;
     }
 
-    .btn-assistive:focus-visible,
     button:focus-visible,
-    select:focus-visible {
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
       outline: var(--focus-ring);
       outline-offset: 2px;
     }
 
-    .btn-assistive[aria-pressed="true"] {
+    .btn-toggle {
+      width: 100%;
+      min-height: var(--touch-min-height);
+      padding: var(--touch-padding);
+      border-radius: 10px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: transform 0.1s ease, background-color 0.15s ease;
+    }
+
+    .btn-toggle:hover {
+      border-color: var(--accent-primary);
+    }
+
+    .btn-toggle[aria-pressed="true"] {
       background: var(--accent-primary);
       color: #000000;
       border-color: #ffffff;
     }
 
-    .badge-state {
-      padding: 4px 10px;
+    .state-pill {
+      padding: 3px 8px;
       border-radius: 6px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 800;
-      text-transform: uppercase;
       background: rgba(255, 255, 255, 0.12);
     }
 
-    .btn-assistive[aria-pressed="true"] .badge-state {
+    .btn-toggle[aria-pressed="true"] .state-pill {
       background: #000000;
       color: #ffffff;
     }
 
-    .mobile-frame {
+    /* Mobile Device Frame */
+    .phone-simulator {
       background: var(--bg-panel);
       border: 3px solid var(--border-color);
-      border-radius: 28px;
-      max-width: 480px;
-      margin: 0 auto;
-      width: 100%;
-      min-height: 780px;
+      border-radius: 30px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-      position: relative;
+      min-height: 820px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
     }
 
-    body.one-handed-mode .mobile-header {
-      padding-top: 28px;
+    body.one-handed-mode .phone-top-bar {
+      padding-top: 26px;
     }
 
-    .mobile-header {
-      padding: 16px 20px;
+    .phone-top-bar {
       background: var(--bg-card);
+      padding: 14px 18px;
       border-bottom: 2px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .sus-badge {
-      font-size: 0.78rem;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 6px;
-      background: var(--accent-primary);
-      color: #000;
-    }
-
-    .mobile-body {
-      padding: 20px;
+    .phone-body {
+      padding: 16px;
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
-    .scanner-viewport {
-      background: #000;
-      border: 2px dashed var(--border-color);
-      border-radius: 14px;
-      padding: 16px;
-      text-align: center;
+    /* Visor Optico + Camera Real + Mira Laser */
+    .camera-viewport {
       position: relative;
-    }
-
-    .stability-bar-wrap {
-      margin-top: 10px;
-      background: #1f2937;
-      height: 10px;
-      border-radius: 999px;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-    }
-
-    .stability-bar {
-      height: 100%;
-      width: 0%;
-      background: var(--status-safe);
-      transition: width 0.1s linear;
-    }
-
-    .result-card {
+      background: #000000;
+      border: 2px solid var(--border-color);
       border-radius: 14px;
-      padding: 18px;
+      height: 190px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px 12px;
+    }
+
+    #camera-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      display: none;
+    }
+
+    .reticle-box {
+      position: absolute;
+      inset: 22px 45px;
+      border: 2px dashed rgba(56, 189, 248, 0.65);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .laser-line {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ef4444, #38bdf8, #ef4444, transparent);
+      box-shadow: 0 0 10px #ef4444;
+      animation: laserScan 2.2s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    @keyframes laserScan {
+      0% { top: 18%; opacity: 0.5; }
+      50% { top: 82%; opacity: 1; }
+      100% { top: 18%; opacity: 0.5; }
+    }
+
+    .camera-overlay-top,
+    .camera-overlay-bottom {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      background: rgba(0, 0, 0, 0.68);
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: #f8fafc;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Card de Diagnostico Clinico-Forense */
+    .diagnostic-card {
+      border-radius: 14px;
+      padding: 14px;
       border: 3px solid var(--border-color);
       background: var(--bg-card);
+      transition: border-color 0.2s ease;
     }
 
-    .result-card.status-safe {
-      border-color: var(--status-safe);
-    }
+    .diagnostic-card.status-safe { border-color: var(--status-safe); }
+    .diagnostic-card.status-warn { border-color: var(--status-warn); }
+    .diagnostic-card.status-danger { border-color: var(--status-danger); }
 
-    .result-card.status-warn {
-      border-color: var(--status-warn);
-    }
-
-    .result-card.status-danger {
-      border-color: var(--status-danger);
-    }
-
-    .status-banner {
+    .status-header-banner {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 10px;
       font-weight: 800;
-      margin-bottom: 14px;
-      color: #000000;
+      margin-bottom: 12px;
     }
 
-    .status-safe .status-banner {
+    .status-safe .status-header-banner {
       background: var(--status-safe);
       color: #ffffff;
     }
-
-    .status-warn .status-banner {
+    .status-warn .status-header-banner {
       background: var(--status-warn);
       color: #000000;
     }
-
-    .status-danger .status-banner {
+    .status-danger .status-header-banner {
       background: var(--status-danger);
       color: #ffffff;
     }
 
-    .geo-icon {
+    .geo-svg {
       width: 28px;
       height: 28px;
       flex-shrink: 0;
     }
 
-    .tall-man-drug {
-      font-size: 1.35rem;
-      font-weight: 900;
-      letter-spacing: 0.03em;
-      padding: 8px 12px;
-      background: var(--bg-primary);
+    .tallman-box {
+      background: var(--bg-input);
       border: 2px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: 10px;
+      padding: 10px 12px;
       margin: 8px 0;
       font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
     }
 
-    .tall-man-highlight {
+    .tallman-caps {
+      color: var(--status-warn);
       text-decoration: underline;
       text-underline-offset: 4px;
-      color: var(--status-warn);
+      font-weight: 900;
     }
 
-    .telemetry-box {
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 0.82rem;
-    }
-
-    .pulse-track {
-      display: flex;
-      align-items: center;
+    .gs1-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
-      margin-top: 8px;
-      min-height: 24px;
+      margin-top: 10px;
     }
 
-    .haptic-visual-bar {
-      height: 16px;
-      border-radius: 4px;
-      background: var(--accent-primary);
-      opacity: 0.85;
+    .gs1-cell {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 6px 9px;
+      font-size: 0.76rem;
     }
 
-    .thumb-zone-bar {
+    .gs1-cell span {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .gs1-cell strong {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--text-primary);
+    }
+
+    /* Zona do Polegar (Tercio Inferior / Lei de Fitts) */
+    .thumb-zone-footer {
       background: var(--bg-card);
       border-top: 2px solid var(--border-color);
-      padding: 16px 20px;
+      padding: 14px 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .thumb-zone-indicator {
-      font-size: 0.72rem;
+    .thumb-zone-title {
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-secondary);
       text-align: center;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    .action-grid {
+    .preset-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .btn-primary-action {
-      min-height: var(--touch-min-height);
-      padding: var(--touch-padding);
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      border: 2px solid var(--border-color);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       gap: 8px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
     }
 
-    .btn-primary-action.voice-btn {
-      background: var(--accent-primary);
-      color: #000000;
-      border-color: #ffffff;
-    }
-
-    .case-selector {
-      width: 100%;
+    .btn-preset {
       min-height: var(--touch-min-height);
       padding: var(--touch-padding);
       border-radius: 10px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
       border: 2px solid var(--border-color);
-      font-weight: 700;
-      font-size: 0.92rem;
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-weight: 800;
+      font-size: 0.78rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      transition: border-color 0.15s ease, transform 0.1s ease;
     }
 
-    .anti-tremor-status {
-      font-size: 0.78rem;
+    .btn-preset:hover {
+      border-color: var(--accent-primary);
+    }
+
+    .btn-preset small {
+      font-size: 0.68rem;
       color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .gs1-input-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .gs1-input {
+      flex: 1;
+      min-height: var(--touch-min-height);
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+    }
+
+    .btn-edge-exec {
+      min-height: var(--touch-min-height);
+      padding: var(--touch-padding);
+      border-radius: 10px;
+      border: 2px solid #ffffff;
+      background: var(--accent-primary);
+      color: #000000;
+      font-weight: 900;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Coluna Direita: Inspetor Criptografico Merkle RFC 6962 */
+    .crypto-box {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      word-break: break-all;
+    }
+
+    .crypto-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      font-weight: 800;
+      margin-bottom: 4px;
       display: flex;
       justify-content: space-between;
-      margin-top: 4px;
+    }
+
+    .receipt-json {
+      background: #050811;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: #a7f3d0;
+      max-height: 290px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    .ledger-list {
+      list-style: none;
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ledger-item {
+      background: var(--bg-card);
+      border-left: 4px solid var(--status-safe);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-family: 'JetBrains Mono', monospace;
     }
   </style>
 </head>
 <body>
 
-  <div class="layout-container">
-    <aside class="assistive-panel" aria-label="Painel de Tecnologia Assistiva Ativa">
-      <div class="panel-title">
-        <span>♿ Tecnologia Assistiva Ativa</span>
+  <div class="app-grid">
+    <!-- COLUNA 1: PAINEL DE TECNOLOGIA ASSISTIVA & CAMERA (WCAG 2.2 AAA) -->
+    <aside class="panel" aria-label="Controles de Tecnologia Assistiva e Sensores">
+      <div class="panel-header">
+        <div class="panel-title">♿ Tecnologia Assistiva</div>
+        <span class="badge">WCAG 2.2 AAA</span>
       </div>
-      <p class="panel-subtitle">
-        Desenho Universal WCAG 2.2 Nível AAA calibrado para plantões de 12h no SUS e pacientes da Farmácia de Alto Custo.
-      </p>
 
-      <div class="control-group">
-        <div class="control-header">
-          <span class="control-label">1. Modo Alto Contraste / CVD Safe</span>
-        </div>
-        <p class="control-desc">
-          Paleta universal de Okabe-Ito (segura para Deuteranopia, Protanopia e Tritanopia) + ícones geométricos redundantes (● ▲ ■) e contraste &gt; 7:1.
-        </p>
-        <button id="toggle-cvd" class="btn-assistive" type="button" aria-pressed="false">
-          <span>Paleta Okabe-Ito + Geometria</span>
-          <span class="badge-state" id="badge-cvd">OFF</span>
+      <!-- 1. Paleta Okabe-Ito CVD Safe -->
+      <div class="control-card">
+        <h3>1. Paleta Okabe-Ito CVD (Anti-Daltonismo)</h3>
+        <p>Contraste &gt; 7:1 com substituicao de verde/vermelho por Azul/Ambar/Vermelhao e geometria redundante (● ▲ ■).</p>
+        <button id="btn-toggle-cvd" class="btn-toggle" type="button" aria-pressed="false">
+          <span>🎨 Alto Contraste Okabe-Ito</span>
+          <span class="state-pill" id="pill-cvd">OFF</span>
         </button>
       </div>
 
-      <div class="control-group">
-        <div class="control-header">
-          <span class="control-label">2. Síntese Vocal &amp; Cadência Fonética</span>
-        </div>
-        <p class="control-desc">
-          Leitura falada (Web Speech API) com soletração silábica de pares LASA e anúncio pausado (rate=0.92) de princípio ativo e dosagem.
-        </p>
-        <button id="btn-tts-panel" class="btn-assistive" type="button" aria-pressed="false">
-          <span>🔊 Ler Resultado do Scan em Voz Alta</span>
-          <span class="badge-state" id="badge-tts">PRONTO</span>
+      <!-- 2. Modo Uma Mao So (Lei de Fitts >= 60dp) -->
+      <div class="control-card">
+        <h3>2. Modo Uma Mao So (Zona do Polegar)</h3>
+        <p>Expande alvos interativos para ≥ 60dp (Lei de Fitts) para operacao enquanto segura caixas termolabeis.</p>
+        <button id="btn-toggle-onehand" class="btn-toggle" type="button" aria-pressed="false">
+          <span>🖐️ Alvos Expandidos (60dp)</span>
+          <span class="state-pill" id="pill-onehand">OFF</span>
         </button>
       </div>
 
-      <div class="control-group">
-        <div class="control-header">
-          <span class="control-label">3. Alvos Ampliados (Uma Mão Só)</span>
+      <!-- 3. Filtro Anti-Tremores (Parkinson / Artrite) -->
+      <div class="control-card">
+        <h3>3. Escudo Anti-Tremor (Debounce 350ms)</h3>
+        <p>Amortece micro-toques involuntarios (4 a 12 Hz) de operadores ou pacientes com tremores motores.</p>
+        <button id="btn-toggle-tremor" class="btn-toggle" type="button" aria-pressed="true">
+          <span>🛡️ Filtro Anti-Tremor (350ms)</span>
+          <span class="state-pill" id="pill-tremor">ATIVO</span>
+        </button>
+        <div id="tremor-counter" style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 6px;">
+          Toques involuntarios amortecidos: <strong>0</strong>
         </div>
-        <p class="control-desc">
-          Expande botões para ≥ 60x60dp (Lei de Fitts) e ancora todas as ações críticas no arco inferior do polegar.
-        </p>
-        <button id="toggle-onehand" class="btn-assistive" type="button" aria-pressed="false">
-          <span>🖐️ Modo Uma Mão (Alvos ≥ 56dp)</span>
-          <span class="badge-state" id="badge-onehand">OFF</span>
+      </div>
+
+      <!-- 4. Sintese de Voz (Web Speech API rate=0.92) -->
+      <div class="control-card">
+        <h3>4. Sintese de Voz Calibrada (TTS 0.92x)</h3>
+        <p>Leitura falada em portugues com cadencia fonetica de 0.92x para ambientes ruidosos de UBS/CEAF.</p>
+        <button id="btn-tts-speak" class="btn-toggle" type="button" aria-pressed="false">
+          <span>🔊 Ouvir Diagnostico Atual</span>
+          <span class="state-pill" id="pill-tts">PRONTO</span>
         </button>
       </div>
 
-      <div class="control-group">
-        <div class="control-header">
-          <span class="control-label">4. Escudo Anti-Tremor &amp; Hands-Free</span>
-        </div>
-        <p class="control-desc">
-          Filtro de histerese temporal (debounce 350ms + tolerância espacial de 24px para tremores de 4–12 Hz) e disparo óptico sem toque.
-        </p>
-        <button id="toggle-tremor" class="btn-assistive" type="button" aria-pressed="true">
-          <span>🛡️ Anti-Tremor Shield (4–12 Hz)</span>
-          <span class="badge-state" id="badge-tremor">ATIVO</span>
-        </button>
-        <button id="btn-handsfree" class="btn-assistive" type="button">
-          <span>📷 Simular Captura Hands-Free (Sem Toque)</span>
-          <span class="badge-state" id="badge-handsfree">AUTO</span>
+      <!-- 5. Camera Traseira Real (getUserMedia) -->
+      <div class="control-card" style="margin-bottom: 0;">
+        <h3>5. Sensor Optico Real (WebRTC Camera)</h3>
+        <p>Aciona a camera traseira do celular (<code>facingMode: environment</code>) com mira laser em tempo real.</p>
+        <button id="btn-camera-toggle" class="btn-toggle" type="button" aria-pressed="false">
+          <span>📷 Ativar Camera Traseira</span>
+          <span class="state-pill" id="pill-camera">OFF</span>
         </button>
       </div>
     </aside>
 
-    <main class="mobile-frame" aria-live="polite">
-      <header class="mobile-header">
+    <!-- COLUNA 2: DISPOSITIVO MOVEL INTERATIVO (VISOR + MOTOR BI-CAMADA + ZONA DO POLEGAR) -->
+    <main class="phone-simulator" aria-live="polite">
+      <header class="phone-top-bar">
         <div>
-          <strong style="font-size: 1.05rem;">CRIBUM MOBILE</strong>
-          <div style="font-size: 0.75rem; color: var(--text-secondary);">Farmácia de Alto Custo • SUS / ANS</div>
+          <strong style="font-size: 1rem; letter-spacing: 0.03em;">🛡️ CRIBUM MOBILE</strong>
+          <div style="font-size: 0.72rem; color: var(--text-secondary);">CEAF / SUS • ANVISA RDC 319 • RFC 6962</div>
         </div>
-        <span class="sus-badge">WCAG 2.2 AAA</span>
+        <span class="badge" id="active-prescription-badge">Rx: MORFINA 10mg</span>
       </header>
 
-      <div class="mobile-body">
-        <section class="scanner-viewport" aria-label="Visor de Captura Hands-Free">
-          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary);">
-            <span id="scanner-status-text">Visor Óptico: Aguardando Estabilização...</span>
-            <span id="tremor-telemetry">Filtro: 350ms / 24px</span>
+      <div class="phone-body">
+        <!-- Visor da Camera com Mira Laser -->
+        <section class="camera-viewport" aria-label="Visor do Leitor GS1 DataMatrix">
+          <video id="camera-video" autoplay playsinline muted></video>
+          <div class="reticle-box"></div>
+          <div class="laser-line"></div>
+          <div class="camera-overlay-top">
+            <span id="camera-state-label">VISOR: SIMULACAO OPTICA</span>
+            <span>CLAHE + ECC200</span>
           </div>
-          <div class="stability-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
-            <div class="stability-bar" id="stability-bar" style="width: 100%;"></div>
+          <div class="camera-overlay-bottom">
+            <span id="active-rx-display">Prescricao Ativa: Sulfato de Morfina 10mg</span>
           </div>
         </section>
 
-        <section id="result-card" class="result-card status-warn" role="region" aria-label="Resultado da Auditoria Assistiva">
-          <div class="status-banner" id="status-banner">
-            <svg id="status-icon" class="geo-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <!-- Cartao de Resultado Bi-Camada (LASA + Dosagem + Fraude) -->
+        <section id="diagnostic-card" class="diagnostic-card status-warn" role="region" aria-label="Resultado da Validacao Clinica e Criptografica">
+          <div class="status-header-banner">
+            <svg id="status-geo-icon" class="geo-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>
             </svg>
             <div>
-              <div id="status-code" style="font-size: 0.75rem; text-transform: uppercase;">[▲ ALERTA DE DOSAGEM / PAR LASA]</div>
-              <div id="status-title" style="font-size: 1.05rem;">Conferência Obrigatória de Princípio Ativo</div>
+              <div id="status-code-badge" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;">
+                [▲ DOSAGE_MISMATCH_BLOCKED]
+              </div>
+              <div id="status-headline" style="font-size: 0.98rem;">
+                Bloqueio Posologico: Risco de Depressao Respiratoria
+              </div>
             </div>
           </div>
 
-          <div style="font-size: 0.85rem; color: var(--text-secondary);">Princípio Ativo &amp; Tall Man Lettering (ISMP):</div>
-          <div class="tall-man-drug" id="drug-display">
-            Sulfato de <span class="tall-man-highlight">MORFINA 30mg</span> vs 10mg
+          <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-secondary);">
+            <span>Analise Ortografica ISMP (Tall Man Lettering):</span>
+            <span id="levenshtein-score">Similaridade LASA: --</span>
           </div>
 
-          <p id="clinical-summary" style="font-size: 0.92rem; margin-top: 6px;">
-            Atenção: A prescrição exige <strong>Morfina 10mg</strong>, mas a caixa inspecionada é de <strong>30mg (Triplo da Dose)</strong>. Risco severo de depressão respiratória em paciente idoso.
+          <div class="tallman-box" id="tallman-render">
+            Sulfato de <span class="tallman-caps">MORFINA 30mg</span> (Prescrito: 10mg)
+          </div>
+
+          <p id="clinical-explanation" style="font-size: 0.84rem; color: var(--text-primary); margin-bottom: 8px;">
+            A prescricao exige <strong>Sulfato de Morfina 10mg</strong>, mas o DataMatrix escaneado pertence a apresentacao de <strong>30mg (300% da dose)</strong>. Dispensacao interditada na Camada 2.
           </p>
 
-          <div class="telemetry-box" style="margin-top: 14px;">
-            <div><strong>Assinatura Háptica (navigator.vibrate):</strong> <span id="haptic-label">2 pulsos intervalados [180, 140, 180] ms</span></div>
-            <div class="pulse-track" id="pulse-track" aria-hidden="true"></div>
-            <div style="margin-top: 6px;"><strong>Transcrição Vocal Simplificada:</strong></div>
-            <div id="voice-transcript" style="color: var(--text-secondary); font-style: italic;">
-              "Atenção: Alerta de dosagem. Caixa lida: Mor-fi-na, trinta miligramas. Receita pede: dez miligramas. Confira antes de entregar."
+          <!-- Dados Extraidos do Parser GS1 DataMatrix (ANVISA RDC 319) -->
+          <div class="gs1-grid" aria-label="Metadados Extraidos do Codigo GS1 DataMatrix">
+            <div class="gs1-cell">
+              <span>(01) GTIN-14 ANVISA</span>
+              <strong id="gs1-gtin">07896676400037</strong>
+            </div>
+            <div class="gs1-cell">
+              <span>(17) Validade Normalizada</span>
+              <strong id="gs1-expiry">30/11/2028</strong>
+            </div>
+            <div class="gs1-cell">
+              <span>(10) Lote de Fabricacao</span>
+              <strong id="gs1-batch">LOTM30A</strong>
+            </div>
+            <div class="gs1-cell">
+              <span>(21) Numero de Serie Unico</span>
+              <strong id="gs1-serial">SN9001002001</strong>
             </div>
           </div>
         </section>
       </div>
 
-      <footer class="thumb-zone-bar" aria-label="Controles na Zona do Polegar">
-        <div class="thumb-zone-indicator">▼ Zona de Alcance do Polegar (Operação com Uma Mão) ▼</div>
+      <!-- ZONA DO POLEGAR: 4 CENARIOS E2E + PARSER GS1 MANUAL -->
+      <footer class="thumb-zone-footer" aria-label="Zona de Alcance do Polegar para Operacao Rapida">
+        <div class="thumb-zone-title">▼ Zona do Polegar: Pre-Sets Clinicos E2E &amp; Decodificador GS1 ▼</div>
 
-        <label for="case-select" style="font-size: 0.8rem; font-weight: 700;">Cenário Clínico do SUS:</label>
-        <select id="case-select" class="case-selector">
-          <option value="dosage_warn" selected>▲ Alerta de Dosagem / LASA: Morfina 10mg vs 30mg (2 Pulsos)</option>
-          <option value="homologated">● Dispensação Homologada: Losartana Potássica 50mg (1 Pulso Longo)</option>
-          <option value="fraud_double">■ Bloqueio de Gasto Duplo / LASA Crítico: Lorazepam 2mg (3 Pulsos Secos)</option>
-        </select>
-
-        <div class="action-grid">
-          <button id="btn-speak-thumb" class="btn-primary-action voice-btn" type="button">
-            <span>🔊 Ouvir Laudo</span>
+        <div class="preset-grid">
+          <button id="btn-case-1" class="btn-preset" type="button">
+            <span>▲ Caso 1: Erro Posologico</span>
+            <small>Morfina 10mg vs 30mg</small>
           </button>
-          <button id="btn-haptic-thumb" class="btn-primary-action" type="button">
-            <span>📳 Testar Vibração</span>
+          <button id="btn-case-2" class="btn-preset" type="button">
+            <span>▲ Caso 2: Colisao LASA</span>
+            <small>Clorpromazina vs Clomipramina</small>
+          </button>
+          <button id="btn-case-3" class="btn-preset" type="button">
+            <span>● Caso 3: Homologar CEAF</span>
+            <small>Adalimumabe 40mg (+Merkle)</small>
+          </button>
+          <button id="btn-case-4" class="btn-preset" type="button">
+            <span>■ Caso 4: Gasto Duplo</span>
+            <small>Reuso de Serial (Fraude)</small>
           </button>
         </div>
-        <div class="anti-tremor-status">
-          <span id="tremor-log">Anti-Tremor: Pronto (0 toques involuntários filtrados)</span>
+
+        <label for="gs1-raw-input" style="font-size: 0.74rem; font-weight: 700; color: var(--text-secondary);">
+          String GS1 DataMatrix (RDC 319: Edite ou cole qualquer codigo):
+        </label>
+        <div class="gs1-input-bar">
+          <input
+            id="gs1-raw-input"
+            class="gs1-input"
+            type="text"
+            value="01078962265024191728103110LOTHUM40A21SN7788990011"
+            aria-label="Campo de entrada do codigo GS1 DataMatrix"
+          />
+          <button id="btn-process-gs1" class="btn-edge-exec" type="button">
+            ⚡ Processar na Borda
+          </button>
         </div>
       </footer>
     </main>
+
+    <!-- COLUNA 3: MOTOR CRIPTOGRAFICO MERKLE TREE (RFC 6962) & AUDITORIA O(log N) -->
+    <section class="panel merkle-inspector-col" aria-label="Inspetor Criptografico da Arvore de Merkle RFC 6962">
+      <div class="panel-header">
+        <div class="panel-title">🔐 Motor Merkle Tree (RFC 6962)</div>
+        <span class="badge" id="merkle-count-badge">0 Folhas</span>
+      </div>
+
+      <div class="crypto-box">
+        <div class="crypto-label">
+          <span>MERKLE ROOT ATUAL (SHA-256 • DOMINIO 0x00 / 0x01)</span>
+          <span id="crypto-engine-tag">Web Crypto API</span>
+        </div>
+        <div id="merkle-root-hex" style="color: #38bdf8; font-weight: 800;">
+          e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+        </div>
+      </div>
+
+      <div class="crypto-box">
+        <div class="crypto-label">
+          <span>ULTIMA FOLHA ASSINADA (LEAF HASH: SHA256(0x00 || PAYLOAD))</span>
+          <span id="audit-path-len">Audit Path: 0 nos</span>
+        </div>
+        <div id="last-leaf-hex" style="color: #f8fafc;">
+          Aguardando dispensacao homologada (Clique no Caso 3)...
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-size: 0.78rem; font-weight: 800;">Recibo Criptografico Forense O(log N):</span>
+        <button id="btn-verify-receipt" class="btn-toggle" type="button" style="width: auto; min-height: 34px; padding: 6px 12px; font-size: 0.75rem;">
+          ✅ Verificar Prova Offline
+        </button>
+      </div>
+
+      <pre id="merkle-receipt-json" class="receipt-json">{
+  "status": "AGUARDANDO_PRIMEIRA_HOMOLOGACAO",
+  "spec": "RFC 6962 (Certificate Transparency)",
+  "domain_separation": {
+    "leaf_prefix": "0x00",
+    "node_prefix": "0x01"
+  }
+}</pre>
+
+      <div style="margin-top: 12px;">
+        <div class="crypto-label">
+          <span>HISTORICO ANTI-FRAUDE DE SERIAIS DISPENSADOS (LEDGER LOCAL)</span>
+        </div>
+        <ul id="serial-ledger-list" class="ledger-list">
+          <li class="ledger-item" style="border-left-color: var(--border-color); color: var(--text-secondary);">
+            Nenhum numero de serie dispensado nesta sessao.
+          </li>
+        </ul>
+      </div>
+    </section>
   </div>
 
   <script>
-    const CLINICAL_CASES = {
-      homologated: {
-        statusClass: 'status-safe',
-        geoSymbol: '●',
-        codeLabel: '[● DISPENSAÇÃO HOMOLOGADA — CÍRCULO DE SEGURANÇA]',
-        title: 'Receita Íntegra & Princípio Ativo Confirmado',
-        drugHtml: '<span class="tall-man-highlight">LOSARTANA</span> Potássica 50mg',
-        summary: 'Validação concluída sem divergências LASA. Registro de dispensação assinado na Árvore de Merkle (RFC 6962).',
-        hapticPattern: [450],
-        hapticDesc: '1 pulso longo e suave [450] ms (Dispensação Homologada)',
-        voiceText: 'Dispensação homologada. Medicamento confirmado: Lo-sar-ta-na Potássica, cinquenta miligramas. Tomar um comprimido pela manhã.',
-        svgPath: '<circle cx="12" cy="12" r="9" />'
+    /***************************************************************************
+     * 1. CATALOGO OFICIAL ANVISA / CEAF & REGRAS DE TALL MAN LETTERING (ISMP)
+     ***************************************************************************/
+    const OFFICIAL_CATALOG = {
+      "07896226502419": {
+        gtin: "07896226502419",
+        activeIngredient: "Adalimumabe",
+        tallManHtml: "<span class='tallman-caps'>ADALIMUMABE</span> 40mg/0,4ml (Humira)",
+        concentration: "40mg",
+        anvisaRegistry: "1986000030035",
+        therapeuticClass: "Imunobiologico Anti-TNF (CEAF Grupo 1A)"
       },
-      dosage_warn: {
-        statusClass: 'status-warn',
-        geoSymbol: '▲',
-        codeLabel: '[▲ ALERTA DE DOSAGEM / LASA — TRIÂNGULO DE ATENÇÃO]',
-        title: 'Conferência Obrigatória de Dosagem (10mg vs 30mg)',
-        drugHtml: 'Sulfato de <span class="tall-man-highlight">MORFINA 30mg</span> vs 10mg',
-        summary: 'Atenção: A prescrição exige Morfina 10mg, mas a embalagem inspecionada é de 30mg (Triplo da Dose). Exige dupla checagem humana.',
-        hapticPattern: [180, 140, 180],
-        hapticDesc: '2 pulsos intervalados [180, 140, 180] ms (Alerta de Dosagem)',
-        voiceText: 'Atenção. Alerta de dosagem. Princípio ativo: Sulfato de Mor-fi-na. Caixa lida: trinta miligramas. Receita exige: dez miligramas. Pare e confira.',
-        svgPath: '<path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>'
+      "07896676400020": {
+        gtin: "07896676400020",
+        activeIngredient: "Sulfato de Morfina",
+        tallManHtml: "Sulfato de <span class='tallman-caps'>MORFINA 10mg</span> (Dimorf)",
+        concentration: "10mg",
+        anvisaRegistry: "1029800070039",
+        therapeuticClass: "Analgesico Opioide Forte (Lista A1)"
       },
-      fraud_double: {
-        statusClass: 'status-danger',
-        geoSymbol: '■',
-        codeLabel: '[■ BLOQUEIO CRÍTICO — QUADRADO DE INTERDIÇÃO]',
-        title: 'Tentativa de Gasto Duplo / Troca LASA Crítica',
-        drugHtml: '<span class="tall-man-highlight">LORAZEPAM</span> 2mg (LASA: Losartana)',
-        summary: 'Bloqueio imediato: Guia previamente dispensada há 4 horas em outra unidade (Gasto Duplo detectado no Grafo) + Risco LASA Crítico.',
-        hapticPattern: [90, 70, 90, 70, 90],
-        hapticDesc: '3 pulsos curtos e secos [90, 70, 90, 70, 90] ms (Fraude / Gasto Duplo)',
-        voiceText: 'Bloqueio crítico. Tentativa de gasto duplo detectada e risco de troca entre Lo-ra-ze-pam dois miligramas e Lo-sar-ta-na. Dispensação bloqueada.',
-        svgPath: '<rect x="3" y="3" width="18" height="18" rx="2" />'
+      "07896676400037": {
+        gtin: "07896676400037",
+        activeIngredient: "Sulfato de Morfina",
+        tallManHtml: "Sulfato de <span class='tallman-caps'>MORFINA 30mg</span> (Dimorf)",
+        concentration: "30mg",
+        anvisaRegistry: "1029800070047",
+        therapeuticClass: "Analgesico Opioide Forte (Triplo da Dose 10mg)"
+      },
+      "07891317401122": {
+        gtin: "07891317401122",
+        activeIngredient: "Clomipramina",
+        tallManHtml: "Cloridrato de <span class='tallman-caps'>CLOMIPRAM</span>ina 25mg",
+        concentration: "25mg",
+        anvisaRegistry: "1004309120021",
+        therapeuticClass: "Antidepressivo Triciclico"
+      },
+      "07891317401115": {
+        gtin: "07891317401115",
+        activeIngredient: "Clorpromazina",
+        tallManHtml: "Cloridrato de <span class='tallman-caps'>CLORPROMAZ</span>ina 25mg",
+        concentration: "25mg",
+        anvisaRegistry: "1004309110018",
+        therapeuticClass: "Antipsicotico Neuroleptico"
+      },
+      "07898574120013": {
+        gtin: "07898574120013",
+        activeIngredient: "Nusinersena",
+        tallManHtml: "<span class='tallman-caps'>NUSINERSENA</span> 12mg/5ml (Spinraza)",
+        concentration: "12mg",
+        anvisaRegistry: "1169500060018",
+        therapeuticClass: "Oligonucleotideo Antisenso (Atrofia Muscular Espinhal)"
       }
     };
 
-    let state = {
-      cvdHighContrast: false,
-      oneHanded: false,
+    // Pares LASA com Regras Dinamicas de Tall Man Lettering (ISMP Brasil)
+    const LASA_TALLMAN_PAIRS = [
+      {
+        a: "clorpromazina",
+        b: "clomipramina",
+        renderComparison: "clor<span class='tallman-caps'>PROMAZ</span>ina vs. clo<span class='tallman-caps'>MIPRAM</span>ina",
+        risk: "Risco severo de sedacao neuroleptica indevida, hipotensao ortostatica e sindrome extrapiramidal por troca LASA."
+      },
+      {
+        a: "losartana",
+        b: "lorazepam",
+        renderComparison: "lo<span class='tallman-caps'>SARTANA</span> vs. lo<span class='tallman-caps'>RAZEPAM</span>",
+        risk: "Troca critica entre anti-hipertensivo e benzodiazepinico depressor do sistema nervoso central."
+      }
+    ];
+
+    /***************************************************************************
+     * 2. MOTOR CRIPTOGRAFICO MERKLE TREE (RFC 6962) EM WEB CRYPTO API NATIVA
+     ***************************************************************************/
+    class RFC6962MerkleEngine {
+      constructor() {
+        this.leaves = [];          // Payloads canonicos
+        this.leafHashes = [];      // Hashes hexadecimais com prefixo 0x00
+        this.dispensedSerials = new Map(); // serial -> metadados do evento anterior
+        this.lastReceipt = null;
+      }
+
+      async sha256Bytes(uint8Array) {
+        const digestBuffer = await crypto.subtle.digest("SHA-256", uint8Array);
+        return new Uint8Array(digestBuffer);
+      }
+
+      bytesToHex(bytes) {
+        return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
+      }
+
+      hexToBytes(hex) {
+        const arr = new Uint8Array(hex.length / 2);
+        for (let i = 0; i < arr.length; i++) {
+          arr[i] = parseInt(hex.substr(i * 2, 2), 16);
+        }
+        return arr;
+      }
+
+      // RFC 6962 Secao 2.1: MTH({d(0)}) = SHA-256(0x00 || d(0))
+      async computeLeafHash(canonicalString) {
+        const encoder = new TextEncoder();
+        const dataBytes = encoder.encode(canonicalString);
+        const prefixed = new Uint8Array(1 + dataBytes.length);
+        prefixed[0] = 0x00; // Separacao estrita de dominio para folhas
+        prefixed.set(dataBytes, 1);
+        const hashBytes = await this.sha256Bytes(prefixed);
+        return this.bytesToHex(hashBytes);
+      }
+
+      // RFC 6962 Secao 2.1: MTH(D[n]) = SHA-256(0x01 || left || right)
+      async computeNodeHash(leftHex, rightHex) {
+        const leftBytes = this.hexToBytes(leftHex);
+        const rightBytes = this.hexToBytes(rightHex);
+        const prefixed = new Uint8Array(1 + leftBytes.length + rightBytes.length);
+        prefixed[0] = 0x01; // Separacao estrita de dominio para nos internos
+        prefixed.set(leftBytes, 1);
+        prefixed.set(rightBytes, 1 + leftBytes.length);
+        const hashBytes = await this.sha256Bytes(prefixed);
+        return this.bytesToHex(hashBytes);
+      }
+
+      largestPowerOfTwoLessThan(n) {
+        let k = 1;
+        while ((k << 1) < n) {
+          k <<= 1;
+        }
+        return k;
+      }
+
+      async mth(start, end) {
+        const span = end - start;
+        if (span === 0) {
+          const empty = await this.sha256Bytes(new Uint8Array(0));
+          return this.bytesToHex(empty);
+        }
+        if (span === 1) {
+          return this.leafHashes[start];
+        }
+        const k = this.largestPowerOfTwoLessThan(span);
+        const leftHash = await this.mth(start, start + k);
+        const rightHash = await this.mth(start + k, end);
+        return await this.computeNodeHash(leftHash, rightHash);
+      }
+
+      async buildAuditPath(index, start, end) {
+        const span = end - start;
+        if (span <= 1) return [];
+        const k = this.largestPowerOfTwoLessThan(span);
+        if (index < start + k) {
+          const path = await this.buildAuditPath(index, start, start + k);
+          const rightSibling = await this.mth(start + k, end);
+          path.push({ position: "RIGHT", hash: rightSibling });
+          return path;
+        } else {
+          const path = await this.buildAuditPath(index, start + k, end);
+          const leftSibling = await this.mth(start, start + k);
+          path.push({ position: "LEFT", hash: leftSibling });
+          return path;
+        }
+      }
+
+      async appendDispensation(claimPayload) {
+        const orderedKeys = Object.keys(claimPayload).sort();
+        const canonicalObj = {};
+        orderedKeys.forEach(k => { canonicalObj[k] = claimPayload[k]; });
+        const canonicalJson = JSON.stringify(canonicalObj);
+
+        const leafHash = await this.computeLeafHash(canonicalJson);
+        const leafIndex = this.leafHashes.length;
+        this.leaves.push(canonicalObj);
+        this.leafHashes.push(leafHash);
+
+        const merkleRoot = await this.mth(0, this.leafHashes.length);
+        const auditPath = await this.buildAuditPath(leafIndex, 0, this.leafHashes.length);
+
+        const receipt = {
+          receipt_version: "CRIBUM-RFC6962-WEBCRYPTO-v1",
+          dispensing_index: leafIndex,
+          tree_size: this.leafHashes.length,
+          merkle_root: merkleRoot,
+          leaf_hash: leafHash,
+          domain_prefixes: { leaf: "0x00", internal_node: "0x01" },
+          audit_path: auditPath,
+          dispensing_claim: canonicalObj
+        };
+
+        this.dispensedSerials.set(claimPayload.serial, {
+          leafIndex,
+          timestamp: claimPayload.timestamp_utc,
+          leafHash,
+          merkleRoot,
+          gtin: claimPayload.gtin
+        });
+
+        this.lastReceipt = receipt;
+        return receipt;
+      }
+
+      async verifyReceiptStateless(receipt) {
+        if (!receipt || !receipt.dispensing_claim) return false;
+        const orderedKeys = Object.keys(receipt.dispensing_claim).sort();
+        const canonicalObj = {};
+        orderedKeys.forEach(k => { canonicalObj[k] = receipt.dispensing_claim[k]; });
+        const canonicalJson = JSON.stringify(canonicalObj);
+
+        let currentHash = await this.computeLeafHash(canonicalJson);
+        if (currentHash !== receipt.leaf_hash) return false;
+
+        for (const step of receipt.audit_path) {
+          if (step.position === "RIGHT") {
+            currentHash = await this.computeNodeHash(currentHash, step.hash);
+          } else {
+            currentHash = await this.computeNodeHash(step.hash, currentHash);
+          }
+        }
+        return currentHash === receipt.merkle_root;
+      }
+    }
+
+    const merkleEngine = new RFC6962MerkleEngine();
+
+    /***************************************************************************
+     * 3. PARSER DE CODIGO GS1 DATAMATRIX (ANVISA RDC 319)
+     ***************************************************************************/
+    function parseGS1DataMatrix(rawString) {
+      const cleaned = rawString.trim().replace(/[()\s]/g, "");
+      // Extrai (01) GTIN-14 digitos, (17) Validade AAMMDD, (10) Lote ate '21', (21) Serial
+      const regex = /^01(\d{14})17(\d{6})10([A-Za-z0-9\-_]+?)21([A-Za-z0-9\-_]+)$/;
+      const match = cleaned.match(regex);
+
+      if (!match) {
+        return {
+          validFormat: false,
+          error: "Formato GS1 invalido. Esperado: 01(14 digitos) + 17(AAMMDD) + 10(Lote) + 21(Serial)."
+        };
+      }
+
+      const [, gtin, yymmdd, batch, serial] = match;
+      const yy = parseInt(yymmdd.slice(0, 2), 10);
+      const mm = parseInt(yymmdd.slice(2, 4), 10);
+      let dd = parseInt(yymmdd.slice(4, 6), 10);
+      const fullYear = 2000 + yy;
+
+      if (mm < 1 || mm > 12) {
+        return { validFormat: false, error: `Mes invalido na validade GS1 (17): ${mm}` };
+      }
+
+      // Norma GS1: DD=00 representa o ultimo dia daquele mes
+      if (dd === 0) {
+        dd = new Date(fullYear, mm, 0).getDate();
+      }
+
+      const formattedExpiry = `${String(dd).padStart(2, "0")}/${String(mm).padStart(2, "0")}/${fullYear}`;
+      const catalogItem = OFFICIAL_CATALOG[gtin] || null;
+
+      return {
+        validFormat: true,
+        gtin,
+        rawExpiry: yymmdd,
+        formattedExpiry,
+        batch,
+        serial,
+        catalogItem
+      };
+    }
+
+    /***************************************************************************
+     * 4. MOTOR CLINICO BI-CAMADA (LEVENSHTEIN LASA + BLOQUEIO POSOLOGICO)
+     ***************************************************************************/
+    function computeLevenshteinSimilarity(strA, strB) {
+      const a = strA.trim().toLowerCase();
+      const b = strB.trim().toLowerCase();
+      if (a === b) return 1.0;
+      const matrix = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+      for (let j = 1; j <= b.length; j++) matrix[0][j] = j;
+
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j] + 1,
+            matrix[i][j - 1] + 1,
+            matrix[i - 1][j - 1] + cost
+          );
+        }
+      }
+      const distance = matrix[a.length][b.length];
+      return 1.0 - distance / Math.max(a.length, b.length);
+    }
+
+    /***************************************************************************
+     * 5. ESTADO DA APLICACAO, HAPTICA & TECNOLOGIA ASSISTIVA (TTS / DEBOUNCE)
+     ***************************************************************************/
+    const appState = {
+      cvdMode: false,
+      oneHandMode: false,
       antiTremor: true,
       filteredTouches: 0,
-      lastActionTimestamp: 0,
-      currentCase: 'dosage_warn'
+      lastTouchTime: 0,
+      cameraStream: null,
+      prescribedDrug: "Sulfato de Morfina",
+      prescribedDose: "10mg",
+      currentVoiceMessage: "Atencao: Bloqueio posologico. Prescrito Sulfato de Morfina dez miligramas, escaneado trinta miligramas."
     };
 
-    function executeWithAntiTremor(actionFn) {
+    function withAntiTremorShield(callback) {
       const now = performance.now();
-      const debounceWindowMs = state.antiTremor ? 350 : 0;
-
-      if (state.antiTremor && (now - state.lastActionTimestamp < debounceWindowMs)) {
-        state.filteredTouches += 1;
-        document.getElementById('tremor-log').textContent =
-          `Anti-Tremor: Ativo (${state.filteredTouches} micro-toques involuntários amortecidos)`;
+      if (appState.antiTremor && (now - appState.lastTouchTime < 350)) {
+        appState.filteredTouches += 1;
+        document.getElementById("tremor-counter").innerHTML =
+          `Toques involuntarios amortecidos: <strong>${appState.filteredTouches}</strong>`;
         return;
       }
-      state.lastActionTimestamp = now;
-      actionFn();
+      appState.lastTouchTime = now;
+      callback();
     }
 
-    function triggerHapticSignature(pattern) {
-      if ('vibrate' in navigator) {
-        try {
-          navigator.vibrate(pattern);
-        } catch (e) {}
-      }
-      const track = document.getElementById('pulse-track');
-      track.innerHTML = '';
-      pattern.forEach((duration, idx) => {
-        if (idx % 2 === 0) {
-          const bar = document.createElement('div');
-          bar.className = 'haptic-visual-bar';
-          bar.style.width = `${Math.max(24, Math.min(180, duration / 2.2))}px`;
-          bar.title = `Pulso: ${duration}ms`;
-          track.appendChild(bar);
-        }
-      });
-    }
-
-    function speakAssistiveResult(text) {
-      const badgeTts = document.getElementById('badge-tts');
-      if (!('speechSynthesis' in window)) {
-        badgeTts.textContent = 'SIMULADO';
+    function speakTextPtBr(text) {
+      appState.currentVoiceMessage = text;
+      const pill = document.getElementById("pill-tts");
+      if (!("speechSynthesis" in window)) {
+        pill.textContent = "SIMULADO";
         return;
       }
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'pt-BR';
-      utterance.rate = 0.92;
-      utterance.pitch = 1.0;
-
-      utterance.onstart = () => {
-        badgeTts.textContent = 'FALANDO...';
-        document.getElementById('btn-tts-panel').setAttribute('aria-pressed', 'true');
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "pt-BR";
+      utter.rate = 0.92; // Cadencia calibrada para clareza auditiva em UBS
+      utter.onstart = () => {
+        pill.textContent = "FALANDO";
+        document.getElementById("btn-tts-speak").setAttribute("aria-pressed", "true");
       };
-      utterance.onend = () => {
-        badgeTts.textContent = 'CONCLUÍDO';
-        document.getElementById('btn-tts-panel').setAttribute('aria-pressed', 'false');
+      utter.onend = () => {
+        pill.textContent = "PRONTO";
+        document.getElementById("btn-tts-speak").setAttribute("aria-pressed", "false");
       };
-      window.speechSynthesis.speak(utterance);
+      window.speechSynthesis.speak(utter);
     }
 
-    function renderClinicalCase(caseKey, autoFeedback = true) {
-      state.currentCase = caseKey;
-      const data = CLINICAL_CASES[caseKey];
-      const card = document.getElementById('result-card');
-      card.className = `result-card ${data.statusClass}`;
-
-      document.getElementById('status-icon').innerHTML = data.svgPath;
-      document.getElementById('status-code').textContent = data.codeLabel;
-      document.getElementById('status-title').textContent = data.title;
-      document.getElementById('drug-display').innerHTML = data.drugHtml;
-      document.getElementById('clinical-summary').textContent = data.summary;
-      document.getElementById('haptic-label').textContent = data.hapticDesc;
-      document.getElementById('voice-transcript').textContent = `"${data.voiceText}"`;
-
-      triggerHapticSignature(data.hapticPattern);
-      if (autoFeedback) {
-        speakAssistiveResult(data.voiceText);
+    function vibrateDevice(pattern) {
+      if ("vibrate" in navigator) {
+        try { navigator.vibrate(pattern); } catch (_) {}
       }
     }
 
-    document.getElementById('toggle-cvd').addEventListener('click', () => {
-      executeWithAntiTremor(() => {
-        state.cvdHighContrast = !state.cvdHighContrast;
-        document.body.classList.toggle('cvd-high-contrast', state.cvdHighContrast);
-        document.getElementById('toggle-cvd').setAttribute('aria-pressed', String(state.cvdHighContrast));
-        document.getElementById('badge-cvd').textContent = state.cvdHighContrast ? 'AAA ATIVO' : 'OFF';
+    /***************************************************************************
+     * 6. AVALIADOR DE PIPELINE COMPLETO (GS1 -> FRAUDE -> LASA -> POSOLOGIA -> MERKLE)
+     ***************************************************************************/
+    async function evaluateGS1OnEdge(rawGS1String) {
+      const parsed = parseGS1DataMatrix(rawGS1String);
+      const card = document.getElementById("diagnostic-card");
+      const iconSvg = document.getElementById("status-geo-icon");
+      const codeBadge = document.getElementById("status-code-badge");
+      const headline = document.getElementById("status-headline");
+      const tallmanEl = document.getElementById("tallman-render");
+      const explanationEl = document.getElementById("clinical-explanation");
+      const levScoreEl = document.getElementById("levenshtein-score");
+
+      if (!parsed.validFormat || !parsed.catalogItem) {
+        card.className = "diagnostic-card status-danger";
+        iconSvg.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2" />';
+        codeBadge.textContent = "[■ INVALID_OR_UNKNOWN_GTIN_BLOCKED]";
+        headline.textContent = "Codigo GS1 Invalido ou Nao Homologado na ANVISA";
+        tallmanEl.textContent = parsed.error || `GTIN ${parsed.gtin} ausente no catalogo CEAF`;
+        explanationEl.textContent = "A caixa escaneada nao pertence ao catalogo oficial ANVISA/CEAF ou possui estrutura GS1 corrompida.";
+        vibrateDevice([90, 70, 90, 70, 90]);
+        speakTextPtBr("Bloqueio imediato. Codigo DataMatrix invalido ou ausente no catalogo da Anvisa.");
+        return;
+      }
+
+      // Atualiza celulas do decodificador GS1 na interface
+      document.getElementById("gs1-gtin").textContent = parsed.gtin;
+      document.getElementById("gs1-expiry").textContent = parsed.formattedExpiry;
+      document.getElementById("gs1-batch").textContent = parsed.batch;
+      document.getElementById("gs1-serial").textContent = parsed.serial;
+
+      const med = parsed.catalogItem;
+      const similarity = computeLevenshteinSimilarity(appState.prescribedDrug, med.activeIngredient);
+      levScoreEl.textContent = `Similaridade Ortografica: ${(similarity * 100).toFixed(0)}%`;
+
+      // VERIFICACAO 1: TENTATIVA DE GASTO DUPLO (DOUBLE_DISPENSATION_FRAUD)
+      if (merkleEngine.dispensedSerials.has(parsed.serial)) {
+        const prevEvent = merkleEngine.dispensedSerials.get(parsed.serial);
+        card.className = "diagnostic-card status-danger";
+        iconSvg.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2" />';
+        codeBadge.textContent = "[■ DOUBLE_DISPENSATION_FRAUD]";
+        headline.textContent = "Interdicao Critica: Serial Ja Dispensado!";
+        tallmanEl.innerHTML = `SERIAL BLOQUEADO: <span class="tallman-caps">${parsed.serial}</span>`;
+        explanationEl.innerHTML =
+          `Tentativa de <strong>Gasto Duplo</strong> detectada! Esta mesma unidade fisica ja foi dispensada na Folha <strong>#${prevEvent.leafIndex}</strong> (${prevEvent.timestamp}) sob o hash <code>${prevEvent.leafHash.slice(0, 16)}...</code>.`;
+        vibrateDevice([90, 70, 90, 70, 90]);
+        speakTextPtBr(`Alerta maximo de fraude. Tentativa de gasto duplo. O numero de serie ${parsed.serial} ja consta na Arvore de Merkle.`);
+        return;
+      }
+
+      // VERIFICACAO 2: CAMADA 1: CONFUSAO FONETICA / ORTOGRAFICA LASA
+      if (med.activeIngredient.toLowerCase() !== appState.prescribedDrug.toLowerCase()) {
+        const lasaPair = LASA_TALLMAN_PAIRS.find(
+          p =>
+            (p.a === appState.prescribedDrug.toLowerCase() && p.b === med.activeIngredient.toLowerCase()) ||
+            (p.b === appState.prescribedDrug.toLowerCase() && p.a === med.activeIngredient.toLowerCase())
+        );
+
+        card.className = "diagnostic-card status-warn";
+        iconSvg.innerHTML = '<path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>';
+        codeBadge.textContent = "[▲ LASA_PHONETIC_CONFUSION_BLOCKED]";
+        headline.textContent = "Alerta LASA Camada 1: Principio Ativo Divergente!";
+        tallmanEl.innerHTML = lasaPair
+          ? lasaPair.renderComparison
+          : `${appState.prescribedDrug.toUpperCase()} vs. <span class="tallman-caps">${med.activeIngredient.toUpperCase()}</span>`;
+        explanationEl.innerHTML =
+          `A receita prescreve <strong>${appState.prescribedDrug}</strong>, mas a caixa escaneada contem <strong>${med.activeIngredient}</strong> (Similaridade Levenshtein: ${(similarity * 100).toFixed(0)}%). ${lasaPair ? lasaPair.risk : "Troca bloqueada."}`;
+        vibrateDevice([180, 140, 180]);
+        speakTextPtBr(`Atencao: Alerta LASA de confusao de nomes. Prescrito ${appState.prescribedDrug}, mas a caixa lida e ${med.activeIngredient}. Dispensacao bloqueada.`);
+        return;
+      }
+
+      // VERIFICACAO 3: CAMADA 2: DIVERGENCIA POSOLOGICA / CONCENTRACAO
+      if (med.concentration.toLowerCase() !== appState.prescribedDose.toLowerCase()) {
+        card.className = "diagnostic-card status-warn";
+        iconSvg.innerHTML = '<path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>';
+        codeBadge.textContent = "[▲ DOSAGE_MISMATCH_BLOCKED]";
+        headline.textContent = `Bloqueio Posologico (${appState.prescribedDose} vs ${med.concentration})`;
+        tallmanEl.innerHTML = `${med.tallManHtml} (Prescrito: ${appState.prescribedDose})`;
+        explanationEl.innerHTML =
+          `Principio ativo correto (${med.activeIngredient}), porem a concentracao fisica escaneada (<strong>${med.concentration}</strong>) diverge da prescricao (<strong>${appState.prescribedDose}</strong>). Bloqueado por risco de superdosagem e depressao respiratoria fatal.`;
+        vibrateDevice([180, 140, 180]);
+        speakTextPtBr(`Atencao: Bloqueio posologico. Receita pede ${med.activeIngredient} ${appState.prescribedDose}, mas a caixa escaneada e de ${med.concentration}.`);
+        return;
+      }
+
+      // VERIFICACAO 4: DISPENSACAO HOMOLOGADA -> INCLUSAO NA ARVORE DE MERKLE (RFC 6962)
+      card.className = "diagnostic-card status-safe";
+      iconSvg.innerHTML = '<circle cx="12" cy="12" r="9" />';
+      codeBadge.textContent = "[● DISPENSATION_HOMOLOGATED_RFC6962]";
+      headline.textContent = "Dispensacao Homologada & Assinada na Arvore de Merkle";
+      tallmanEl.innerHTML = med.tallManHtml;
+      explanationEl.innerHTML =
+        `Conformidade clinica e documental verificada (${med.therapeuticClass}). Folha criptografica inserida com prefixo <code>0x00</code> e Merkle Root recalculada em tempo real.`;
+
+      const claimPayload = {
+        anvisa_registry: med.anvisaRegistry,
+        batch: parsed.batch,
+        concentration: med.concentration,
+        drug: med.activeIngredient,
+        expiry_br: parsed.formattedExpiry,
+        gtin: parsed.gtin,
+        serial: parsed.serial,
+        timestamp_utc: new Date().toISOString()
+      };
+
+      const receipt = await merkleEngine.appendDispensation(claimPayload);
+      updateMerkleUI(receipt);
+      vibrateDevice([450]);
+      speakTextPtBr(`Dispensacao homologada. ${med.activeIngredient} ${med.concentration}, lote ${parsed.batch}. Assinado na Arvore de Merkle na folha numero ${receipt.dispensing_index}.`);
+    }
+
+    function updateMerkleUI(receipt) {
+      document.getElementById("merkle-count-badge").textContent = `${receipt.tree_size} Folha(s)`;
+      document.getElementById("merkle-root-hex").textContent = receipt.merkle_root;
+      document.getElementById("last-leaf-hex").textContent = receipt.leaf_hash;
+      document.getElementById("audit-path-len").textContent = `Audit Path: ${receipt.audit_path.length} no(s) O(log N)`;
+      document.getElementById("merkle-receipt-json").textContent = JSON.stringify(receipt, null, 2);
+
+      const ledgerList = document.getElementById("serial-ledger-list");
+      ledgerList.innerHTML = "";
+      merkleEngine.dispensedSerials.forEach((info, serialKey) => {
+        const li = document.createElement("li");
+        li.className = "ledger-item";
+        li.textContent = `Folha #${info.leafIndex} | Serial: ${serialKey} | GTIN: ${info.gtin} | Hash: ${info.leafHash.slice(0, 14)}...`;
+        ledgerList.appendChild(li);
+      });
+    }
+
+    function setPrescriptionContext(drugName, doseStr) {
+      appState.prescribedDrug = drugName;
+      appState.prescribedDose = doseStr;
+      document.getElementById("active-prescription-badge").textContent = `Rx: ${drugName.split(" ").pop().toUpperCase()} ${doseStr}`;
+      document.getElementById("active-rx-display").textContent = `Prescricao Ativa: ${drugName} ${doseStr}`;
+    }
+
+    /***************************************************************************
+     * 7. EVENT LISTENERS DOS 4 BOTOES E2E, PARSER GS1, CAMERA E ASSISTIVOS
+     ***************************************************************************/
+    // Caso 1: Erro Posologico (Morfina 10mg prescrita vs 30mg escaneada)
+    document.getElementById("btn-case-1").addEventListener("click", () => {
+      withAntiTremorShield(() => {
+        setPrescriptionContext("Sulfato de Morfina", "10mg");
+        const gs1 = "01078966764000371728113010LOTM30A21SN9001002001";
+        document.getElementById("gs1-raw-input").value = gs1;
+        evaluateGS1OnEdge(gs1);
       });
     });
 
-    document.getElementById('toggle-onehand').addEventListener('click', () => {
-      executeWithAntiTremor(() => {
-        state.oneHanded = !state.oneHanded;
-        document.body.classList.toggle('one-handed-mode', state.oneHanded);
-        document.getElementById('toggle-onehand').setAttribute('aria-pressed', String(state.oneHanded));
-        document.getElementById('badge-onehand').textContent = state.oneHanded ? '60dp ATIVO' : 'OFF';
+    // Caso 2: Confusao Fonetica LASA (Clorpromazina 25mg prescrita vs Clomipramina 25mg escaneada)
+    document.getElementById("btn-case-2").addEventListener("click", () => {
+      withAntiTremorShield(() => {
+        setPrescriptionContext("Clorpromazina", "25mg");
+        const gs1 = "01078913174011221727083110LOTCLM2521SN3004005002";
+        document.getElementById("gs1-raw-input").value = gs1;
+        evaluateGS1OnEdge(gs1);
       });
     });
 
-    document.getElementById('toggle-tremor').addEventListener('click', () => {
-      state.antiTremor = !state.antiTremor;
-      document.getElementById('toggle-tremor').setAttribute('aria-pressed', String(state.antiTremor));
-      document.getElementById('badge-tremor').textContent = state.antiTremor ? 'ATIVO' : 'OFF';
-      document.getElementById('tremor-telemetry').textContent = state.antiTremor ? 'Filtro: 350ms / 24px' : 'Filtro: Desativado';
-    });
-
-    document.getElementById('btn-tts-panel').addEventListener('click', () => {
-      executeWithAntiTremor(() => {
-        speakAssistiveResult(CLINICAL_CASES[state.currentCase].voiceText);
+    // Caso 3: Dispensacao Homologada (Adalimumabe 40mg com serial novo -> insere folha na Merkle Tree)
+    let adalimumabCounter = 1001;
+    document.getElementById("btn-case-3").addEventListener("click", () => {
+      withAntiTremorShield(() => {
+        setPrescriptionContext("Adalimumabe", "40mg");
+        const uniqueSerial = `SNHUMIRA${adalimumabCounter++}`;
+        const gs1 = `01078962265024191728103110LOTHUM40A21${uniqueSerial}`;
+        document.getElementById("gs1-raw-input").value = gs1;
+        evaluateGS1OnEdge(gs1);
       });
     });
 
-    document.getElementById('btn-speak-thumb').addEventListener('click', () => {
-      executeWithAntiTremor(() => {
-        speakAssistiveResult(CLINICAL_CASES[state.currentCase].voiceText);
-      });
-    });
-
-    document.getElementById('btn-haptic-thumb').addEventListener('click', () => {
-      executeWithAntiTremor(() => {
-        triggerHapticSignature(CLINICAL_CASES[state.currentCase].hapticPattern);
-      });
-    });
-
-    document.getElementById('case-select').addEventListener('change', (e) => {
-      renderClinicalCase(e.target.value, true);
-    });
-
-    document.getElementById('btn-handsfree').addEventListener('click', () => {
-      const bar = document.getElementById('stability-bar');
-      const statusText = document.getElementById('scanner-status-text');
-      const badge = document.getElementById('badge-handsfree');
-      bar.style.width = '0%';
-      badge.textContent = 'FOCANDO...';
-      statusText.textContent = 'Estabilizando quadro óptico (Laplaciano > limiar)...';
-
-      let progress = 0;
-      const timer = setInterval(() => {
-        progress += 25;
-        bar.style.width = `${progress}%`;
-        if (progress >= 100) {
-          clearInterval(timer);
-          badge.textContent = 'CAPTURADO';
-          statusText.textContent = 'Disparo Hands-Free concluído sem toque na tela!';
-          const keys = Object.keys(CLINICAL_CASES);
-          const nextKey = keys[(keys.indexOf(state.currentCase) + 1) % keys.length];
-          document.getElementById('case-select').value = nextKey;
-          renderClinicalCase(nextKey, true);
+    // Caso 4: Tentativa de Gasto Duplo (Reutiliza o ultimo serial ja homologado ou cria + repete)
+    document.getElementById("btn-case-4").addEventListener("click", () => {
+      withAntiTremorShield(async () => {
+        setPrescriptionContext("Adalimumabe", "40mg");
+        let targetSerial = "SNHUMIRA1001";
+        if (merkleEngine.dispensedSerials.size === 0) {
+          // Garante que o serial exista no ledger antes de simular o segundo escaneamento fraudulento
+          const firstGs1 = `01078962265024191728103110LOTHUM40A21${targetSerial}`;
+          await evaluateGS1OnEdge(firstGs1);
+        } else {
+          const keys = Array.from(merkleEngine.dispensedSerials.keys());
+          targetSerial = keys[keys.length - 1];
         }
-      }, 180);
+        const replayGs1 = `01078962265024191728103110LOTHUM40A21${targetSerial}`;
+        document.getElementById("gs1-raw-input").value = replayGs1;
+        await evaluateGS1OnEdge(replayGs1);
+      });
     });
 
-    renderClinicalCase('dosage_warn', false);
+    // Botao Processar String GS1 Manualmente na Borda
+    document.getElementById("btn-process-gs1").addEventListener("click", () => {
+      withAntiTremorShield(() => {
+        const raw = document.getElementById("gs1-raw-input").value;
+        evaluateGS1OnEdge(raw);
+      });
+    });
+
+    // Verificador Matematico Puro do Recibo Merkle (Stateless)
+    document.getElementById("btn-verify-receipt").addEventListener("click", () => {
+      withAntiTremorShield(async () => {
+        const btn = document.getElementById("btn-verify-receipt");
+        if (!merkleEngine.lastReceipt) {
+          btn.textContent = "⚠️ Homologue o Caso 3 primeiro";
+          return;
+        }
+        const t0 = performance.now();
+        const isValid = await merkleEngine.verifyReceiptStateless(merkleEngine.lastReceipt);
+        const dt = (performance.now() - t0).toFixed(2);
+        btn.textContent = isValid
+          ? `✅ Prova O(log N) Integra (${dt} ms)`
+          : "❌ Falha Criptografica!";
+      });
+    });
+
+    // Controles Assistivos WCAG 2.2 AAA
+    document.getElementById("btn-toggle-cvd").addEventListener("click", () => {
+      withAntiTremorShield(() => {
+        appState.cvdMode = !appState.cvdMode;
+        document.body.classList.toggle("cvd-high-contrast", appState.cvdMode);
+        document.getElementById("btn-toggle-cvd").setAttribute("aria-pressed", String(appState.cvdMode));
+        document.getElementById("pill-cvd").textContent = appState.cvdMode ? "AAA ATIVO" : "OFF";
+      });
+    });
+
+    document.getElementById("btn-toggle-onehand").addEventListener("click", () => {
+      withAntiTremorShield(() => {
+        appState.oneHandMode = !appState.oneHandMode;
+        document.body.classList.toggle("one-handed-mode", appState.oneHandMode);
+        document.getElementById("btn-toggle-onehand").setAttribute("aria-pressed", String(appState.oneHandMode));
+        document.getElementById("pill-onehand").textContent = appState.oneHandMode ? "60dp ATIVO" : "OFF";
+      });
+    });
+
+    document.getElementById("btn-toggle-tremor").addEventListener("click", () => {
+      appState.antiTremor = !appState.antiTremor;
+      document.getElementById("btn-toggle-tremor").setAttribute("aria-pressed", String(appState.antiTremor));
+      document.getElementById("pill-tremor").textContent = appState.antiTremor ? "ATIVO" : "OFF";
+    });
+
+    document.getElementById("btn-tts-speak").addEventListener("click", () => {
+      withAntiTremorShield(() => {
+        speakTextPtBr(appState.currentVoiceMessage);
+      });
+    });
+
+    // Camera Traseira Real via getUserMedia
+    document.getElementById("btn-camera-toggle").addEventListener("click", () => {
+      withAntiTremorShield(async () => {
+        const videoEl = document.getElementById("camera-video");
+        const pillCam = document.getElementById("pill-camera");
+        const btnCam = document.getElementById("btn-camera-toggle");
+        const stateLabel = document.getElementById("camera-state-label");
+
+        if (appState.cameraStream) {
+          appState.cameraStream.getTracks().forEach(t => t.stop());
+          appState.cameraStream = null;
+          videoEl.style.display = "none";
+          btnCam.setAttribute("aria-pressed", "false");
+          pillCam.textContent = "OFF";
+          stateLabel.textContent = "VISOR: SIMULACAO OPTICA";
+          return;
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          stateLabel.textContent = "CAMERA INDISPONIVEL NESTE NAVEGADOR";
+          return;
+        }
+
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" },
+            audio: false
+          });
+          appState.cameraStream = stream;
+          videoEl.srcObject = stream;
+          videoEl.style.display = "block";
+          btnCam.setAttribute("aria-pressed", "true");
+          pillCam.textContent = "AO VIVO";
+          stateLabel.textContent = "CAMERA TRASEIRA ATIVA (LASER SCAN)";
+        } catch (err) {
+          stateLabel.textContent = "PERMISSAO DE CAMERA NEGADA / SEM SENSOR";
+          pillCam.textContent = "ERRO";
+        }
+      });
+    });
   </script>
 </body>
 </html>
