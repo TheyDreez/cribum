@@ -6,110 +6,773 @@
   <title>CRIBUM Mobile: Simulador Forense, GS1 & Tecnologia Assistiva (Campus Mobile 15)</title>
   <style>
     :root {
-      /* Paleta Clinica Padrao (Dark Mode) */
-      --bg-primary: #070b14;
-      --bg-panel: #0f172a;
-      --bg-card: #1e293b;
-      --bg-input: #090e17;
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --border-color: #334155;
+      /* Paleta Moderna MedTech (Dark Mode Refinado) */
+      --bg-base: #080C15;
+      --bg-surface: #0E1526;
+      --bg-card: #151F36;
+      --bg-card-hover: #1C2947;
+      --bg-input: #0A0F1D;
+      
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --text-subtle: #64748B;
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #38BDF8;
 
-      /* Cores Semanticas Padrao */
-      --status-safe: #10b981;
-      --status-warn: #f59e0b;
-      --status-danger: #ef4444;
-      --accent-primary: #6366f1;
-      --accent-hover: #818cf8;
+      /* Cores Semânticas Clínicas com Alta Harmonia */
+      --color-safe: #10B981;
+      --color-safe-bg: rgba(16, 185, 129, 0.12);
+      --color-safe-border: rgba(16, 185, 129, 0.35);
+
+      --color-warn: #F59E0B;
+      --color-warn-bg: rgba(245, 158, 11, 0.12);
+      --color-warn-border: rgba(245, 158, 11, 0.35);
+
+      --color-danger: #EF4444;
+      --color-danger-bg: rgba(239, 68, 68, 0.12);
+      --color-danger-border: rgba(239, 68, 68, 0.35);
+
+      --color-brand: #0EA5E9;
+      --color-brand-bg: rgba(14, 165, 233, 0.15);
 
       /* Ergonomia e Alvos de Toque */
-      --touch-min-height: 46px;
-      --touch-padding: 10px 14px;
-      --font-scale: 1;
-      --focus-ring: 3px solid #38bdf8;
+      --touch-target: 50px;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --radius-pill: 9999px;
     }
 
-    /* Paleta Universal Okabe-Ito CVD Safe + Alto Contraste WCAG 2.2 AAA (> 7:1) */
+    /* Paleta Okabe-Ito CVD Safe (Alto Contraste WCAG 2.2 AAA > 7:1) */
     body.cvd-high-contrast {
-      --bg-primary: #000000;
-      --bg-panel: #080808;
-      --bg-card: #121212;
+      --bg-base: #000000;
+      --bg-surface: #0A0A0A;
+      --bg-card: #141414;
+      --bg-card-hover: #1F1F1F;
       --bg-input: #000000;
-      --text-primary: #ffffff;
-      --text-secondary: #e2e8f0;
-      --border-color: #ffffff;
 
-      /* Okabe-Ito Cientifica */
-      --status-safe: #0072B2;    /* Azul Okabe-Ito (Homologado) */
-      --status-warn: #E69F00;    /* Ambar/Laranja Okabe-Ito (Alerta LASA/Posologico) */
-      --status-danger: #D55E00;  /* Vermelhao Okabe-Ito (Fraude/Gasto Duplo) */
-      --accent-primary: #56B4E9; /* Azul Celeste Okabe-Ito */
-      --accent-hover: #F0E442;
-      --focus-ring: 4px solid #F0E442;
+      --text-main: #FFFFFF;
+      --text-muted: #E2E8F0;
+      --text-subtle: #CBD5E1;
+
+      --border-subtle: rgba(255, 255, 255, 0.3);
+      --border-focus: #F0E442;
+
+      --color-safe: #0072B2;
+      --color-safe-bg: rgba(0, 114, 178, 0.25);
+      --color-safe-border: #56B4E9;
+
+      --color-warn: #E69F00;
+      --color-warn-bg: rgba(230, 159, 0, 0.25);
+      --color-warn-border: #F0E442;
+
+      --color-danger: #D55E00;
+      --color-danger-bg: rgba(213, 94, 0, 0.25);
+      --color-danger-border: #FFFFFF;
+
+      --color-brand: #56B4E9;
+      --color-brand-bg: rgba(86, 180, 233, 0.25);
     }
 
-    /* Modo Uma Mao So (Lei de Fitts >= 60dp na Zona do Polegar) */
+    /* Modo Uma Mão Só (Lei de Fitts >= 60dp) */
     body.one-handed-mode {
-      --touch-min-height: 60px;
-      --touch-padding: 16px 20px;
-      --font-scale: 1.08;
+      --touch-target: 62px;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      font-size: calc(15px * var(--font-scale));
-      line-height: 1.5;
-      padding: 16px;
-      transition: background-color 0.2s ease, color 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", Helvetica, Arial, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.45;
+      padding: 20px 16px;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
     .app-grid {
-      max-width: 1440px;
+      max-width: 1400px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 360px 480px 1fr;
-      gap: 20px;
+      grid-template-columns: 360px 440px 1fr;
+      gap: 24px;
       align-items: start;
     }
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1200px) {
       .app-grid {
-        grid-template-columns: 350px 1fr;
+        grid-template-columns: 340px 1fr;
       }
       .merkle-inspector-col {
         grid-column: 1 / -1;
       }
     }
 
-    @media (max-width: 860px) {
+    @media (max-width: 880px) {
+      body {
+        padding: 8px 8px 32px 8px;
+      }
       .app-grid {
-        grid-template-columns: 1fr;
         display: flex;
         flex-direction: column;
+        gap: 16px;
       }
       .phone-simulator {
-        order: 1; /* Celular em primeiro lugar na tela do smartphone */
-        width: 100%;
+        order: 1; /* O celular fica no topo absoluto no mobile */
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto;
       }
       .panel:first-of-type {
         order: 2; /* Controles assistivos logo abaixo */
       }
       .merkle-inspector-col {
-        order: 3; /* Inspetor criptografico no final */
+        order: 3; /* Inspetor criptográfico no final */
       }
     }
 
-    /* Modo App Nativo Fullscreen (via ?view=app) */
+    /* Painéis Laterais Modernos */
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .panel-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--color-brand-bg);
+      color: var(--color-brand);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      letter-spacing: 0.02em;
+    }
+
+    .control-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .control-card:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      background: var(--bg-card-hover);
+    }
+
+    .control-card h3 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .control-card p {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .btn-toggle {
+      width: 100%;
+      min-height: var(--touch-target);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 0.84rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-toggle:hover {
+      border-color: var(--color-brand);
+    }
+
+    .btn-toggle[aria-pressed="true"] {
+      background: var(--color-brand-bg);
+      border-color: var(--color-brand);
+      color: #FFFFFF;
+    }
+
+    .state-pill {
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .btn-toggle[aria-pressed="true"] .state-pill {
+      background: var(--color-brand);
+      color: #000000;
+    }
+
+    /* FRAME DO SMARTPHONE REFINADO (Estilo iPhone / Pixel Moderno) */
+    .phone-simulator {
+      background: var(--bg-surface);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 36px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
+      max-width: 440px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Top Bar Estilo Mobile OS */
+    .phone-top-bar {
+      background: rgba(14, 21, 38, 0.85);
+      backdrop-filter: blur(16px);
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .phone-brand-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .phone-brand-subtitle {
+      font-size: 0.68rem;
+      color: var(--text-subtle);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .rx-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(14, 165, 233, 0.15);
+      color: #38BDF8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      white-space: nowrap;
+    }
+
+    .phone-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* VISOR DA CÂMERA (Estilo Google Lens / Apple Camera) */
+    .camera-viewport {
+      position: relative;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      height: 180px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 12px;
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+
+    #camera-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+      display: none;
+    }
+
+    /* Cantoneiras Elegantes de Foco Óptico (Reticle) */
+    .reticle-frame {
+      position: absolute;
+      inset: 18px 36px;
+      pointer-events: none;
+    }
+
+    .reticle-corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: #38BDF8;
+      border-style: solid;
+      pointer-events: none;
+    }
+
+    .reticle-corner.top-left { top: 0; left: 0; border-width: 3px 0 0 3px; border-top-left-radius: 8px; }
+    .reticle-corner.top-right { top: 0; right: 0; border-width: 3px 3px 0 0; border-top-right-radius: 8px; }
+    .reticle-corner.bottom-left { bottom: 0; left: 0; border-width: 0 0 3px 3px; border-bottom-left-radius: 8px; }
+    .reticle-corner.bottom-right { bottom: 0; right: 0; border-width: 0 3px 3px 0; border-bottom-right-radius: 8px; }
+
+    /* Laser Suave */
+    .laser-line {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #38BDF8, #818CF8, #38BDF8, transparent);
+      box-shadow: 0 0 12px #38BDF8;
+      animation: modernScan 2.4s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    @keyframes modernScan {
+      0% { top: 18%; opacity: 0.3; }
+      50% { top: 82%; opacity: 0.95; }
+      100% { top: 18%; opacity: 0.3; }
+    }
+
+    .camera-pill-top,
+    .camera-pill-bottom {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-weight: 500;
+    }
+
+    /* CARTÃO DE DIAGNÓSTICO CLÍNICO MODERNO */
+    .diagnostic-card {
+      border-radius: 20px;
+      padding: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .diagnostic-card.status-safe {
+      background: var(--color-safe-bg);
+      border-color: var(--color-safe-border);
+    }
+    .diagnostic-card.status-warn {
+      background: var(--color-warn-bg);
+      border-color: var(--color-warn-border);
+    }
+    .diagnostic-card.status-danger {
+      background: var(--color-danger-bg);
+      border-color: var(--color-danger-border);
+    }
+
+    /* Banner de Status Fluido (Sem quebrar texto) */
+    .status-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .status-icon-wrapper {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    .status-safe .status-icon-wrapper { color: var(--color-safe); }
+    .status-warn .status-icon-wrapper { color: var(--color-warn); }
+    .status-danger .status-icon-wrapper { color: var(--color-danger); }
+
+    .status-header-content {
+      flex: 1;
+      min-width: 0; /* Previne overflow de flex items */
+    }
+
+    .status-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+
+    .status-safe .status-tag { color: var(--color-safe); }
+    .status-warn .status-tag { color: var(--color-warn); }
+    .status-danger .status-tag { color: var(--color-danger); }
+
+    .status-headline {
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text-main);
+      word-break: break-word;
+    }
+
+    /* Box de Tall Man Lettering Elegante */
+    .tallman-wrapper {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .tallman-title {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .tallman-display {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 0.01em;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .tallman-caps {
+      color: #FBBF24;
+      background: rgba(245, 158, 11, 0.18);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .status-safe .tallman-caps {
+      color: #34D399;
+      background: rgba(16, 185, 129, 0.18);
+    }
+
+    .clinical-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .clinical-text strong {
+      color: var(--text-main);
+    }
+
+    /* Grid GS1 DataMatrix Limpo e Fluido */
+    .gs1-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    @media (max-width: 360px) {
+      .gs1-summary {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .gs1-item {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .gs1-label {
+      font-size: 0.64rem;
+      color: var(--text-subtle);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 2px;
+    }
+
+    .gs1-val {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 0.78rem;
+      color: var(--text-main);
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ZONA DE AÇÃO RÁPIDA / BOTÕES CLÍNICOS E2E */
+    .actions-footer {
+      background: rgba(14, 21, 38, 0.95);
+      border-top: 1px solid var(--border-subtle);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .cases-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-case {
+      min-height: var(--touch-target);
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-case:hover {
+      border-color: var(--color-brand);
+      background: var(--bg-card-hover);
+    }
+
+    .btn-case small {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .gs1-field {
+      flex: 1;
+      min-height: 44px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-main);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.76rem;
+    }
+
+    .gs1-field:focus {
+      outline: 2px solid var(--color-brand);
+      border-color: transparent;
+    }
+
+    .btn-submit-scan {
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: var(--color-brand);
+      color: #000000;
+      font-weight: 800;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s ease;
+    }
+
+    .btn-submit-scan:hover {
+      opacity: 0.9;
+    }
+
+    /* INSPETOR CRIPTOGRÁFICO MERKLE */
+    .crypto-box {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+
+    .crypto-header-line {
+      font-size: 0.68rem;
+      color: var(--text-subtle);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .crypto-hash-text {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.74rem;
+      color: #38BDF8;
+      word-break: break-all;
+    }
+
+    .receipt-json {
+      background: #040810;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: #6EE7B7;
+      max-height: 240px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    .ledger-list {
+      list-style: none;
+      max-height: 160px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .ledger-item {
+      background: var(--bg-card);
+      border-left: 3px solid var(--color-safe);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    /* MODAL DA CARTELA DE ETIQUETAS */
+    .cartela-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .cartela-modal-overlay.active {
+      display: flex;
+    }
+
+    .cartela-modal {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      max-width: 780px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .cartela-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .cartela-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cartela-dm-preview {
+      background: #FFFFFF;
+      color: #000000;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    /* Modo App Nativo Fullscreen (?view=app) */
     body.app-only-mode {
       padding: 0;
+      background: var(--bg-surface);
     }
     body.app-only-mode .panel {
       display: none !important;
@@ -123,509 +786,7 @@
       box-shadow: none;
       border-radius: 0;
       min-height: 100vh;
-      width: 100%;
-    }
-
-    .panel {
-      background: var(--bg-panel);
-      border: 2px solid var(--border-color);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .panel-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .badge {
-      font-size: 0.72rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 6px;
-      text-transform: uppercase;
-      background: var(--accent-primary);
-      color: #000000;
-    }
-
-    .control-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
-
-    .control-card h3 {
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .control-card p {
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-
-    button, input, select, textarea {
-      font-family: inherit;
-    }
-
-    button:focus-visible,
-    input:focus-visible,
-    select:focus-visible,
-    textarea:focus-visible {
-      outline: var(--focus-ring);
-      outline-offset: 2px;
-    }
-
-    .btn-toggle {
-      width: 100%;
-      min-height: var(--touch-min-height);
-      padding: var(--touch-padding);
-      border-radius: 10px;
-      border: 2px solid var(--border-color);
-      background: var(--bg-input);
-      color: var(--text-primary);
-      font-weight: 700;
-      font-size: 0.88rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      transition: transform 0.1s ease, background-color 0.15s ease;
-    }
-
-    .btn-toggle:hover {
-      border-color: var(--accent-primary);
-    }
-
-    .btn-toggle[aria-pressed="true"] {
-      background: var(--accent-primary);
-      color: #000000;
-      border-color: #ffffff;
-    }
-
-    .state-pill {
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    .btn-toggle[aria-pressed="true"] .state-pill {
-      background: #000000;
-      color: #ffffff;
-    }
-
-    /* Mobile Device Frame */
-    .phone-simulator {
-      background: var(--bg-panel);
-      border: 3px solid var(--border-color);
-      border-radius: 30px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 820px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
-    }
-
-    body.one-handed-mode .phone-top-bar {
-      padding-top: 26px;
-    }
-
-    .phone-top-bar {
-      background: var(--bg-card);
-      padding: 14px 18px;
-      border-bottom: 2px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .phone-body {
-      padding: 16px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    /* Visor Optico + Camera Real + Mira Laser */
-    .camera-viewport {
-      position: relative;
-      background: #000000;
-      border: 2px solid var(--border-color);
-      border-radius: 14px;
-      height: 190px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 10px 12px;
-    }
-
-    #camera-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.85;
-      display: none;
-    }
-
-    .reticle-box {
-      position: absolute;
-      inset: 22px 45px;
-      border: 2px dashed rgba(56, 189, 248, 0.65);
-      border-radius: 10px;
-      pointer-events: none;
-    }
-
-    .laser-line {
-      position: absolute;
-      left: 8%;
-      right: 8%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #ef4444, #38bdf8, #ef4444, transparent);
-      box-shadow: 0 0 10px #ef4444;
-      animation: laserScan 2.2s infinite ease-in-out;
-      pointer-events: none;
-    }
-
-    @keyframes laserScan {
-      0% { top: 18%; opacity: 0.5; }
-      50% { top: 82%; opacity: 1; }
-      100% { top: 18%; opacity: 0.5; }
-    }
-
-    .camera-overlay-top,
-    .camera-overlay-bottom {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      background: rgba(0, 0, 0, 0.68);
-      padding: 4px 8px;
-      border-radius: 6px;
-      color: #f8fafc;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Card de Diagnostico Clinico-Forense */
-    .diagnostic-card {
-      border-radius: 14px;
-      padding: 14px;
-      border: 3px solid var(--border-color);
-      background: var(--bg-card);
-      transition: border-color 0.2s ease;
-    }
-
-    .diagnostic-card.status-safe { border-color: var(--status-safe); }
-    .diagnostic-card.status-warn { border-color: var(--status-warn); }
-    .diagnostic-card.status-danger { border-color: var(--status-danger); }
-
-    .status-header-banner {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-
-    .status-safe .status-header-banner {
-      background: var(--status-safe);
-      color: #ffffff;
-    }
-    .status-warn .status-header-banner {
-      background: var(--status-warn);
-      color: #000000;
-    }
-    .status-danger .status-header-banner {
-      background: var(--status-danger);
-      color: #ffffff;
-    }
-
-    .geo-svg {
-      width: 28px;
-      height: 28px;
-      flex-shrink: 0;
-    }
-
-    .tallman-box {
-      background: var(--bg-input);
-      border: 2px solid var(--border-color);
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin: 8px 0;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.05rem;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-    }
-
-    .tallman-caps {
-      color: var(--status-warn);
-      text-decoration: underline;
-      text-underline-offset: 4px;
-      font-weight: 900;
-    }
-
-    .gs1-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .gs1-cell {
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 6px 9px;
-      font-size: 0.76rem;
-    }
-
-    .gs1-cell span {
-      display: block;
-      color: var(--text-secondary);
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-
-    .gs1-cell strong {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      color: var(--text-primary);
-    }
-
-    /* Zona do Polegar (Tercio Inferior / Lei de Fitts) */
-    .thumb-zone-footer {
-      background: var(--bg-card);
-      border-top: 2px solid var(--border-color);
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .thumb-zone-title {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-secondary);
-      text-align: center;
-      font-weight: 800;
-    }
-
-    .preset-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .btn-preset {
-      min-height: var(--touch-min-height);
-      padding: var(--touch-padding);
-      border-radius: 10px;
-      border: 2px solid var(--border-color);
-      background: var(--bg-input);
-      color: var(--text-primary);
-      font-weight: 800;
-      font-size: 0.78rem;
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 2px;
-      transition: border-color 0.15s ease, transform 0.1s ease;
-    }
-
-    .btn-preset:hover {
-      border-color: var(--accent-primary);
-    }
-
-    .btn-preset small {
-      font-size: 0.68rem;
-      color: var(--text-secondary);
-      font-weight: 600;
-    }
-
-    .gs1-input-bar {
-      display: flex;
-      gap: 8px;
-    }
-
-    .gs1-input {
-      flex: 1;
-      min-height: var(--touch-min-height);
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 2px solid var(--border-color);
-      background: var(--bg-input);
-      color: var(--text-primary);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-    }
-
-    .btn-edge-exec {
-      min-height: var(--touch-min-height);
-      padding: var(--touch-padding);
-      border-radius: 10px;
-      border: 2px solid #ffffff;
-      background: var(--accent-primary);
-      color: #000000;
-      font-weight: 900;
-      font-size: 0.8rem;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    /* Coluna Direita: Inspetor Criptografico Merkle RFC 6962 */
-    .crypto-box {
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.76rem;
-      word-break: break-all;
-    }
-
-    .crypto-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      font-weight: 800;
-      margin-bottom: 4px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .receipt-json {
-      background: #050811;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.74rem;
-      color: #a7f3d0;
-      max-height: 290px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-    }
-
-    .ledger-list {
-      list-style: none;
-      max-height: 180px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .ledger-item {
-      background: var(--bg-card);
-      border-left: 4px solid var(--status-safe);
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 0.74rem;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Modal da Cartela de Etiquetas de Teste */
-    .cartela-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .cartela-modal-overlay.active {
-      display: flex;
-    }
-
-    .cartela-modal {
-      background: var(--bg-panel);
-      border: 2px solid var(--border-color);
-      border-radius: 20px;
-      max-width: 820px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-    }
-
-    .cartela-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .cartela-card {
-      background: var(--bg-card);
-      border: 2px solid var(--border-color);
-      border-radius: 14px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .cartela-dm-preview {
-      background: #ffffff;
-      color: #000000;
-      padding: 12px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      border: 3px solid #000000;
-    }
-
-    .btn-close-modal {
-      background: transparent;
-      border: 2px solid var(--border-color);
-      color: var(--text-primary);
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
+      max-width: 100%;
     }
 
   </style>
@@ -706,114 +867,120 @@
     <main class="phone-simulator" aria-live="polite">
       <header class="phone-top-bar">
         <div>
-          <strong style="font-size: 1rem; letter-spacing: 0.03em;">🛡️ CRIBUM MOBILE</strong>
-          <div style="font-size: 0.72rem; color: var(--text-secondary);">CEAF / SUS • ANVISA RDC 319 • RFC 6962</div>
+          <div class="phone-brand-title">🛡️ CRIBUM Mobile</div>
+          <div class="phone-brand-subtitle">Segurança Farmacêutica • SUS</div>
         </div>
-        <span class="badge" id="active-prescription-badge">Rx: MORFINA 10mg</span>
+        <span class="rx-pill" id="active-prescription-badge">Rx: MORFINA 10mg</span>
       </header>
 
       <div class="phone-body">
-        <!-- Visor da Camera com Mira Laser -->
+        <!-- Visor da Câmera estilo Google Lens / Apple Camera -->
         <section class="camera-viewport" aria-label="Visor do Leitor GS1 DataMatrix">
           <video id="camera-video" autoplay playsinline muted></video>
-          <div class="reticle-box"></div>
-          <div class="laser-line"></div>
-          <div class="camera-overlay-top">
-            <span id="camera-state-label">VISOR: SIMULACAO OPTICA</span>
-            <span>CLAHE + ECC200</span>
+          <div class="reticle-frame">
+            <div class="reticle-corner top-left"></div>
+            <div class="reticle-corner top-right"></div>
+            <div class="reticle-corner bottom-left"></div>
+            <div class="reticle-corner bottom-right"></div>
           </div>
-          <div class="camera-overlay-bottom">
-            <span id="active-rx-display">Prescricao Ativa: Sulfato de Morfina 10mg</span>
+          <div class="laser-line"></div>
+          <div class="camera-pill-top">
+            <span id="camera-state-label">Visor Óptico Ativo</span>
+            <span style="font-size: 0.68rem; opacity: 0.85;">ANVISA RDC 319</span>
+          </div>
+          <div class="camera-pill-bottom">
+            <span id="active-rx-display">Prescrição: Sulfato de Morfina 10mg</span>
           </div>
         </section>
 
-        <!-- Cartao de Resultado Bi-Camada (LASA + Dosagem + Fraude) -->
-        <section id="diagnostic-card" class="diagnostic-card status-warn" role="region" aria-label="Resultado da Validacao Clinica e Criptografica">
-          <div class="status-header-banner">
-            <svg id="status-geo-icon" class="geo-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>
-            </svg>
-            <div>
-              <div id="status-code-badge" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;">
-                [▲ DOSAGE_MISMATCH_BLOCKED]
-              </div>
-              <div id="status-headline" style="font-size: 0.98rem;">
-                Bloqueio Posologico: Risco de Depressao Respiratoria
+        <!-- Cartão de Diagnóstico Clínico Refinado -->
+        <section id="diagnostic-card" class="diagnostic-card status-warn" role="region" aria-label="Resultado da Validação Clínica">
+          <div class="status-banner">
+            <div class="status-icon-wrapper">
+              <svg id="status-geo-icon" viewBox="0 0 24 24" fill="currentColor" width="22" height="22" aria-hidden="true">
+                <path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>
+              </svg>
+            </div>
+            <div class="status-header-content">
+              <div id="status-code-badge" class="status-tag">Alerta de Sobredosagem</div>
+              <div id="status-headline" class="status-headline">
+                Bloqueio Posológico: Risco de Depressão Respiratória
               </div>
             </div>
           </div>
 
-          <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-secondary);">
-            <span>Analise Ortografica ISMP (Tall Man Lettering):</span>
-            <span id="levenshtein-score">Similaridade LASA: --</span>
+          <div class="tallman-wrapper">
+            <div class="tallman-title">
+              <span>Análise ISMP (Tall Man Lettering)</span>
+              <span id="levenshtein-score">Conformidade: --</span>
+            </div>
+            <div class="tallman-display" id="tallman-render">
+              Sulfato de <span class="tallman-caps">MORFINA 30mg</span> (Prescrito: 10mg)
+            </div>
           </div>
 
-          <div class="tallman-box" id="tallman-render">
-            Sulfato de <span class="tallman-caps">MORFINA 30mg</span> (Prescrito: 10mg)
-          </div>
-
-          <p id="clinical-explanation" style="font-size: 0.84rem; color: var(--text-primary); margin-bottom: 8px;">
-            A prescricao exige <strong>Sulfato de Morfina 10mg</strong>, mas o DataMatrix escaneado pertence a apresentacao de <strong>30mg (300% da dose)</strong>. Dispensacao interditada na Camada 2.
+          <p id="clinical-explanation" class="clinical-text">
+            A prescrição exige <strong>Sulfato de Morfina 10mg</strong>, mas o DataMatrix escaneado pertence à apresentação de <strong>30mg (300% da dose)</strong>. Dispensação interditada na Camada 2.
           </p>
 
-          <!-- Dados Extraidos do Parser GS1 DataMatrix (ANVISA RDC 319) -->
-          <div class="gs1-grid" aria-label="Metadados Extraidos do Codigo GS1 DataMatrix">
-            <div class="gs1-cell">
-              <span>(01) GTIN-14 ANVISA</span>
-              <strong id="gs1-gtin">07896676400037</strong>
+          <!-- Dados Extraídos do Parser GS1 DataMatrix (ANVISA RDC 319) -->
+          <div class="gs1-summary" aria-label="Metadados Extraídos do Código GS1 DataMatrix">
+            <div class="gs1-item">
+              <div class="gs1-label">(01) GTIN ANVISA</div>
+              <div class="gs1-val" id="gs1-gtin">07896676400037</div>
             </div>
-            <div class="gs1-cell">
-              <span>(17) Validade Normalizada</span>
-              <strong id="gs1-expiry">30/11/2028</strong>
+            <div class="gs1-item">
+              <div class="gs1-label">(17) Validade</div>
+              <div class="gs1-val" id="gs1-expiry">30/11/2028</div>
             </div>
-            <div class="gs1-cell">
-              <span>(10) Lote de Fabricacao</span>
-              <strong id="gs1-batch">LOTM30A</strong>
+            <div class="gs1-item">
+              <div class="gs1-label">(10) Lote</div>
+              <div class="gs1-val" id="gs1-batch">LOTM30A</div>
             </div>
-            <div class="gs1-cell">
-              <span>(21) Numero de Serie Unico</span>
-              <strong id="gs1-serial">SN9001002001</strong>
+            <div class="gs1-item">
+              <div class="gs1-label">(21) Serial Único</div>
+              <div class="gs1-val" id="gs1-serial">SN9001002001</div>
             </div>
           </div>
         </section>
       </div>
 
-      <!-- ZONA DO POLEGAR: 4 CENARIOS E2E + PARSER GS1 MANUAL -->
-      <footer class="thumb-zone-footer" aria-label="Zona de Alcance do Polegar para Operacao Rapida">
-        <div class="thumb-zone-title">▼ Zona do Polegar: Pre-Sets Clinicos E2E &amp; Decodificador GS1 ▼</div>
+      <!-- Zona de Ação: 4 Cenários Clínicos E2E + Entrada GS1 -->
+      <footer class="actions-footer" aria-label="Controles de Simulação Clínica">
+        <div class="section-label">Cenários Clínicos para Teste</div>
 
-        <div class="preset-grid">
-          <button id="btn-case-1" class="btn-preset" type="button">
-            <span>▲ Caso 1: Erro Posologico</span>
+        <div class="cases-grid">
+          <button id="btn-case-1" class="btn-case" type="button">
+            <span>▲ Dose Errada</span>
             <small>Morfina 10mg vs 30mg</small>
           </button>
-          <button id="btn-case-2" class="btn-preset" type="button">
-            <span>▲ Caso 2: Colisao LASA</span>
+          <button id="btn-case-2" class="btn-case" type="button">
+            <span>▲ Troca LASA</span>
             <small>Clorpromazina vs Clomipramina</small>
           </button>
-          <button id="btn-case-3" class="btn-preset" type="button">
-            <span>● Caso 3: Homologar CEAF</span>
-            <small>Adalimumabe 40mg (+Merkle)</small>
+          <button id="btn-case-3" class="btn-case" type="button">
+            <span>● Homologar</span>
+            <small>Humira 40mg (+Merkle)</small>
           </button>
-          <button id="btn-case-4" class="btn-preset" type="button">
-            <span>■ Caso 4: Gasto Duplo</span>
+          <button id="btn-case-4" class="btn-case" type="button">
+            <span>■ Gasto Duplo</span>
             <small>Reuso de Serial (Fraude)</small>
           </button>
         </div>
 
-        <label for="gs1-raw-input" style="font-size: 0.74rem; font-weight: 700; color: var(--text-secondary);">
-          String GS1 DataMatrix (RDC 319: Edite ou cole qualquer codigo):
+        <label for="gs1-raw-input" class="section-label" style="margin-top: 2px;">
+          Código GS1 DataMatrix (Edite ou Cole):
         </label>
-        <div class="gs1-input-bar">
+        <div class="input-row">
           <input
             id="gs1-raw-input"
-            class="gs1-input"
+            class="gs1-field"
             type="text"
             value="01078962265024191728103110LOTHUM40A21SN7788990011"
-            aria-label="Campo de entrada do codigo GS1 DataMatrix"
+            aria-label="Campo de entrada do código GS1 DataMatrix"
           />
-          <button id="btn-process-gs1" class="btn-edge-exec" type="button">
-            ⚡ Processar na Borda
+          <button id="btn-process-gs1" class="btn-submit-scan" type="button">
+            ⚡ Analisar
           </button>
         </div>
       </footer>
@@ -1237,7 +1404,7 @@
       if (!parsed.validFormat || !parsed.catalogItem) {
         card.className = "diagnostic-card status-danger";
         iconSvg.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2" />';
-        codeBadge.textContent = "[■ INVALID_OR_UNKNOWN_GTIN_BLOCKED]";
+        codeBadge.textContent = "Código Não Homologado";
         headline.textContent = "Codigo GS1 Invalido ou Nao Homologado na ANVISA";
         tallmanEl.textContent = parsed.error || `GTIN ${parsed.gtin} ausente no catalogo CEAF`;
         explanationEl.textContent = "A caixa escaneada nao pertence ao catalogo oficial ANVISA/CEAF ou possui estrutura GS1 corrompida.";
@@ -1261,7 +1428,7 @@
         const prevEvent = merkleEngine.dispensedSerials.get(parsed.serial);
         card.className = "diagnostic-card status-danger";
         iconSvg.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2" />';
-        codeBadge.textContent = "[■ DOUBLE_DISPENSATION_FRAUD]";
+        codeBadge.textContent = "Alerta Máximo: Gasto Duplo";
         headline.textContent = "Interdicao Critica: Serial Ja Dispensado!";
         tallmanEl.innerHTML = `SERIAL BLOQUEADO: <span class="tallman-caps">${parsed.serial}</span>`;
         explanationEl.innerHTML =
@@ -1281,7 +1448,7 @@
 
         card.className = "diagnostic-card status-warn";
         iconSvg.innerHTML = '<path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>';
-        codeBadge.textContent = "[▲ LASA_PHONETIC_CONFUSION_BLOCKED]";
+        codeBadge.textContent = "Alerta de Troca LASA";
         headline.textContent = "Alerta LASA Camada 1: Principio Ativo Divergente!";
         tallmanEl.innerHTML = lasaPair
           ? lasaPair.renderComparison
@@ -1297,7 +1464,7 @@
       if (med.concentration.toLowerCase() !== appState.prescribedDose.toLowerCase()) {
         card.className = "diagnostic-card status-warn";
         iconSvg.innerHTML = '<path d="M12 2L1 21h22L12 2zm0 4.5l7.53 13H4.47L12 6.5zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>';
-        codeBadge.textContent = "[▲ DOSAGE_MISMATCH_BLOCKED]";
+        codeBadge.textContent = "Alerta de Sobredosagem";
         headline.textContent = `Bloqueio Posologico (${appState.prescribedDose} vs ${med.concentration})`;
         tallmanEl.innerHTML = `${med.tallManHtml} (Prescrito: ${appState.prescribedDose})`;
         explanationEl.innerHTML =
@@ -1310,7 +1477,7 @@
       // VERIFICACAO 4: DISPENSACAO HOMOLOGADA -> INCLUSAO NA ARVORE DE MERKLE (RFC 6962)
       card.className = "diagnostic-card status-safe";
       iconSvg.innerHTML = '<circle cx="12" cy="12" r="9" />';
-      codeBadge.textContent = "[● DISPENSATION_HOMOLOGATED_RFC6962]";
+      codeBadge.textContent = "Dispensação Homologada";
       headline.textContent = "Dispensacao Homologada & Assinada na Arvore de Merkle";
       tallmanEl.innerHTML = med.tallManHtml;
       explanationEl.innerHTML =
