@@ -53,6 +53,12 @@ Basta abrir o arquivo [simulator.html](simulator.html) no navegador (ou rodar um
 
 Também é possível **ativar a câmera traseira do celular** para ver a mira laser e escanear códigos diretamente, além de ligar o modo de alto contraste Okabe-Ito e o filtro anti-tremores.
 
+### Recursos do Leitor e Cartela de Testes:
+* A cartela de etiquetas (`?cartela=1`) agora exibe **GS1 DataMatrix ECC 200 reais**, que a câmera do celular lê de verdade. Abra a cartela no computador e escaneie com o celular.
+* O parser aceita o formato real dos leitores (separador FNC1/GS, prefixo `]d2`, AIs em qualquer ordem e notação com parênteses).
+* Bloqueios novos: medicamento vencido e registro ANVISA (AI 713) divergente.
+* A câmera ao vivo exige HTTPS ou localhost.
+
 ---
 
 ## 🔬 Rigor de Engenharia de Software e Testes
