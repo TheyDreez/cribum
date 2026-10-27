@@ -418,4 +418,30 @@ test.describe.serial('CRIBUM E2E Browser Test Suite — Operational Scenarios & 
     expect(result.body.detail.error).toBe('INFERENCE_UNAVAILABLE');
     expect(result.body.detail.message).toContain('AMD');
   });
+
+  // Cenário 15: Tratamento de falha no fetch de NetworkGraphView
+  test('Cenário 15: Falha no fetch do Grafo de Rede exibe estado de fallback gracioso', async () => {
+    await page.route('**/api/graph', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'Erro interno ao gerar grafo' }),
+      });
+    });
+
+    try {
+      const redeTab = page.locator('button', { hasText: 'Rede de Guias (Grafo)' });
+      await redeTab.click();
+
+      // Verifica se a tela exibe o fallback gracioso quando o fetch falhar
+      await expect(page.locator('text=Nenhum dado de rede disponível.')).toBeVisible({ timeout: 10000 });
+    } finally {
+      await page.unroute('**/api/graph');
+
+      // Retorna para aba de auditoria
+      const auditTab = page.locator('button', { hasText: 'Auditoria Individual' });
+      await auditTab.click();
+      await expect(page.locator('text=Fila de Auditoria')).toBeVisible();
+    }
+  });
 });
