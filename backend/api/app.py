@@ -499,6 +499,7 @@ def run_document_processing(
 
     # 1. Salva Evidências isoladas por run_id e document_id
     id_map = {}
+    ev_models = []
     for idx, ev_data in enumerate(result.evidences, 1):
         raw_id = ev_data.get("id") or f"ev-{run.id[:8]}-{idx}"
         scoped_id = f"{raw_id}-{run.id[:8]}" if not raw_id.endswith(run.id[:8]) else raw_id
@@ -514,7 +515,8 @@ def run_document_processing(
             source=ev_data.get("source", "VLM_OUTPUT"),
             excerpt=ev_data.get("excerpt"),
         )
-        db.merge(ev)
+        ev_models.append(ev)
+    db.add_all(ev_models)
 
     # 2. Salva Campos Extraídos
     saved_fields = []
