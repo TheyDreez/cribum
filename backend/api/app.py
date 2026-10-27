@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Optional
 from fastapi import Depends, FastAPI, File, HTTPException, Query, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from backend.models.database import (
@@ -171,31 +172,68 @@ def compute_document_review_status(decisions: List[ReviewDecisionModel]) -> str:
 @app.get("/api/documents", response_model=List[DocumentContract])
 def list_documents(db: Session = Depends(get_db)):
     docs = db.query(DocumentModel).order_by(DocumentModel.created_at.desc()).all()
+    if not docs:
+        return []
+
+    doc_ids = [d.id for d in docs]
+
+    # 1. Fetch latest processing run for each document
+    latest_run_map = {}
+    for i in range(0, len(doc_ids), 500):
+        chunk = doc_ids[i : i + 500]
+        runs = (
+            db.query(ProcessingRunModel)
+            .filter(ProcessingRunModel.document_id.in_(chunk))
+            .order_by(ProcessingRunModel.started_at.desc(), ProcessingRunModel.id.desc())
+            .all()
+        )
+        for r in runs:
+            if r.document_id not in latest_run_map:
+                latest_run_map[r.document_id] = r
+
+    # 2. Fetch findings count per latest run_id
+    latest_run_ids = [r.id for r in latest_run_map.values()]
+    findings_count_map = {}
+    if latest_run_ids:
+        for i in range(0, len(latest_run_ids), 500):
+            chunk = latest_run_ids[i : i + 500]
+            counts = (
+                db.query(FindingModel.run_id, func.count(FindingModel.id))
+                .filter(FindingModel.run_id.in_(chunk))
+                .group_by(FindingModel.run_id)
+                .all()
+            )
+            for run_id, count in counts:
+                findings_count_map[run_id] = count
+
+    # 3. Fetch review decisions for all documents
+    decisions_by_doc = {}
+    for i in range(0, len(doc_ids), 500):
+        chunk = doc_ids[i : i + 500]
+        decs = (
+            db.query(ReviewDecisionModel)
+            .filter(ReviewDecisionModel.document_id.in_(chunk))
+            .order_by(ReviewDecisionModel.created_at.desc(), ReviewDecisionModel.id.desc())
+            .all()
+        )
+        for dec in decs:
+            decisions_by_doc.setdefault(dec.document_id, []).append(dec)
+
+    # 4. Assemble contracts
     results = []
     for d in docs:
-        latest_run = (
-            db.query(ProcessingRunModel)
-            .filter(ProcessingRunModel.document_id == d.id)
-            .order_by(ProcessingRunModel.started_at.desc(), ProcessingRunModel.id.desc())
-            .first()
-        )
-        findings_count = (
-            db.query(FindingModel).filter(FindingModel.run_id == latest_run.id).count()
-            if latest_run
-            else 0
-        )
-        decisions_query = (
-            db.query(ReviewDecisionModel)
-            .filter(ReviewDecisionModel.document_id == d.id)
-            .order_by(ReviewDecisionModel.created_at.desc(), ReviewDecisionModel.id.desc())
-        )
+        latest_run = latest_run_map.get(d.id)
+        findings_count = findings_count_map.get(latest_run.id, 0) if latest_run else 0
+        doc_decisions = decisions_by_doc.get(d.id, [])
+
         if latest_run:
             decisions = [
-                dec for dec in decisions_query.all()
+                dec for dec in doc_decisions
                 if dec.run_id == latest_run.id or (dec.created_at and dec.created_at >= latest_run.started_at)
             ]
         else:
-            decisions = decisions_query.all()
+            decisions = doc_decisions
+
         review_status = compute_document_review_status(decisions)
 
         results.append(
