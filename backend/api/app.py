@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional
 from fastapi import Depends, FastAPI, File, HTTPException, Query, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from backend.models.database import (
     AuditEventModel,
@@ -302,6 +302,10 @@ def get_document_details(doc_id: str, db: Session = Depends(get_db)):
 
     decisions = (
         db.query(ReviewDecisionModel)
+        .options(
+            joinedload(ReviewDecisionModel.field),
+            joinedload(ReviewDecisionModel.run),
+        )
         .filter(ReviewDecisionModel.document_id == doc.id)
         .order_by(ReviewDecisionModel.created_at.desc(), ReviewDecisionModel.id.desc())
         .all()
