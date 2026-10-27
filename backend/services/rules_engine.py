@@ -8,6 +8,9 @@ from typing import Any, Dict, List, Optional
 from backend.models.database import DocumentModel, ExtractedFieldModel, FindingModel
 
 
+CRM_PATTERN = re.compile(r"\d{4,7}")
+
+
 def normalize_text(value: Optional[str]) -> str:
     """Remove acentos, espaços extras e converte para minúsculas para comparação determinística."""
     if not value or not isinstance(value, str):
@@ -21,7 +24,7 @@ def is_valid_crm_format(crm: Optional[str]) -> bool:
     if not crm or not isinstance(crm, str):
         return False
     cleaned = crm.strip().upper()
-    return bool(re.search(r"\d{4,7}", cleaned))
+    return bool(CRM_PATTERN.search(cleaned))
 
 
 SEVERITY_MAP: Dict[str, str] = {
