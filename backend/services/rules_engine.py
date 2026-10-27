@@ -47,10 +47,35 @@ class RulesEngine:
         self.lasa_database = self._load_lasa(lasa_path)
 
     def _load_lasa(self, path: str) -> List[Dict[str, Any]]:
-        if os.path.exists(path):
-            with open(path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        return []
+        if not os.path.exists(path):
+            return []
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        processed = []
+        for par in data:
+            nome_a = normalize_text(par.get("droga_a", {}).get("nome", ""))
+            nome_b = normalize_text(par.get("droga_b", {}).get("nome", ""))
+
+            prefix_a = nome_a[:4] if len(nome_a) >= 4 else None
+            prefix_b = nome_b[:4] if len(nome_b) >= 4 else None
+
+            palavras = [normalize_text(p) for p in par.get("palavras_chave", []) if p]
+
+            terms_a_set = {nome_a} if nome_a else set()
+            terms_b_set = {nome_b} if nome_b else set()
+
+            for p in palavras:
+                if prefix_a and prefix_a in p:
+                    terms_a_set.add(p)
+                if prefix_b and prefix_b in p:
+                    terms_b_set.add(p)
+
+            par["_terms_a"] = tuple(terms_a_set)
+            par["_terms_b"] = tuple(terms_b_set)
+            processed.append(par)
+
+        return processed
 
     def evaluate(
         self,
@@ -209,27 +234,18 @@ class RulesEngine:
             return None
 
         hyp_texts = [
-            normalize_text(h.get("text")) if isinstance(h, dict) else ""
+            normalize_text(h.get("text"))
             for h in hypotheses
+            if isinstance(h, dict) and h.get("text")
         ]
-        hyp_texts = [t for t in hyp_texts if t]
+        if not hyp_texts:
+            return None
+
+        joined_hyp = " \n ".join(hyp_texts)
 
         for par in self.lasa_database:
-            nome_a = normalize_text(par.get("droga_a", {}).get("nome", ""))
-            nome_b = normalize_text(par.get("droga_b", {}).get("nome", ""))
-
-            has_match_a = any(nome_a in t for t in hyp_texts) if nome_a else False
-            has_match_b = any(nome_b in t for t in hyp_texts) if nome_b else False
-
-            # Também verifica palavras-chave / marcas registradas do par
-            palavras = [normalize_text(p) for p in par.get("palavras_chave", []) if p]
-            for t in hyp_texts:
-                for p in palavras:
-                    if p in t:
-                        if len(nome_a) >= 4 and nome_a[:4] in p:
-                            has_match_a = True
-                        if len(nome_b) >= 4 and nome_b[:4] in p:
-                            has_match_b = True
+            has_match_a = any(term in joined_hyp for term in par["_terms_a"])
+            has_match_b = any(term in joined_hyp for term in par["_terms_b"])
 
             # Colisão LASA confirmada quando o leitor hesita entre droga A e droga B
             if has_match_a and has_match_b:
