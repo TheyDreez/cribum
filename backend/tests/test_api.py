@@ -120,6 +120,18 @@ def test_real_provider_fails_explicitly_without_silent_fallback():
     assert err["error"] == "INFERENCE_UNAVAILABLE"
 
 
+def test_run_document_processing_invalid_mode_returns_400():
+    # Cria documento de teste
+    img_bytes = create_test_image_bytes(200, 200)
+    files = {"file": ("doc_invalid_mode.jpg", img_bytes, "image/jpeg")}
+    doc_id = client.post("/api/documents", files=files).json()["id"]
+
+    # Invoca endpoint com mode_override='INVALID'
+    run_res = client.post(f"/api/documents/{doc_id}/runs?mode_override=INVALID")
+    assert run_res.status_code == 400
+    assert "Modo de execução inválido" in run_res.json()["detail"]
+
+
 def test_human_review_decision_persisted():
     # Cria documento e executa run em demo
     img_path = "backend/data/synthetic/cases/caso_01_losartana_lorazepam.jpg"
