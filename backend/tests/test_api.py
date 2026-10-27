@@ -195,6 +195,24 @@ def test_upload_file_too_large_returns_413():
     assert "limite máximo permitido" in response.json()["detail"]
 
 
+def test_upload_internal_error_returns_generic_500_message(monkeypatch):
+    sensitive_error_str = "Sensitive internal exception details: /var/secret/db_credentials.key"
+
+    def mock_validate_and_save_image(*args, **kwargs):
+        raise RuntimeError(sensitive_error_str)
+
+    monkeypatch.setattr("backend.api.app.validate_and_save_image", mock_validate_and_save_image)
+
+    img_bytes = create_test_image_bytes(200, 200, "JPEG")
+    files = {"file": ("test_error.jpg", img_bytes, "image/jpeg")}
+    response = client.post("/api/documents", files=files)
+
+    assert response.status_code == 500
+    detail = response.json()["detail"]
+    assert detail == "Erro interno no armazenamento do arquivo."
+    assert sensitive_error_str not in response.text
+
+
 def test_graph_endpoint():
     res = client.get("/api/graph")
     assert res.status_code == 200
