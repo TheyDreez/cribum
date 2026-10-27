@@ -613,6 +613,14 @@ def test_schema_auto_migration_for_legacy_database(tmp_path):
         session.close()
 
 
+def test_run_document_processing_invalid_mode():
+    img_bytes = create_test_image_bytes(200, 200)
+    files = {"file": ("doc_invalid_mode.jpg", img_bytes, "image/jpeg")}
+    doc_id = client.post("/api/documents", files=files).json()["id"]
+
+    response = client.post(f"/api/documents/{doc_id}/runs?mode_override=INVALID")
+    assert response.status_code == 400
+    assert "Modo de execução inválido" in response.json()["detail"]
 
 
 
