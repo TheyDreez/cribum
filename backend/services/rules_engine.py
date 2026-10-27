@@ -3,6 +3,7 @@ import os
 import re
 import unicodedata
 from datetime import datetime, timezone
+from functools import lru_cache
 from typing import Any, Dict, List, Optional
 
 from backend.models.database import DocumentModel, ExtractedFieldModel, FindingModel
@@ -46,7 +47,9 @@ class RulesEngine:
     def __init__(self, lasa_path: str = "backend/data/references/lasa_ismp.json"):
         self.lasa_database = self._load_lasa(lasa_path)
 
-    def _load_lasa(self, path: str) -> List[Dict[str, Any]]:
+    @staticmethod
+    @lru_cache(maxsize=32)
+    def _load_lasa(path: str) -> List[Dict[str, Any]]:
         if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 return json.load(f)
