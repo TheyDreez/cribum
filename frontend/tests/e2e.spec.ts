@@ -5,9 +5,6 @@ test.describe.serial('CRIBUM E2E Browser Test Suite — Operational Scenarios & 
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    page.on('console', (msg) => console.log('BROWSER CONSOLE:', msg.text()));
-    page.on('pageerror', (err) => console.log('BROWSER PAGE ERROR:', err.message));
-    page.on('requestfailed', (req) => console.log('FAILED REQUEST:', req.url(), req.failure()?.errorText));
 
     try {
       await page.goto('/');
