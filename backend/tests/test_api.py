@@ -55,6 +55,37 @@ def test_health_and_config():
     assert cfg["execution_mode"] in ("DEMO", "REAL")
 
 
+def test_cors_security_headers():
+    # 1. Allowed origin request
+    res_allowed = client.get(
+        "/health",
+        headers={"Origin": "http://localhost:5173"}
+    )
+    assert res_allowed.status_code == 200
+    assert res_allowed.headers.get("access-control-allow-origin") == "http://localhost:5173"
+    assert res_allowed.headers.get("access-control-allow-credentials") == "true"
+
+    # 2. Preflight request with allowed origin, method, and header
+    res_preflight = client.options(
+        "/api/documents",
+        headers={
+            "Origin": "http://localhost:5173",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "Content-Type",
+        }
+    )
+    assert res_preflight.status_code == 200
+    assert res_preflight.headers.get("access-control-allow-origin") == "http://localhost:5173"
+    assert "POST" in res_preflight.headers.get("access-control-allow-methods", "")
+
+    # 3. Disallowed origin request
+    res_disallowed = client.get(
+        "/health",
+        headers={"Origin": "http://malicious-attacker.com"}
+    )
+    assert res_disallowed.headers.get("access-control-allow-origin") is None
+
+
 def test_upload_valid_image():
     img_bytes = create_test_image_bytes(300, 400, "PNG")
     files = {"file": ("receita_teste.png", img_bytes, "image/png")}

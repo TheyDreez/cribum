@@ -63,19 +63,32 @@ app = FastAPI(
     description="Auditor de Guias e Prescrições Médicas — Ambiente de Revisão Documental Rastreável",
 )
 
-# CORS Allowlist
+# CORS Allowlist & Security Configuration
 RAW_CORS_ORIGINS = os.getenv(
     "CORS_ORIGINS",
     "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173",
 )
 ALLOWED_ORIGINS = [origin.strip() for origin in RAW_CORS_ORIGINS.split(",") if origin.strip()]
 
+RAW_CORS_METHODS = os.getenv("CORS_METHODS", "GET,POST,PUT,DELETE,OPTIONS")
+ALLOWED_METHODS = [method.strip() for method in RAW_CORS_METHODS.split(",") if method.strip()]
+
+RAW_CORS_HEADERS = os.getenv(
+    "CORS_HEADERS",
+    "Content-Type,Authorization,Accept,Origin,X-Requested-With",
+)
+ALLOWED_HEADERS = [header.strip() for header in RAW_CORS_HEADERS.split(",") if header.strip()]
+
+ALLOW_CREDENTIALS = os.getenv("CORS_ALLOW_CREDENTIALS", "true").lower() == "true"
+if "*" in ALLOWED_ORIGINS:
+    ALLOW_CREDENTIALS = False
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_credentials=ALLOW_CREDENTIALS,
+    allow_methods=ALLOWED_METHODS,
+    allow_headers=ALLOWED_HEADERS,
 )
 
 rules_engine = RulesEngine()
