@@ -1,4 +1,5 @@
 import abc
+from functools import lru_cache
 import json
 import os
 import time
@@ -350,6 +351,14 @@ class RealROCmProvider(BaseInferenceProvider):
         return fields, evidences
 
 
+@lru_cache(maxsize=32)
+def _load_fixtures_from_disk(fixtures_path: str) -> Dict[str, Any]:
+    if os.path.exists(fixtures_path):
+        with open(fixtures_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
 class DemoFixtureProvider(BaseInferenceProvider):
     """
     Provedor DEMO: utiliza exclusivamente fixtures determinísticas gabaritadas.
@@ -360,13 +369,12 @@ class DemoFixtureProvider(BaseInferenceProvider):
 
     def __init__(self, fixtures_path: str = "backend/data/synthetic/fixtures.json"):
         self.fixtures_path = fixtures_path
-        self._fixtures = self._load_fixtures()
+        self._fixtures = dict(self._load_fixtures())
 
-    def _load_fixtures(self) -> Dict[str, Any]:
-        if os.path.exists(self.fixtures_path):
-            with open(self.fixtures_path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        return {}
+    def _load_fixtures(self, reload: bool = False) -> Dict[str, Any]:
+        if reload:
+            _load_fixtures_from_disk.cache_clear()
+        return _load_fixtures_from_disk(self.fixtures_path)
 
     def register_fixture(self, key: str, fixture_data: Dict[str, Any]):
         self._fixtures[key] = fixture_data

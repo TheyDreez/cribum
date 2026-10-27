@@ -871,7 +871,7 @@ def seed_demo_cases(db: Session = Depends(get_db)):
     build_synthetic_20_cases()
 
     # 2. Recarrega o dicionário de fixtures em memória RAM
-    demo_provider._fixtures = demo_provider._load_fixtures()
+    demo_provider._fixtures = dict(demo_provider._load_fixtures(reload=True))
 
     cases_dir = "backend/data/synthetic/cases"
     manifest_path = "backend/data/synthetic/manifest.json"
