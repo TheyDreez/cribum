@@ -478,6 +478,50 @@ def test_exact_hypothesis_validation_and_rejections():
     assert "pelo menos 3 caracteres" in res_short_reason.json()["detail"]
 
 
+def test_submit_human_review_short_reason_validation():
+    # Test explicitly all short/whitespace reason error paths in submit_human_review
+    img_path = "backend/data/synthetic/cases/caso_01_losartana_lorazepam.jpg"
+    with open(img_path, "rb") as f:
+        files = {"file": ("caso_01_losartana_lorazepam.jpg", f.read(), "image/jpeg")}
+    doc_id = client.post("/api/documents", files=files).json()["id"]
+
+    # Reasons that pass Pydantic min_length=3 but fail app.py stripped_reason < 3 validation (HTTP 400)
+    invalid_whitespace_reasons = [
+        "   ",
+        "  a  ",
+        "  ab  ",
+        "12        ",
+    ]
+    for reason in invalid_whitespace_reasons:
+        res = client.post(
+            f"/api/documents/{doc_id}/reviews",
+            json={
+                "action": "APPROVED_CLAIM",
+                "actor_id": "auditor-01",
+                "reason": reason,
+            },
+        )
+        assert res.status_code == 400, f"Expected 400 for reason: {repr(reason)}"
+        assert res.json()["detail"] == "A justificativa da revisão deve conter pelo menos 3 caracteres."
+
+    # Reasons that fail Pydantic schema validation (min_length=3) returning HTTP 422
+    invalid_schema_reasons = [
+        "",
+        "a",
+        "ab",
+    ]
+    for reason in invalid_schema_reasons:
+        res = client.post(
+            f"/api/documents/{doc_id}/reviews",
+            json={
+                "action": "APPROVED_CLAIM",
+                "actor_id": "auditor-01",
+                "reason": reason,
+            },
+        )
+        assert res.status_code == 422, f"Expected 422 for reason: {repr(reason)}"
+
+
 def test_multiple_runs_and_failed_run_isolation():
     # Verifica que uma execução com falha subsequente não mascara falhas com dados antigos
     img_path = "backend/data/synthetic/cases/caso_01_losartana_lorazepam.jpg"
