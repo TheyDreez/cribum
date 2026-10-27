@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 # Garante raiz no path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from backend.api.app import app, get_db
+from backend.api.app import app, get_db, normalize_review_value
 from backend.models.database import Base, get_engine
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -41,6 +41,34 @@ def create_test_image_bytes(width: int = 400, height: int = 500, format: str = "
     buf = io.BytesIO()
     img.save(buf, format=format)
     return buf.getvalue()
+
+
+@pytest.mark.parametrize(
+    "input_val, expected",
+    [
+        # Standard casing and whitespace
+        ("Losartana 50mg", "losartana 50mg"),
+        ("  LOSARTANA   50MG  ", "losartana 50mg"),
+        ("Lorazepam\t2mg\n1x  ao\r\ndia", "lorazepam 2mg 1x ao dia"),
+        # Empty and whitespace-only strings
+        ("", ""),
+        ("   ", ""),
+        ("\t\n\r", ""),
+        # Unicode NFKC normalization
+        ("𝟱𝟬 𝗺𝗴", "50 mg"),  # Mathematical bold digits/letters
+        ("ﬁlme", "filme"),    # Fi ligature
+        ("½", "1\u20442"),   # Vulgar fraction converts to fraction slash U+2044
+        ("¹²³", "123"),      # Superscripts
+        # Unicode case folding
+        ("STRAßE", "strasse"),  # German sharp s (ß) case fold
+        ("ÉXITO", "éxito"),
+        ("MÉDICO", "médico"),
+        ("  ＡＢＣ  １２３  ", "abc 123"),  # Full-width characters
+        ("Losartana\u00a050mg", "losartana 50mg"),  # Non-breaking spaces (U+00A0)
+    ],
+)
+def test_normalize_review_value(input_val, expected):
+    assert normalize_review_value(input_val) == expected
 
 
 def test_health_and_config():
