@@ -1,0 +1,74 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+ENV/
+env/
+
+# Node / Frontend
+node_modules/
+frontend/dist/
+frontend/build/
+.npm
+.yarn
+
+# Environment variables & credentials
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Model weights & large datasets
+*.pt
+*.bin
+*.safetensors
+*.onnx
+
+# Databases & Storage
+*.db
+*.sqlite3
+backend/data/storage/
+!backend/data/storage/.gitkeep
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs & Test outputs
+*.log
+logs/
+test-results/
+frontend/test-results/
+playwright-report/
+frontend/playwright-report/
+docs/FULL_CODEBASE.md

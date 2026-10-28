@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>CRIBUM - Binary Shield</title>
+<style>
+  html, body { margin: 0; background: #0d1117; height: 100%; display: flex; align-items: center; justify-content: center; }
+  canvas { width: min(100vh, 100vw); height: min(100vh, 100vw); }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1080"></canvas>
+<script>
+const W = 1080, H = 1080, CELL = 13, DURATION = 9;
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+// Deterministic PRNG so every render (browser or video export) is identical
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const rnd = mulberry32(1962);
+
+// ---- Build masks (shield outline, shield body, magnifier) ----
+function mask(drawFn) {
+  const off = document.createElement('canvas'); off.width = W; off.height = H;
+  const o = off.getContext('2d'); drawFn(o); return o.getImageData(0, 0, W, H).data;
+}
+const shieldPath = new Path2D();
+shieldPath.moveTo(540, 110);
+shieldPath.lineTo(880, 225);
+shieldPath.lineTo(880, 500);
+shieldPath.bezierCurveTo(880, 710, 725, 850, 540, 930);
+shieldPath.bezierCurveTo(355, 850, 200, 710, 200, 500);
+shieldPath.lineTo(200, 225);
+shieldPath.closePath();
+
+const outlineM = mask(o => { o.strokeStyle = '#fff'; o.lineWidth = 34; o.lineJoin = 'round'; o.stroke(shieldPath); });
+const bodyM = mask(o => { o.fillStyle = '#fff'; o.fill(shieldPath); });
+const LENS = { x: 500, y: 480, r: 128 };
+const lensM = mask(o => {
+  o.strokeStyle = '#fff'; o.lineCap = 'round';
+  o.lineWidth = 30; o.beginPath(); o.arc(LENS.x, LENS.y, LENS.r, 0, Math.PI * 2); o.stroke();
+  o.lineWidth = 46; o.beginPath(); o.moveTo(LENS.x + 92, LENS.y + 92); o.lineTo(LENS.x + 215, LENS.y + 215); o.stroke();
+});
+
+// ---- Sample grid cells ----
+const cells = [];
+for (let gy = 0; gy < H / CELL; gy++) {
+  for (let gx = 0; gx < W / CELL; gx++) {
+    const px = Math.floor(gx * CELL + CELL / 2), py = Math.floor(gy * CELL + CELL / 2);
+    const i = (py * W + px) * 4 + 3;
+    const inLens = lensM[i] > 128, inOutline = outlineM[i] > 128, inBody = bodyM[i] > 128;
+    const dLens = Math.hypot(px - LENS.x, py - LENS.y);
+    let kind = 0; // 0 none, 1 body dim, 2 outline bright, 3 magnifier bright, 4 lens glass (amber)
+    if (inLens) kind = 3;
+    else if (inOutline) kind = 2;
+    else if (inBody && dLens < LENS.r - 12) kind = 4;
+    else if (inBody && dLens > LENS.r + 30) kind = 1;
+    if (!kind) continue;
+    if (kind === 1 && rnd() < 0.35) continue; // body is sparser
+    if (kind === 4 && rnd() < 0.55) continue; // lens glass is sparse
+    cells.push({
+      x: px, y: py, kind,
+      seed: rnd(), delay: rnd() * 2.2 + (py / H) * 0.6,
+      fall: 260 + rnd() * 380, dur: 0.9 + rnd() * 0.7,
+    });
+  }
+}
+// Stray ambient digits around the shield
+const strays = [];
+for (let n = 0; n < 220; n++) strays.push({ x: rnd() * W, y: rnd() * H, seed: rnd(), speed: 8 + rnd() * 26 });
+
+const ease = p => 1 - Math.pow(1 - p, 3);
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+
+function render(tRaw) {
+  const t = tRaw % DURATION;
+  ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+
+  // soft radial glow behind the shield
+  const g = ctx.createRadialGradient(540, 520, 60, 540, 520, 560);
+  g.addColorStop(0, 'rgba(16,185,129,0.10)'); g.addColorStop(1, 'rgba(16,185,129,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  ctx.font = `bold ${CELL + 3}px Consolas, "Courier New", monospace`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+  // global fade-out at the end for a clean loop
+  const fadeOut = 1 - clamp((t - (DURATION - 0.8)) / 0.8);
+
+  // ambient strays
+  for (const s of strays) {
+    const y = (s.y + t * s.speed) % H;
+    const v = Math.floor(t * 3 + s.seed * 100) % 2;
+    ctx.fillStyle = `rgba(56,189,248,${(0.10 + 0.18 * s.seed) * fadeOut})`;
+    ctx.fillText(String(v), s.x, y);
+  }
+
+  // scan line sweeping top -> bottom between 3.2s and 6.6s
+  const scanActive = t > 3.2 && t < 6.6;
+  const scanY = 110 + clamp((t - 3.2) / 3.4) * 830;
+
+  for (const c of cells) {
+    const p = clamp((t - c.delay) / c.dur);
+    if (p <= 0) continue;
+    const e = ease(p);
+    const y = c.y - (1 - e) * c.fall;
+    const flip = Math.floor(t * (c.kind === 1 ? 2 : 3) + c.seed * 50);
+    const bit = ((flip * 2654435761 + Math.floor(c.seed * 1e6)) >>> 0) % 2;
+
+    let r, gC, b, a;
+    if (c.kind === 2 || c.kind === 3) { r = 52; gC = 211; b = 153; a = 0.95; }     // bright emerald
+    else if (c.kind === 4) { r = 245; gC = 158; b = 11; a = 0.85; }              // amber (ambiguity)
+    else { r = 16; gC = 185; b = 129; a = 0.38; }                                  // dim emerald body
+
+    // scan highlight (cyan) within 36px of the scan line
+    if (scanActive) {
+      const d = Math.abs(c.y - scanY);
+      if (d < 36) { const k = 1 - d / 36; r = r + (56 - r) * k; gC = gC + (189 - gC) * k; b = b + (248 - b) * k; a = Math.min(1, a + 0.55 * k); }
+    }
+    // amber flicker inside the lens while the scan runs (the "ambiguity" being detected)
+    if (c.kind === 4 && t > 4.4 && t < 7.6) a *= 0.55 + 0.45 * Math.sin(t * 9 + c.seed * 30);
+
+    a *= e * fadeOut;
+    if (c.kind === 2 || c.kind === 3) { ctx.shadowColor = 'rgba(16,185,129,0.65)'; ctx.shadowBlur = 8; } else { ctx.shadowBlur = 0; }
+    ctx.fillStyle = `rgba(${r | 0},${gC | 0},${b | 0},${a})`;
+    ctx.fillText(String(bit), c.x, y);
+  }
+  ctx.shadowBlur = 0;
+
+  // scan line itself
+  if (scanActive) {
+    const lg = ctx.createLinearGradient(180, 0, 900, 0);
+    lg.addColorStop(0, 'rgba(56,189,248,0)'); lg.addColorStop(0.5, 'rgba(56,189,248,0.55)'); lg.addColorStop(1, 'rgba(56,189,248,0)');
+    ctx.fillStyle = lg; ctx.fillRect(180, scanY - 1, 720, 2);
+  }
+
+  // title
+  const ta = clamp((t - 2.6) / 0.9) * fadeOut;
+  ctx.font = 'bold 54px Consolas, "Courier New", monospace';
+  ctx.fillStyle = `rgba(110,231,183,${ta})`;
+  ctx.shadowColor = 'rgba(16,185,129,0.9)'; ctx.shadowBlur = 18;
+  const title = 'C R I B U M';
+  ctx.fillText(title, 540, 1000);
+  ctx.shadowBlur = 0;
+  ctx.font = '22px Consolas, "Courier New", monospace';
+  ctx.fillStyle = `rgba(148,163,184,${ta * 0.9})`;
+  ctx.fillText('uncertainty-aware clinical audit', 540, 1040);
+}
+
+window.renderFrame = render;
+window.DURATION = DURATION;
+
+if (!location.search.includes('static')) {
+  const start = performance.now();
+  (function loop() { render((performance.now() - start) / 1000); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>
