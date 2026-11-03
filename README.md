@@ -1,138 +1,182 @@
+# CRIBUM Mobile: Segurança Farmacêutica Inteligente e Acessível
+
 <div align="center">
 
-# CRIBUM 🛡️
+<img src="docs/assets/cribum_binary_shield.gif" alt="CRIBUM: escudo formado por bits, com varredura de auditoria" width="280">
 
-<img src="docs/assets/cribum_binary_shield.gif" alt="CRIBUM: escudo formado por bits, com varredura de auditoria" width="300">
+### *Plataforma de Segurança Farmacêutica Multiagente, Offline-First e Criptográfica*
+**Projeto submetido à 15ª Edição do Campus Mobile (Instituto Claro / Escola Politécnica da USP / BeOn Claro)**  
+*Categoria: Saúde e Tecnologias Assistivas*
 
-### *IA Multiagente para Segurança de Medicação (LASA), Tecnologia Assistiva & Auditoria em Saúde*
-> **O crivo inteligente para prevenção de erros médicos em receitas, segurança farmacológica LASA e auditoria de conformidade no SUS e na Saúde Suplementar (ANS).**  
-> *Arquitetura multiagente Privacy-First (LGPD) com Visão Computacional Multimodal (**Qwen2-VL**), Grafos Relacionais (**NetworkX**) e Cadeia de Custódia **Merkle Tree (RFC 6962)**.*
-
-[![Campus Mobile](https://img.shields.io/badge/Campus%20Mobile-Instituto%20Claro%20%7C%20Sa%C3%BAde-8b5cf6)](https://github.com/TheyDreez/cribum)
-[![Domain](https://img.shields.io/badge/Domain-Clinical%20AI%20%26%20LASA%20Safety-blue)](https://github.com/TheyDreez/cribum)
-[![RFC 6962](https://img.shields.io/badge/Auditability-Merkle%20Chain%20RFC%206962-10b981)](https://datatracker.ietf.org/doc/html/rfc6962)
-[![Tests](https://img.shields.io/badge/Tests-37%20Pytest%20%7C%2014%20Playwright-success)](https://github.com/TheyDreez/cribum)
-[![Local GPU Ready](https://img.shields.io/badge/Local%20GPU%20Ready-AMD%20ROCm%20%26%20vLLM-ED1C24?logo=amd&logoColor=white)](docs/AMD_SETUP.md)
-[![License](https://img.shields.io/badge/License-Proprietary%20%7C%20All%20Rights%20Reserved-red.svg)](LICENSE)
+[![Campus Mobile](https://img.shields.io/badge/Campus%20Mobile-15%C2%AA%20Edi%C3%A7%C3%A3o-blue)](https://www.institutoclaro.org.br/campus-mobile/)
+[![Python Tests](https://img.shields.io/badge/Python%20Core-100%25%20Passing-success)](cribum_core.py)
+[![RFC 6962](https://img.shields.io/badge/Merkle%20Tree-RFC%206962%20Compliant-10b981)](https://datatracker.ietf.org/doc/html/rfc6962)
+[![GS1 Standard](https://img.shields.io/badge/GS1-DataMatrix%20ANVISA%20RDC%20319-orange)](https://www.gov.br/anvisa/)
+[![A11y](https://img.shields.io/badge/Accessibility-Okabe--Ito%20AAA%20(9.4:1)-purple)](simulator.html)
+[![License](https://img.shields.io/badge/License-Source--Available%20Evaluation-green.svg)](LICENSE)
 
 </div>
 
-> 🔒 **Repositório Oficial de Arquitetura & Especificações Técnicas (Showcase Público):**  
-> *O CRIBUM é uma tecnologia assistiva e plataforma de auditoria clínica submetida à 15ª edição do Campus Mobile (Instituto Claro / LSI-TEC / USP). Para salvaguarda de segredo industrial, modelos treinados e propriedade intelectual proprietária, o código-fonte executável dos microsserviços é mantido em repositório privado. A documentação completa de arquitetura, fluxos, modelos de ameaça e a demonstração oficial em vídeo estão disponibilizados publicamente abaixo.*
+---
+
+## 🎬 Vídeo Oficial de Demonstração (Campus Mobile)
+
+Assista ao vídeo pitch de demonstração (84 segundos) apresentando a arquitetura multiagente, o motor determinístico e o simulador mobile em funcionamento:
+
+👉 **[▶️ Assistir no YouTube: https://youtu.be/e7jOR-w5BzM](https://youtu.be/e7jOR-w5BzM)**
 
 ---
 
-## 🎬 Demonstração Oficial em Vídeo (Português - PT-BR)
+## 🧭 Estratégia de Repositório: Open Core
 
-> **Submissão — Campus Mobile, do Instituto Claro (Categoria: Saúde e Tecnologias Assistivas)**  
-> Assista à demonstração completa de 1 minuto mostrando o fluxo em tempo real dos **4 agentes autônomos de IA**, desde a leitura de receituários com caligrafia ambígua até o bloqueio de trocas fatais de medicamentos **LASA** (*Losartana* vs. *Lorazepam*), emissão de laudo criptográfico **Merkle Tree (RFC 6962)** e detecção de anomalias em grafos:
+Para conciliar rigor de verificação técnica pela banca avaliadora da USP e da Claro com a proteção da propriedade intelectual e segredos industriais da solução, o CRIBUM adota uma estrutura **Open Core**:
 
-👉 **[▶️ Assistir / Baixar Vídeo Oficial de Demonstração (`docs/Cribum_Campus_Mobile_Demo.mp4`)](https://github.com/TheyDreez/cribum/raw/main/docs/Cribum_Campus_Mobile_Demo.mp4)**
-
----
-
-## 🎯 Propósito e Impacto em Duas Pontas: Do Bolso do Cidadão à Gestão de Saúde
-
-Erros de medicação por grafia ou som semelhantes (**LASA** — *Look-Alike, Sound-Alike*) causam milhares de internações e óbitos evitáveis no Brasil, enquanto fraudes e glosas drenam **R$ 34 bilhões anualmente** do SUS e da saúde suplementar (conforme estimativas do Instituto de Estudos de Saúde Suplementar — IESS). O **CRIBUM** conecta duas pontas complementares através do mesmo motor multiagente:
-
-### 1. 📱 Tecnologia Assistiva Mobile na Ponta (B2C / Impacto Social Direto)
-* **Para quem:** Pacientes (especialmente **idosos, polimedicados e pessoas com baixa visão**), cuidadores familiares, enfermeiros e farmacêuticos na triagem de balcão.
-* **Como atua:** Pelo celular, o usuário fotografa a receita médica e valida a prescrição em segundos. O sistema identifica caligrafias médicas ambíguas, alerta sobre riscos fatais de confusão entre medicamentos LASA catalogados pela **ANVISA / ISMP Brasil** (evitando, por exemplo, que um paciente hipertenso tome um ansiolítico/psicotrópico por engano) e aponta incompatibilidades com o diagnóstico (**CID-10**), democratizando a segurança clínica no bolso do cidadão.
-
-### 2. 🏥 Auditoria Pericial e Integridade na Gestão (B2B / B2G — SUS e ANS)
-* **Para quem:** Auditores médicos e de enfermagem do SUS, hospitais, clínicas, secretarias públicas de saúde e operadoras suplementares (ANS).
-* **Como atua:** Processa filas de guias médicas (padrão **TUSS/ANS**), calcula automaticamente o risco clínico composto (**CCRI**) e a glosa preventiva evitada, cruza **multigrafos relacionais** para impedir fraudes e conluios (como faturamentos simultâneos em municípios distantes) e sela cada decisão humana em uma cadeia criptográfica imutável.
-
----
-
-## 💎 Vitrine Visual da Plataforma
-
-> *Interface responsiva em React 18 & TypeScript projetada tanto para inspeção clínica e assistiva quanto para auditoria pericial e visualização de redes complexas.*
-
-```text
+```
 +---------------------------------------------------------------------------------+
-| [CRIBUM WORKSTATION v1.0]   | Case: CASE-AMB-001 [AMBIGUOUS / LASA]  [CCRI: 94] |
-+---------------------------------+-----------------------------------------------+
-| [A4 Medical Image & BBox]       | [AI Findings & Clinical Correlation]          |
-|  .---------------------------.  | - Alerta LASA: Losartana 50mg vs Lorazepam    |
-|  | [X] Bounding Box 0..1     |  | - CID-10 I10 (Hipertensão) × Incompatibilidade|
-|  |     (Visual Evidence)     |  | - Glosa Preventiva Calculada: R$ 1.480,00     |
-|  '---------------------------'  | - Cadeia de Custódia SHA-256 (RFC 6962 Ativa) |
-+---------------------------------+-----------------------------------------------+
-| [Filtros Ópticos Forenses: Negatoscópio | Contraste Dinâmico | Realce de Tinta] |
+|                       CRIBUM REPOSITORY ARCHITECTURE                            |
++---------------------------------------------------------------------------------+
+|                                                                                 |
+|  [REPOSITÓRIO PÚBLICO: NÚCLEO TÉCNICO DE DEMONSTRAÇÃO (OPEN CORE)]              |
+|                                                                                 |
+|   1. simulator.html        -> Protótipo mobile PWA 100% offline, áudio nativo,  |
+|                               alto contraste Okabe-Ito (9,4:1) e 4 cenários.    |
+|   2. cribum_core.py        -> Motor determinístico em Python padrão (zero deps):|
+|                               Parser GS1 DataMatrix, Árvore de Merkle RFC 6962, |
+|                               fonética LASA PT-BR, trava de dose e suíte forense|
+|   3. Documentação Técnica  -> Especificações Claro 5G, FAQ e matriz de tradeoffs|
+|                                                                                 |
++---------------------------------------------------------------------------------+
+|                                                                                 |
+|  [REPOSITÓRIO PRIVADO: INFRAESTRUTURA ENTERPRISE & ADAPTADORES CORPORATIVOS]    |
+|                                                                                 |
+|   - Pesos finetunados de modelos VLM (Qwen2-VL)                                 |
+|   - Microsserviços de integração hospitalar legada (TUSS / ANS / HL7 FHIR)      |
+|   - Orquestração distribuída multi-tenant e telemetria de nuvem                 |
+|   - Chaves de API, credenciais e configurações de produção                      |
+|                                                                                 |
 +---------------------------------------------------------------------------------+
 ```
 
-| Inspeção de Receituário, Hipóteses VLM & Segurança LASA (`CASE-AMB-001`) | Topologia Relacional & Detecção de Conluio em Grafo (`NetworkGraphView`) |
-| :---: | :---: |
-| ![Workstation Pericial](docs/screenshots/redesign/desktop_1920x1080.png) | ![Grafo de Rede](docs/screenshots/redesign/desktop_1920x1080_graph.png) |
+---
+
+## ⚡ Como Executar e Verificar o Código em Menos de 1 Minuto
+
+O núcleo técnico foi desenhado para **execução imediata, sem necessidade de instalar pacotes externos ou bancos de dados**.
+
+### 1. Testar o Motor Determinístico em Python (Terminal)
+
+O arquivo `cribum_core.py` utiliza exclusivamente a biblioteca padrão do Python (3.9+). Clone o repositório e execute:
+
+```bash
+python cribum_core.py
+```
+
+O comando executará automaticamente a suíte forense completa:
+* **Parser GS1 DataMatrix (ANVISA RDC 319):** validação de GTIN-14 (módulo 10), data de validade (regra dia 00), lote e número de série com separadores de grupo (FNC1 / ASCII 29).
+* **Árvore de Merkle RFC 6962:** separação de domínio criptográfico (`0x00` para folhas, `0x01` para nós internos), cálculo de raiz e geração/validação de caminhos de auditoria (Audit Proofs).
+* **Motor Fonético LASA PT-BR:** cruzamento de nomes com similaridade fonética e ortográfica (Levenshtein), aplicação de Tall Man Lettering e trava de divergência de dose.
+* **Bateria Forense Avançada:** rejeição de ataques de replay inter-árvores, detecção de adulteração de 1 byte no lote (efeito avalanche) e teste de escala com 1.000 folhas processadas em ~13 ms.
+
+### 2. Testar o Protótipo Mobile Interativo (Navegador ou Celular)
+
+O arquivo `simulator.html` é um protótipo mobile completo e autossuficiente:
+
+* **Opção Direta:** Dê dois cliques em `simulator.html` para abrir diretamente no seu navegador.
+* **Opção Servidor Local (para testar no celular via Wi-Fi):**
+
+```bash
+# Com Node.js:
+node serve.js
+
+# Ou com Python:
+python -m http.server 8080
+```
+
+Abra o endereço indicado no celular ou no navegador desktop e experimente os botões de simulação instantânea no topo da tela.
 
 ---
 
-## 🤖 Arquitetura dos 4 Agentes Autônomos de IA (`backend/agents/`)
+## 🧪 Os 4 Cenários Clínicos Demonstrados
 
-Diferente de sistemas baseados em OCR simples — que falham em caligrafias médicas, não compreendem contexto clínico e expõem dados sensíveis em nuvens públicas —, o **CRIBUM** opera com uma arquitetura coordenada de **4 agentes especializados** sob supervisão humana obrigatória (*Human-in-the-Loop*):
-
-1. **👁️ Agente de Visão Multimodal (`backend/agents/leitor.py` — `Qwen2-VL`):**
-   * Realiza leitura visual multi-hipótese (`top-3`) ciente de incerteza (`CERTAIN`, `AMBIGUOUS`, `INDETERMINATE`), ancorando cada campo extraído às coordenadas físicas exatas da imagem (*Bounding Boxes* normalizadas `0..1`).
-2. **💊 Agente Farmacológico LASA (`backend/agents/farmaceutico.py`):**
-   * Calcula distância fonética e ortográfica/visual sobre o banco de pares críticos de medicamentos **LASA (ANVISA / ISMP Brasil)**, cruza a indicação terapêutica com o diagnóstico **CID-10**, verifica integridade documental (CRM, unidade, posologia e duplicidade SHA-256) e computa o *Composite Clinical Risk Index* (**CCRI** de 0 a 100).
-3. **🕸️ Agente de Grafos Relacionais (`backend/agents/investigador.py` & `backend/services/graph_engine.py`):**
-   * Modela interações entre prescritores, clínicas, pacientes e procedimentos em multigrafos direcionados (**NetworkX**), identificando anomalias topológicas, faturamentos geograficamente incompatíveis no mesmo dia e redes de conluio.
-4. **🔐 Agente Privacy-First & Custódia Merkle (`backend/agents/relator.py`):**
-   * Garante conformidade com a **LGPD** e consolida o dossiê pericial (padrão TUSS/ANS) com selagem criptográfica encadeada em **Árvore de Merkle (RFC 6962)** (`prev_chain_hash` $\rightarrow$ `chain_hash`), assegurando rastreabilidade e imutabilidade jurídica.
-
-*(Consulte [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) para o detalhamento técnico completo do pipeline e isolamento por execução).*
+| Cenário de Teste | Prescrição | Caixa Escaneada (GS1 DataMatrix) | Ação do Motor CRIBUM |
+| :--- | :--- | :--- | :--- |
+| **1. Superdosagem Crítica** | Sulfato de Morfina 10 mg | Sulfato de Morfina 30 mg | **BLOQUEIO IMEDIATO:** Alerta vocal e visual indicando dose 3x maior que a receita. |
+| **2. Troca LASA (Grafia/Som)** | Clorpromazina 25 mg (Antipsicótico) | Clomipramina 25 mg (Antidepressivo) | **ALERTA COM DUPLA CONFIRMAÇÃO:** Destaque em Tall Man Lettering (`clorproMAZINA` vs. `clomiPRAMINA`). |
+| **3. Homologação Regular** | Humira 40 mg (Adalimumabe) | Humira 40 mg (Lote e serial válidos) | **HOMOLOGAÇÃO:** Selagem criptográfica da folha na Árvore de Merkle e recibo emitido. |
+| **4. Fraude por Duplicidade** | Humira 40 mg | Mesma embalagem física já dispensada | **BLOQUEIO ANTIFRAUDE:** Interceptação imediata por colisão de serial na árvore de Merkle. |
 
 ---
 
-## 🧪 Validação em Fixtures Sintéticas e Testes Automatizados
+## 🏛️ Arquitetura Técnica: Separação de Responsabilidades
 
-O repositório inclui um conjunto de dados sintéticos gabaritados (100% livres de dados reais de pacientes) e suítes de testes automatizados:
-
-### 1. Dataset Clínico Sintético (`backend/data/synthetic/`)
-* **20 Casos Documentais Estruturados (`cases/` e `ground_truth/`):**
-  * **Pares Críticos LASA (Casos 01 a 05):** *Losartana vs. Lorazepam*, *Fluoxetina vs. Flunarizina*, *Digoxina vs. Dipirona*, *Citalopram vs. Escitalopram* e *Tramadol vs. Trazodona*.
-  * **Inconformidades Regulatórias e Clínicas (Casos 06 a 10):** Ausência de CRM do prescritor, ausência de unidade de medida, CRM incompleto, incompatibilidade entre medicamento e CID-10, e posologia contraditória (para inspeção visual e testes de robustez de schema).
-  * **Fraudes por Duplicidade Documental (Casos 11 a 15):** Lotes de guias duplicadas submetidas em diferentes contextos para teste de colisão criptográfica e bloqueio de refaturamento.
-  * **Grupo de Controle Regular (Casos 16 a 20):** Prescrições limpas e legíveis para validação de ausência de falsos positivos.
-* **Rede Relacional de 200 Sinistros (`claims_200.json`):**
-  * Grafo sintético com **200 guias médicas** conectando médicos, clínicas, pacientes e procedimentos para validação dos algoritmos de detecção de anomalias em rede.
-
-### 2. Suíte de Testes Automatizados (37 Pytest Backend + 14 Playwright E2E)
-O projeto conta com uma suíte de 51 testes automatizados (100% passando):
-* **37 Testes de Backend (Pytest):** Executados a partir da raiz (`python -m pytest`), cobrindo contratos de API, motor farmacológico LASA, regras determinísticas, normalização Unicode NFKD, casos de borda, isolamento de persistência SQLite por `run_id`, integridade da cadeia criptográfica Merkle (RFC 6962) e protocolo do provedor VLM (`backend/tests/`).
-* **14 Testes End-to-End de Interface (Playwright):** Validam a jornada visual no Chromium headless (`frontend/tests/e2e.spec.ts`), incluindo renderização de *bounding boxes* SVG, seleção de hipóteses, conferência humana (HITL) e inspeção do grafo de sinistros.
-
-### 3. Transparência de Modo: Deterministic Fixture vs. VLM Real
-Para permitir que avaliadores e recrutadores testem todo o pipeline forense imediatamente após o `git clone` — **sem exigir chaves pagas de API ou GPU dedicada local** —, o CRIBUM opera em dois modos:
-* **Deterministic Fixture Engine (Padrão de Avaliação):** Reconhece os 20 casos estruturados do catálogo sintético (`CASE-AMB-001` a `CASE-CTR-020`) e fornece a extração base documentada para que os agentes e o motor de regras executem a auditoria de forma **100% reprodutível e determinística**.
-* **Live VLM Mode:** Ativado mediante configuração de variáveis no `.env` (veja `.env.example`), conectando a inferência visual a instâncias locais aceleradas por GPU (`vLLM` com `Qwen2-VL`) ou provedores compatíveis.
-
-> **Nota sobre Métricas (`eval/run_eval.py`):** O script de avaliação afere a **consistência lógica e determinística do motor de regras** contra o gabarito das fixtures sintéticas catalogadas, e não acurácia de OCR em receituários manuscritos de hospitais reais.
-
----
-
-## ⚠️ Limitações Conhecidas e Escopo
-Este projeto foi desenvolvido como protótipo de engenharia submetido ao **Campus Mobile, do Instituto Claro**. O sistema utiliza dados 100% sintéticos, base referencial de 10 pares críticos LASA (ISMP Brasil), validação estrutural de CRM e não é um dispositivo médico homologado (SaMD). Consulte os detalhes completos em [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
-
----
-
-## 🔒 Propriedade Intelectual & Modelo de Código Fechado
-
-> O **CRIBUM** foi submetido à 15ª edição do **Campus Mobile (Instituto Claro / LSI-TEC / USP)**.  
-> Por questões de **segurança de dados clínicos, segredo industrial e salvaguarda de propriedade intelectual**, os microsserviços do backend (motores de agentes, pipelines de inferência, regras de negócio e suíte de automação) são mantidos em **repositório privado**.
->
-> Este repositório público cumpre a função de **vitrine oficial de arquitetura, especificações técnicas, documentação de segurança e comprovação de integridade** da plataforma.
-
-### 📑 Documentação e Especificações Técnicas Disponíveis
-* [📐 Arquitetura do Sistema e Pipeline Multiagente (`docs/ARCHITECTURE.md`)](docs/ARCHITECTURE.md)
-* [🛡️ Modelo de Ameaças e Segurança Clínica (`docs/THREAT_MODEL.md`)](docs/THREAT_MODEL.md)
-* [⚖️ Decisões Arquiteturais e Conformidade LGPD (`docs/DECISIONS.md`)](docs/DECISIONS.md)
-* [🔬 Roteiro e Metodologia de Demonstração (`docs/DEMO_SCRIPT.md`)](docs/DEMO_SCRIPT.md)
-* [🎬 Vídeo Oficial de Demonstração em MP4 (`docs/Cribum_Campus_Mobile_Demo.mp4`)](https://github.com/TheyDreez/cribum/raw/main/docs/Cribum_Campus_Mobile_Demo.mp4)
+```
++---------------------------------------------------------------------------------+
+| ENTRADA MULTIMODAL NO SMARTPHONE (PWA / OFFLINE-FIRST)                          |
+| Receita Digital (QR Code / Texto)  +  GS1 DataMatrix da Caixa (Câmera do Celular)|
++---------------------------------------------------------------------------------+
+                                      |
+                                      v
++---------------------------------------------------------------------------------+
+| CAMADA DE ASSISTÊNCIA COGNITIVA (IA MULTIAGENTE ON-DEVICE)                      |
+|                                                                                 |
+| - Agente de Leitura: extrai princípio ativo, concentração e AIs do código GS1.  |
+| - Agente de Conciliação: normaliza termos para DCB/ANVISA e unifica dosagens.   |
+| - Agente de Segurança LASA: analisa proximidade fonética e aplica voz acessível. |
+| - Agente de Auditoria: consulta manifesto local e prepara recibo assinado.      |
++---------------------------------------------------------------------------------+
+                                      | Dados estruturados (JSON)
+                                      v
++---------------------------------------------------------------------------------+
+| NÚCLEO DETERMINÍSTICO INVIOLÁVEL (cribum_core.py)                               |
+|                                                                                 |
+| [X] Trava matemática de divergência de dose (ex.: 30 mg != 10 mg -> BLOQUEIO)  |
+| [X] Validação de vigência de validade e dígito verificador GS1 (Módulo 10)      |
+| [X] Selagem append-only em Árvore de Merkle RFC 6962                            |
+|                                                                                 |
+| * REGRA CENTRAL DE SEGURANÇA: A IA auxilia, mas a autoridade de bloqueio        |
+|   clínico reside 100% no Núcleo Determinístico imune a alucinações.            |
++---------------------------------------------------------------------------------+
+                                      |
+                                      v
++---------------------------------------------------------------------------------+
+| INTEGRAÇÃO E RECONCILIAÇÃO CLARO 5G                                            |
+| Sincronização periódica ultra-rápida de raízes de Merkle entre unidades via MEC |
+| e rede Claro 5G Standalone para auditoria forense centralizada contra desvios.   |
++---------------------------------------------------------------------------------+
+```
 
 ---
 
-## ⚖️ Licença e Autoria
-Todos os direitos autorais, marcas e propriedade intelectual pertencem a **André Rogério da Silva Filho**. Todos os direitos reservados. Consulte o arquivo [`LICENSE`](LICENSE) para mais detalhes.
+## ♿ Tecnologia Assistiva e Acessibilidade (WCAG 2.2 AAA)
+
+* **Paleta Okabe-Ito:** Cores seguras para todos os tipos de daltonismo (deuteranopia, protanopia e tritanopia). Razão de contraste medida de **9,4:1** nos cartões de status (exigência AAA: 7:1).
+* **Síntese Vocal Nativa:** Leitura em voz alta de alertas e instruções via Web Speech API nativa, sem consumo de dados e com funcionamento offline.
+* **Filtro Anti-Tremor Motor:** Debounce e histerese temporal de 350 ms com alvos de toque generosos (mínimo 60x60 dp) para uso seguro por idosos com tremor essencial ou profissionais em plantões exaustivos.
+
+---
+
+## 📚 Documentação Técnica Complementar
+
+* [`docs/campus_mobile/CAMPUS_MOBILE_PROPOSAL.md`](docs/campus_mobile/CAMPUS_MOBILE_PROPOSAL.md): Proposta técnica detalhada submetida à 15ª Edição do Campus Mobile.
+* [`docs/campus_mobile/ARQUITETURA_CLARO_5G.md`](docs/campus_mobile/ARQUITETURA_CLARO_5G.md): Modelo de reconciliação de Merkle Roots e edge computing sobre Claro 5G SA e MEC.
+* [`docs/campus_mobile/EDGE_VISION_ROBUSTNESS.md`](docs/campus_mobile/EDGE_VISION_ROBUSTNESS.md): Engenharia óptica para leitura de códigos sob iluminação adversa e ruído.
+* [`docs/campus_mobile/TECHNICAL_FAQ_AND_TRADEOFFS.md`](docs/campus_mobile/TECHNICAL_FAQ_AND_TRADEOFFS.md): Perguntas frequentes da banca, matriz CAP e decisões de engenharia.
+* [`docs/campus_mobile/ROTEIRO_VALIDACAO_RAPIDA_SUS.md`](docs/campus_mobile/ROTEIRO_VALIDACAO_RAPIDA_SUS.md): Protocolo de validação clínica e usabilidade (NASA-TLX).
+
+---
+
+## 📄 Licença e Propriedade Intelectual
+
+Este projeto está registrado sob a licença **Proprietary & Source-Available Evaluation License**.  
+Consulte o arquivo [`LICENSE`](LICENSE) para as condições completas.
+
+* **Permitido:** Avaliação técnica, auditoria de código, clonagem e execução local por comissões avaliadoras de inovação (incluindo o Programa Campus Mobile, Instituto Claro e USP), acadêmicos e recrutadores.
+* **Vedado:** Uso comercial não autorizado, exploração em plataformas fechadas de terceiros ou redistribuição sem autorização prévia por escrito do autor.
+
+---
+
+<div align="center">
+Desenvolvido por <b>André Rogério da Silva Filho</b><br>
+<i>Tecnologia a serviço da integridade humana e da segurança de quem cuida.</i><br>
+Contato: <a href="https://www.linkedin.com/in/andre-silvaf">LinkedIn</a> | <a href="https://github.com/TheyDreez">GitHub</a>
+</div>
