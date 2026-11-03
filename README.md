@@ -23,7 +23,8 @@
 
 Assista ao vídeo pitch de demonstração (84 segundos) apresentando a arquitetura multiagente, o motor determinístico e o simulador mobile em funcionamento:
 
-👉 **[▶️ Assistir no YouTube: https://youtu.be/e7jOR-w5BzM](https://youtu.be/e7jOR-w5BzM)**
+👉 **[▶️ Vídeo Oficial Registrado na Inscrição (YouTube): https://youtu.be/HbfY0Narq3I](https://youtu.be/HbfY0Narq3I)**  
+*(Versão alternativa em alta definição com legendas: [https://youtu.be/e7jOR-w5BzM](https://youtu.be/e7jOR-w5BzM))*
 
 ---
 
