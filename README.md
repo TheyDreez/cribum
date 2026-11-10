@@ -5,7 +5,7 @@
 <img src="docs/assets/cribum_binary_shield.gif" alt="CRIBUM: escudo formado por bits, com varredura de auditoria" width="280">
 
 ### *Plataforma de Segurança Farmacêutica Multiagente, Offline-First e Criptográfica*
-**Projeto submetido à 15ª Edição do Campus Mobile (Instituto Claro / Escola Politécnica da USP / BeOn Claro)**  
+**Projeto inscrito na 15ª Edição do Programa Campus Mobile (Categoria: Saúde e Tecnologias Assistivas)**  
 *Categoria: Saúde e Tecnologias Assistivas*
 
 [![Campus Mobile](https://img.shields.io/badge/Campus%20Mobile-15%C2%AA%20Edi%C3%A7%C3%A3o-blue)](https://www.institutoclaro.org.br/campus-mobile/)
@@ -30,7 +30,7 @@
 
 ## 🧭 Estratégia de Repositório: Open Core
 
-Para conciliar rigor de verificação técnica pela banca avaliadora da USP e da Claro com a proteção da propriedade intelectual e segredos industriais da solução, o CRIBUM adota uma estrutura **Open Core**:
+Para conciliar rigor de verificação técnica pela banca avaliadora do programa com a proteção da propriedade intelectual e segredos industriais da solução, o CRIBUM adota uma estrutura **Open Core**:
 
 ```
 +---------------------------------------------------------------------------------+
@@ -44,7 +44,8 @@ Para conciliar rigor de verificação técnica pela banca avaliadora da USP e da
 |   2. cribum_core.py        -> Motor determinístico em Python padrão (zero deps):|
 |                               Parser GS1 DataMatrix, Árvore de Merkle RFC 6962, |
 |                               fonética LASA PT-BR, trava de dose e suíte forense|
-|   3. Documentação Técnica  -> Especificações Claro 5G, FAQ e matriz de tradeoffs|
+|   3. Documentação Técnica  -> Especificações 5G SA / MEC, FAQ e matriz de       |
+|                               tradeoffs técnicos de engenharia.                 |
 |                                                                                 |
 +---------------------------------------------------------------------------------+
 |                                                                                 |
@@ -141,9 +142,9 @@ Abra o endereço indicado no celular ou no navegador desktop e experimente os bo
                                       |
                                       v
 +---------------------------------------------------------------------------------+
-| INTEGRAÇÃO E RECONCILIAÇÃO CLARO 5G                                            |
+| INTEGRAÇÃO E RECONCILIAÇÃO VIA REDES 5G STANDALONE (MEC)                      |
 | Sincronização periódica ultra-rápida de raízes de Merkle entre unidades via MEC |
-| e rede Claro 5G Standalone para auditoria forense centralizada contra desvios.   |
+| e redes 5G Standalone para auditoria forense centralizada contra desvios.        |
 +---------------------------------------------------------------------------------+
 ```
 
@@ -160,7 +161,7 @@ Abra o endereço indicado no celular ou no navegador desktop e experimente os bo
 ## 📚 Documentação Técnica Complementar
 
 * [`docs/campus_mobile/CAMPUS_MOBILE_PROPOSAL.md`](docs/campus_mobile/CAMPUS_MOBILE_PROPOSAL.md): Proposta técnica detalhada submetida à 15ª Edição do Campus Mobile.
-* [`docs/campus_mobile/ARQUITETURA_CLARO_5G.md`](docs/campus_mobile/ARQUITETURA_CLARO_5G.md): Modelo de reconciliação de Merkle Roots e edge computing sobre Claro 5G SA e MEC.
+* [`docs/campus_mobile/ARQUITETURA_5G_SA_MEC.md`](docs/campus_mobile/ARQUITETURA_5G_SA_MEC.md): Modelo de reconciliação de Merkle Roots e edge computing sobre 5G Standalone (5G SA) e MEC.
 * [`docs/campus_mobile/EDGE_VISION_ROBUSTNESS.md`](docs/campus_mobile/EDGE_VISION_ROBUSTNESS.md): Engenharia óptica para leitura de códigos sob iluminação adversa e ruído.
 * [`docs/campus_mobile/TECHNICAL_FAQ_AND_TRADEOFFS.md`](docs/campus_mobile/TECHNICAL_FAQ_AND_TRADEOFFS.md): Perguntas frequentes da banca, matriz CAP e decisões de engenharia.
 * [`docs/campus_mobile/ROTEIRO_VALIDACAO_RAPIDA_SUS.md`](docs/campus_mobile/ROTEIRO_VALIDACAO_RAPIDA_SUS.md): Protocolo de validação clínica e usabilidade (NASA-TLX).
@@ -172,7 +173,7 @@ Abra o endereço indicado no celular ou no navegador desktop e experimente os bo
 Este projeto está registrado sob a licença **Proprietary & Source-Available Evaluation License**.  
 Consulte o arquivo [`LICENSE`](LICENSE) para as condições completas.
 
-* **Permitido:** Avaliação técnica, auditoria de código, clonagem e execução local por comissões avaliadoras de inovação (incluindo o Programa Campus Mobile, Instituto Claro e USP), acadêmicos e recrutadores.
+* **Permitido:** Avaliação técnica, auditoria de código, clonagem e execução local por comissões avaliadoras de inovação (incluindo a comissão do Programa Campus Mobile), acadêmicos e recrutadores.
 * **Vedado:** Uso comercial não autorizado, exploração em plataformas fechadas de terceiros ou redistribuição sem autorização prévia por escrito do autor.
 
 ---

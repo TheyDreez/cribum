@@ -67,7 +67,7 @@ Para atender aos critérios de complexidade técnica e inovação da 15ª Ediç�
 |  | Agente de Segurança LASA [On-Device]  |  | Agente de Auditoria [Híbrido 5G]     |  |
 |  | Calcula similaridade fonética PT-BR e |  | Verifica manifesto local da UBS,     |  |
 |  | Levenshtein, aplica Tall Man Lettering|  | sincroniza com pares na LAN e        |  |
-|  | e sintetiza alerta vocal acessível.   |  | reconcilia raízes na borda Claro 5G. |  |
+|  | e sintetiza alerta vocal acessível.   |  | reconcilia raízes na borda 5G SA / MEC. |  |
 |  +---------------------------------------+  +--------------------------------------+  |
 +-------------------------------------------+-------------------------------------------+
                                             | Resposta Estruturada Padronizada (JSON)
@@ -91,12 +91,12 @@ Para atender aos critérios de complexidade técnica e inovação da 15ª Ediç�
 
 Para que a operação *offline-first* seja tecnicamente íntegra, o CRIBUM Mobile define de forma estrita onde cada agente opera:
 
-| Componente / Agente | Função no Fluxo de Trabalho | Execução no Dispositivo (Offline) | Execução Conectada (Claro 5G / Nuvem) | Autoridade Clínica |
+| Componente / Agente | Função no Fluxo de Trabalho | Execução no Dispositivo (Offline) | Execução Conectada (5G SA / Nuvem) | Autoridade Clínica |
 | :--- | :--- | :--- | :--- | :--- |
 | **Agente de Leitura** | Interpretação da prescrição (QR Code SUS / texto) e extração dos campos GS1 DataMatrix da embalagem. | **100% On-Device** (WebAssembly / câmera local). | Atualização periódica de modelos ópticos leves. | Nenhuma (apenas extração). |
 | **Agente de Conciliação** | Normalização para Denominação Comum Brasileira (DCB) e equivalência de unidades (`g`, `mg`, `mcg`, `UI/mL`). | **100% On-Device** sobre dicionário ANVISA compactado em IndexedDB. | Sincronização de novos registros regulatórios da ANVISA. | Nenhuma (apenas mapeamento). |
 | **Agente de Segurança LASA** | Detecção de pares fonéticos/ortográficos de alto risco, formatação *Tall Man Lettering* e adaptação para linguagem simples e voz. | **100% On-Device** (motor fonético PT-BR + Web Speech API nativa). | Telemetria agregada e anônima de quase-erros (*near misses*). | Consultiva (dispara alerta obrigatório). |
-| **Agente de Auditoria** | Detecção de seriais repetidos, validação de lote alocado à UBS e correlação de anomalias entre unidades. | **Local + LAN P2P** (verifica árvore de Merkle local e pares na mesma UBS). | **Reconciliação Federada Claro 5G** (cruzamento inter-UBSs em MEC). | Consultiva e forense. |
+| **Agente de Auditoria** | Detecção de seriais repetidos, validação de lote alocado à UBS e correlação de anomalias entre unidades. | **Local + LAN P2P** (verifica árvore de Merkle local e pares na mesma UBS). | **Reconciliação Federada 5G SA** (cruzamento inter-UBSs em MEC). | Consultiva e forense. |
 | **Núcleo Determinístico CRIBUM** | Execução das travas formais de dosagem, validade, integridade GS1 e selagem criptográfica na Árvore de Merkle. | **100% On-Device** (código determinístico auditável). | Publicação de raízes assinadas (`Merkle Root`). | **Autoridade Final de Bloqueio.** |
 
 ---
@@ -111,8 +111,8 @@ O CRIBUM Mobile resolve esse desafio clássico do Teorema CAP (*Consistency, Ava
    Na cadeia do CEAF/Hórus, lotes e faixas de seriais (`GTIN + Lote + Filtro de Bloom de Seriais`) são alocados especificamente para o CNES de cada farmácia pública. O manifesto assinado dos lotes destinados àquela UBS é carregado no dispositivo no início do expediente. Se um serial pertencente ao lote da UBS "A" for escaneado offline na UBS "B", o Núcleo Determinístico barra a entrega imediatamente por **Incompatibilidade de Alocação Territorial**, mesmo sem internet.
 2. **Camada 2 (Prevenção Intra-Unidade via Sincronização Local P2P na mesma Farmácia):**  
    Dentro de uma mesma farmácia pública com múltiplos balconistas mas sem internet externa, os dispositivos trocam novas folhas da Árvore de Merkle via rede local (Wi-Fi local / WebRTC LAN Gossip). Assim, se uma caixa acabar de ser dispensada no Guichê 1, o Guichê 2 da mesma unidade recebe o hash do serial em sub-segundo, sem depender de servidor na nuvem.
-3. **Camada 3 (Reconciliação Compartilhada e Prova Forense de Colisão entre Unidades via Claro 5G):**  
-   Caso uma embalagem clonada do mesmo lote seja apresentada simultaneamente em dois dispositivos totalmente isolados sem comunicação local, o sistema prioriza a disponibilidade assistencial com registro assinado e executa a **Detecção Forense Inevitável na Reconciliação**: assim que qualquer dispositivo recupera sinal Claro 5G/4G, sua Raiz de Merkle e folhas pendentes são sincronizadas com o nó regional (Claro MEC). A colisão do identificador `SHA256(GTIN + Serial)` entre duas árvores gera automaticamente uma **Prova Criptográfica de Colisão (`Serial Collision Proof`)** contendo o carimbo de tempo, o CNES e a assinatura dos dois pontos, bloqueando instantaneamente o lote residual e acionando auditoria.
+3. **Camada 3 (Reconciliação Compartilhada e Prova Forense de Colisão entre Unidades via Redes 5G SA):**  
+   Caso uma embalagem clonada do mesmo lote seja apresentada simultaneamente em dois dispositivos totalmente isolados sem comunicação local, o sistema prioriza a disponibilidade assistencial com registro assinado e executa a **Detecção Forense Inevitável na Reconciliação**: assim que qualquer dispositivo recupera sinal 5G/4G, sua Raiz de Merkle e folhas pendentes são sincronizadas com o nó regional (nó MEC). A colisão do identificador `SHA256(GTIN + Serial)` entre duas árvores gera automaticamente uma **Prova Criptográfica de Colisão (`Serial Collision Proof`)** contendo o carimbo de tempo, o CNES e a assinatura dos dois pontos, bloqueando instantaneamente o lote residual e acionando auditoria.
 
 ---
 
@@ -127,7 +127,7 @@ Para assegurar rigor científico e transparência perante a banca avaliadora, os
 | **Acessibilidade Visual e Contraste (Okabe-Ito)** | **Implementado:** paleta segura para daltonismo com razão de contraste medida de **9,4:1** nos cartões de decisão (acima do limiar 7:1 exigido pela WCAG 2.2 AAA para texto normal). | Auditoria completa de conformidade WCAG 2.2 AAA com usuários com baixa visão e daltonismo. |
 | **Tempo de Conferência no Balcão** | Execução algorítmica local inferior a 50 ms após captura do código. | **Meta de SLA operacional:** concluir o ciclo completo de leitura óptica + confirmação humana em **menos de 3 segundos**. |
 | **Filtro Motor Anti-Tremor (Debounce/Histerese)** | **Implementado:** filtro temporal de 350 ms e alvos de toque de 60x60dp na interface mobile. | **Meta de validação assistiva:** reduzir em **mais de 90%** os toques involuntários em testes com idosos com tremor essencial ou Parkinson. |
-| **Reconciliação de Raízes em Borda 5G** | Simulação de payload criptográfico enxuto (32 bytes por raiz de Merkle). | **Meta de arquitetura em rede Claro 5G SA + MEC:** latência de sincronização de borda **inferior a 10 ms**. |
+| **Reconciliação de Raízes em Borda 5G** | Simulação de payload criptográfico enxuto (32 bytes por raiz de Merkle). | **Meta de arquitetura em redes 5G SA + MEC:** latência de sincronização de borda **inferior a 10 ms**. |
 
 ---
 
@@ -148,7 +148,7 @@ Durante o ciclo da 15ª Edição do Campus Mobile, a validação empírica segui
 O CRIBUM Mobile não exige que o Ministério da Saúde ou as prefeituras desativem o **Hórus** ou o **e-SUS APS**:
 - **Fase 1 (Utilitário Assistivo Standalone Zero-Instalação):** Funciona imediatamente como *Progressive Web App (PWA)* em qualquer smartphone de paciente, cuidador ou profissional de saúde para conferência visual/vocal da receita contra a caixa, exigindo **custo zero de integração de TI**.
 - **Fase 2 (Camada Complementar de Auditoria em Farmácias Municipais/CEAF):** Opera como leitor óptico de bolso conectado via exportação padrão JSON/FHIR ao controle de estoque da unidade.
-- **Fase 3 (Sinergia Corporativa Claro B2Gov):** Oferta como solução de valor agregado sobre planos corporativos móveis e infraestrutura 5G Standalone da Claro para Secretarias Estaduais e Municipais de Saúde.
+- **Fase 3 (Sinergia B2Gov de Conectividade):** Oferta como solução de valor agregado sobre planos corporativos móveis e infraestrutura de redes 5G Standalone para Secretarias Estaduais e Municipais de Saúde.
 
 ---
 
@@ -166,8 +166,8 @@ O CRIBUM Mobile não exige que o Ministério da Saúde ou as prefeituras desativ
   *"Para proteger as duas pontas, nasce o CRIBUM Mobile: uma arquitetura multiagente no dispositivo para leitura, conciliação e segurança LASA, aliada a um núcleo determinístico inviolável que nunca delega o bloqueio clínico à inteligência artificial."*
 - **`00:35 - 01:13` (Cena 4: Demonstração Real do Sistema Mobile em 5 Cenários):**  
   *"Direto no navegador do celular e cem por cento offline, o sistema lê a Receita Digital do SUS e confere o código GS1 DataMatrix da caixa. Se a concentração for divergente, o sistema bloqueia o uso na hora e alerta em voz alta: dose três vezes mais forte que a receita. Se os nomes forem parecidos, o padrão internacional Tall Man Lettering destaca as letras críticas para impedir a troca entre um antipsicótico e um antidepressivo. Quando a caixa está correta, a entrega é homologada e selada localmente em uma árvore de Merkle criptográfica. Se a mesma embalagem de alto custo for escaneada uma segunda vez, o CRIBUM intercepta a duplicidade sem depender de servidor central. Com um toque, a interface alterna entre a linguagem simples para o paciente, a visão forense para o farmacêutico do SUS e o modo de alto contraste Okabe-Ito com filtro anti-tremor."*
-- **`01:13 - 01:25` (Cena 5 e Cena 6: Reconciliação Compartilhada Claro 5G + End Card):**  
-  *"E quando há cobertura Claro 5G, as árvores locais são reconciliadas em um registro compartilhado entre unidades, fechando o cerco contra desvios. CRIBUM Mobile. Segurança clínica e antifraude. Na palma da mão."*
+- **`01:13 - 01:25` (Cena 5 e Cena 6: Reconciliação Compartilhada 5G Standalone + End Card):**  
+  *"E quando há cobertura 5G Standalone, as árvores locais são reconciliadas em um registro compartilhado entre unidades, fechando o cerco contra desvios. CRIBUM Mobile. Segurança clínica e antifraude. Na palma da mão."*
 
 ---
 

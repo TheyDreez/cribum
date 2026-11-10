@@ -25,19 +25,19 @@ Este documento formaliza as decisões de arquitetura de software, telecomunicaç
 
 ---
 
-## 🥊 ROUND 1: O FALSO PARADOXO "OFFLINE-FIRST VS. CLARO 5G STANDALONE"
+## 🥊 ROUND 1: O FALSO PARADOXO "OFFLINE-FIRST VS. 5G STANDALONE"
 
 ### 1.1 A Provocação da Banca
 > *"Candidato, sua tese possui uma contradição de premissas. No primeiro momento, você afirma que o Cribum é indispensável porque 40 mil UBSs brasileiras enfrentam apagão de conectividade (offline-first). Trinta segundos depois, você propõe Network Slicing 5G Standalone e MEC da Claro. Se o posto não tem sinal, o 5G é inútil lá. Se o posto possui cobertura 5G Standalone com latência de 5 milissegundos, por que diabos eu precisaria de uma Árvore de Merkle local no celular em vez de um simples webhook direto no DATASUS?"*
 
 ### 1.2 A Resposta Estratégica & Fundamentação Técnica
-> *"Pelo contrário, ilustres avaliadores. É justamente a **assimetria de conectividade continental do território brasileiro** que torna o 5G da Claro insubstituível. O Cribum Mobile opera sob o paradigma de **Garantia Local Imediata com Sincronização Federada por Rajada**.
+> *"Pelo contrário, ilustres avaliadores. É justamente a **assimetria de conectividade continental do território brasileiro** que torna a rede 5G SA insubstituível. O Cribum Mobile opera sob o paradigma de **Garantia Local Imediata com Sincronização Federada por Rajada**.
 >
 > 1. **A Assimetria Geográfica do Crime Farmacêutico:** O crime organizado de desvio de medicamentos do Componente Especializado (CEAF) não fabrica caixas na Amazônia: ele intercepta e sangra cargas nas rodovias, galpões de operadoras logísticas e grandes hospitais nas regiões metropolitanas (São Paulo, Rio de Janeiro, Belo Horizonte, Salvador).
-> 2. **O Papel do Claro 5G Standalone (Borda de Alta Densidade):** Nos centros de distribuição, caminhões refrigerados com gateways veiculares 5G e hospitais de alta complexidade (como o HCFMUSP), o Cribum utiliza **Network Slicing de Missão Crítica** (3GPP Release 16, SST=2 / URLLC, 5QI 82). A consolidação das Raízes de Merkle acumuladas ocorre em menos de **8 milissegundos** diretamente nos servidores **Claro MEC (Multi-access Edge Computing)**, fechando o cerco nas capitais e impedindo a re-entrada de lotes desviados no fluxo formal antes que as caixas sejam despachadas para o interior.
+> 2. **O Papel do 5G Standalone (Borda de Alta Densidade):** Nos centros de distribuição, caminhões refrigerados com gateways veiculares 5G e hospitais de alta complexidade (como o HCFMUSP), o Cribum utiliza **Network Slicing de Missão Crítica** (3GPP Release 16, SST=2 / URLLC, 5QI 82). A consolidação das Raízes de Merkle acumuladas ocorre em menos de **8 milissegundos** diretamente nos servidores **Claro MEC (Multi-access Edge Computing)**, fechando o cerco nas capitais e impedindo a re-entrada de lotes desviados no fluxo formal antes que as caixas sejam despachadas para o interior.
 > 3. **A Ponta Remota (Borda Desconectada):** Na UBS ribeirinha ou de sertão, onde a conectividade é nula, o profissional precisa de uma garantia criptográfica local soberana de que aquela unidade física não dispensará a mesma caixa duas vezes. Quando a equipe de saúde retorna à cidade polo ou quando o sinal oscila e conecta por 2 segundos, o app transmite apenas a Raiz de Merkle de **32 bytes**, reconciliando o histórico local com o cluster estadual.
 >
-> Em suma: o 5G da Claro é a muralha nos nós logísticos de alta vazão, enquanto o Merkle Tree é o cofre autônomo na última milha desconectada."*
+> Em suma: a rede 5G SA é a muralha nos nós logísticos de alta vazão, enquanto o Merkle Tree é o cofre autônomo na última milha desconectada."*
 
 ---
 
@@ -150,7 +150,7 @@ Este documento formaliza as decisões de arquitetura de software, telecomunicaç
 | :--- | :--- | :--- |
 | **"E a LGPD dos pacientes?"** | *HMAC-SHA256 Hardware-Backed* | "O CPF nunca é salvo em texto puro nem em SHA-256 simples: aplicamos HMAC-SHA256 com chave isolada no Android StrongBox, blindando os $10^9$ CPFs contra força bruta em GPU." |
 | **"Por que não leitor de código a laser?"** | *Custo de Apropriação Zero* | "Um leitor industrial 2D custa R$ 1.800; o Cribum roda no celular que o agente já tem no bolso, economizando R$ 80 milhões em aquisição de hardware." |
-| **"O SUS vai demorar anos para licitar."** | *Acordo B2Gov SVA Claro* | "O Cribum é empacotado como Serviço de Valor Agregado nos contratos corporativos existentes de dados e chips da Claro com as Secretarias de Saúde." |
+| **"O SUS vai demorar anos para licitar."** | *Acordo B2Gov de Conectividade SVA* | "O Cribum é empacotado como Serviço de Valor Agregado nos contratos corporativos existentes de telecomunicações com as Secretarias de Saúde." |
 | **"E se o lote estiver vencido?"** | *Regra Dia 00 GS1 AI (17)* | "O parser valida o AI 17 no instante do disparo da câmera; remédios vencidos há 1 dia sequer entram no log de dispensação." |
 
 ---
