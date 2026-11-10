@@ -12,19 +12,19 @@
 [![Python Tests](https://img.shields.io/badge/Python%20Core-100%25%20Passing-success)](cribum_core.py)
 [![RFC 6962](https://img.shields.io/badge/Merkle%20Tree-RFC%206962%20Compliant-10b981)](https://datatracker.ietf.org/doc/html/rfc6962)
 [![GS1 Standard](https://img.shields.io/badge/GS1-DataMatrix%20ANVISA%20RDC%20319-orange)](https://www.gov.br/anvisa/)
-[![A11y](https://img.shields.io/badge/Accessibility-Okabe--Ito%20AAA%20(9.4:1)-purple)](simulator.html)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Testar%20Simulador%20Online-success?logo=googlechrome&logoColor=white)](https://theydreez.github.io/cribum/simulator.html)
+[![A11y](https://img.shields.io/badge/Accessibility-Okabe--Ito%20AAA%20(9.4:1)-purple)](https://theydreez.github.io/cribum/simulator.html)
 [![License](https://img.shields.io/badge/License-Source--Available%20Evaluation-green.svg)](LICENSE)
 
 </div>
 
 ---
 
-## 🎬 Vídeo Oficial de Demonstração (Campus Mobile)
+## 🎬 Demonstração Oficial (Vídeo e Teste Interativo Online)
 
-Assista ao vídeo pitch de demonstração (84 segundos) apresentando a arquitetura multiagente, o motor determinístico e o simulador mobile em funcionamento:
-
-👉 **[▶️ Vídeo Oficial Registrado na Inscrição (YouTube): https://youtu.be/HbfY0Narq3I](https://youtu.be/HbfY0Narq3I)**  
-*(Versão alternativa em alta definição com legendas: [https://youtu.be/e7jOR-w5BzM](https://youtu.be/e7jOR-w5BzM))*
+* 🎬 **Vídeo Pitch Oficial (YouTube):** [https://youtu.be/HbfY0Narq3I](https://youtu.be/HbfY0Narq3I) *(versão em alta definição: [https://youtu.be/e7jOR-w5BzM](https://youtu.be/e7jOR-w5BzM))*
+* 📱 **Simulador Mobile Online (Sem Instalação):** 👉 **[https://theydreez.github.io/cribum/simulator.html](https://theydreez.github.io/cribum/simulator.html)**  
+  *(Abra no celular ou navegador para testar a câmera com mira laser, leitura GS1 DataMatrix, voz assistiva e os 4 casos clínicos).*
 
 ---
 
@@ -82,7 +82,8 @@ O comando executará automaticamente a suíte forense completa:
 
 O arquivo `simulator.html` é um protótipo mobile completo e autossuficiente:
 
-* **Opção Direta:** Dê dois cliques em `simulator.html` para abrir diretamente no seu navegador.
+* **Opção Online Imediata (Recomendada):** Acesse diretamente pelo link do GitHub Pages: **[https://theydreez.github.io/cribum/simulator.html](https://theydreez.github.io/cribum/simulator.html)**
+* **Opção Direta Local:** Dê dois cliques em `simulator.html` para abrir diretamente no seu navegador.
 * **Opção Servidor Local (para testar no celular via Wi-Fi):**
 
 ```bash
